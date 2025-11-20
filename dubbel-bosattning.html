@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <title>Avdrag för dubbel bosättning & hemresor | Avdragsjakten</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Jobbar du på annan ort med extra boendekostnader och hemresor? Här kan du göra en förenklad uppskattning av möjliga avdrag för dubbel bosättning, hemresor, resor och arbetsrum." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <p class="beta-label">
+        Beta – förenklad uppskattning, inte rådgivning
+      </p>
+      <h1>Avdrag för dubbel bosättning & hemresor</h1>
+      <p class="hero-subtitle">
+        Om du jobbar på annan ort än där du normalt bor kan du ibland ha rätt till avdrag för dubbel bosättning och hemresor. Här kan du göra en förenklad uppskattning – tillsammans med resor till jobbet och eventuellt arbetsrum hemma.
+      </p>
+      <button id="startBtn" class="btn-primary">Börja räkna</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Dubbel bosättning – i stora drag</h2>
+      <p>
+        Dubbel bosättning kan bli aktuellt om du tillfälligt behöver bo på en annan ort på grund av arbete, samtidigt som du har kvar din ordinarie bostad. Då kan du under vissa förutsättningar få avdrag för extra boendekostnader och resor hem.
+      </p>
+      <p>
+        I den här förenklade beräkningen tittar vi på:
+      </p>
+      <ul>
+        <li>Extra boendekostnad på arbetsorten</li>
+        <li>Hemresor till din ordinarie bostad</li>
+        <li>Resor till och från arbetet</li>
+        <li>Eventuellt arbetsrum hemma</li>
+      </ul>
+      <p>
+        Resultatet är en uppskattning och ersätter inte en individuell bedömning eller Skatteverkets exakta regler, men kan ge dig en första fingervisning om storleksordningen på möjliga avdrag.
+      </p>
+    </section>
+
+    <!-- Samma kalkylator som på startsidan -->
+    <section id="calculator" class="card">
+      <h2>Steg 1 – Din pendling</h2>
+      <form id="deductionForm">
+        <div class="form-group">
+          <label for="daysPerYear">Hur många dagar per år pendlar du till jobbet?</label>
+          <input type="number" id="daysPerYear" name="daysPerYear" min="0" value="210" required />
+        </div>
+
+        <div class="form-group">
+          <label for="distanceKm">Avstånd hem–jobb (enkel väg) i kilometer</label>
+          <input type="number" id="distanceKm" name="distanceKm" min="0" step="0.1" required />
+        </div>
+
+        <div class="form-group">
+          <p>Hur pendlar du oftast?</p>
+          <label><input type="radio" name="transportMode" value="car" checked /> Bil</label>
+          <label><input type="radio" name="transportMode" value="public" /> Kollektivtrafik</label>
+          <label><input type="radio" name="transportMode" value="mixed" /> Blandat / annat</label>
+        </div>
+
+        <hr />
+
+        <h3>Steg 2 – Dina kostnader (valfritt)</h3>
+
+        <div class="form-group">
+          <p>Har du ungefärlig koll på vad pendlingen kostar dig per år?</p>
+          <label><input type="radio" name="costKnowledge" value="no" checked /> Nej, räkna åt mig</label>
+          <label><input type="radio" name="costKnowledge" value="yes" /> Ja, ungefär</label>
+        </div>
+
+        <div class="form-group" id="knownCostGroup" style="display: none;">
+          <label for="knownYearlyCost">Ungefärlig kostnad per år (kr)</label>
+          <input type="number" id="knownYearlyCost" name="knownYearlyCost" min="0" />
+          <p class="helper-text">
+            Till exempel bränsle, bilslitage, parkeringskostnad eller periodkort.
+          </p>
+        </div>
+
+        <hr />
+
+        <h3>Steg 3 – Arbetsrum hemma</h3>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="hasHomeOffice" />
+            Jag har ett särskilt rum i bostaden som i huvudsak används som arbetsrum.
+          </label>
+          <p class="helper-text">
+            Här gör vi en schablonuppskattning av ett möjligt avdrag för arbetsrum. Detta är mycket förenklat.
+          </p>
+        </div>
+
+        <hr />
+
+        <h3>Steg 4 – Dubbel bosättning & hemresor</h3>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="hasDoubleHousing" />
+            Jag har extra boendekostnader eftersom jag jobbar på annan ort (dubbel bosättning).
+          </label>
+        </div>
+
+        <div class="form-group" id="doubleHousingGroup" style="display: none;">
+          <label for="doubleHousingYearlyCost">Ungefärlig extra boendekostnad per år (kr)</label>
+          <input type="number" id="doubleHousingYearlyCost" min="0" />
+          <p class="helper-text">
+            Till exempel hyra för tillfällig bostad på arbetsorten, utöver din vanliga bostad.
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="hasHomeTravel" />
+            Jag betalar själv för hemresor på grund av arbete på annan ort.
+          </label>
+        </div>
+
+        <div class="form-group" id="homeTravelGroup" style="display: none;">
+          <label for="homeTravelYearlyCost">Ungefärlig kostnad för hemresor per år (kr)</label>
+          <input type="number" id="homeTravelYearlyCost" min="0" />
+          <p class="helper-text">
+            Till exempel tågbiljetter eller flyg hem till familjen under perioden med dubbel bosättning.
+          </p>
+        </div>
+
+        <button type="submit" class="btn-primary">Visa resultat</button>
+      </form>
+    </section>
+
+    <section id="resultSection" class="card" style="display:none;">
+      <h2>Din uppskattade skattesänkning</h2>
+      <p id="resultText"></p>
+      <p class="disclaimer">
+        Obs! Detta är en <strong>förenklad uppskattning</strong> baserad på schablonantaganden och avrundningar. Regler för avdrag kan ändras och skilja sig åt beroende på din situation. Kontrollera alltid mot Skatteverkets information innan du deklarerar eller gör ändringar.
+      </p>
+    </section>
+
+    <section id="emailSection" class="card">
+      <h2>Vill du följa utvecklingen?</h2>
+      <p>
+        Vi kommer löpande lägga till fler avdrag och göra beräkningarna smartare. Lämna din e-post om du vill få uppdateringar inför deklarationssäsongen.
+      </p>
+      <form id="emailForm">
+        <div class="form-group">
+          <label for="emailInput">E-postadress</label>
+          <input type="email" id="emailInput" placeholder="namn@exempel.se" required />
+        </div>
+        <button type="submit" class="btn-primary">Spara mig på listan</button>
+        <p id="emailFeedback" class="helper-text" style="display:none;"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© <span id="year"></span> Avdragsjakten. Ingen data sparas i denna version – alla beräkningar görs i din webbläsare.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
