@@ -2,47 +2,187 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
-  <title>Resavdrag – Räkna på ditt avdrag | Avdragsjakten</title>
+  <title>Reseavdrag – se om du kan sänka din skatt | Avdragsjakten</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Lär dig hur resavdrag fungerar och räkna ut en förenklad uppskattning med Avdragsjakten. Se om du kan sänka din skatt baserat på dina arbetsresor, arbetsrum och eventuell dubbel bosättning." />
+  <meta name="description" content="Pendlar du långt till jobbet? Gör en förenklad beräkning av reseavdraget och se om du kan sänka din skatt. Svara på några frågor – vi räknar ut en uppskattning direkt i din webbläsare." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="hero">
     <div class="container">
-      <p class="beta-label">
-        Beta – förenklad uppskattning, inte rådgivning
-      </p>
-      <h1>Resavdrag – räkna på ditt avdrag</h1>
+      <p class="beta-label">Beta – förenklad uppskattning, inte rådgivning</p>
+      <h1>Reseavdrag – se om du kan sänka din skatt</h1>
       <p class="hero-subtitle">
-        Resor till och från jobbet är ett av de vanligaste avdragen i deklarationen. Här kan du göra en förenklad uppskattning av hur stort ditt möjliga resavdrag kan vara – och samtidigt ta med arbetsrum och dubbel bosättning.
+        Pendlar du långt till jobbet? Då finns en stor chans att du betalar för mycket i skatt.
+        Svara på några frågor om din resa – så räknar vi ut om du har rätt till reseavdrag.
       </p>
-      <button id="startBtn" class="btn-primary">Börja räkna</button>
+      <button id="startBtn" class="btn-primary">Se om du kan sänka din skatt</button>
     </div>
   </header>
 
   <main class="container">
+    <!-- Varför-sektion -->
     <section class="card">
-      <h2>Hur fungerar resavdrag i stora drag?</h2>
+      <h2>Varför ska du bry dig om reseavdraget?</h2>
       <p>
-        Resavdrag handlar i grunden om att du kan få avdrag för en del av dina kostnader för att ta dig till och från arbetet, om de överstiger ett visst belopp per år. Reglerna är detaljerade och beror bland annat på färdsätt, avstånd och hur många dagar du faktiskt reser.
+        Tusentals svenskar missar pengar varje år – helt i onödan. Reseavdraget gäller för dig som
+        pendlar till jobbet och har höga resekostnader.
       </p>
-      <p>
-        På den här sidan gör vi en <strong>förenklad uppskattning</strong> utifrån:
-      </p>
+      <p>Det är särskilt vanligt att det lönar sig om du:</p>
       <ul>
-        <li>Hur långt du har till jobbet</li>
-        <li>Hur många dagar per år du pendlar</li>
-        <li>Om du åker bil, kollektivt eller blandat</li>
+        <li>Kör bil längre sträckor till arbetet</li>
+        <li>Inte har bra kollektivtrafik där du bor</li>
+        <li>Jobbar oregelbundna tider</li>
+        <li>Pendlar mellan två bostäder</li>
       </ul>
       <p>
-        Resultatet är inte en exakt uträkning enligt Skatteverkets modell, men kan ge en bra indikation på om det är värt att titta närmare på resavdraget i din deklaration.
+        Kort sagt: ju längre du reser – desto större chans att du har rätt till avdrag.
       </p>
     </section>
 
-    <!-- Samma kalkylator som på startsidan -->
+    <!-- Hur mycket-sektion -->
+    <section class="card">
+      <h2>Hur mycket kan du få tillbaka?</h2>
+      <p>
+        Hur mycket du kan få tillbaka beror på hur du reser, hur långt och hur ofta. Exempel:
+      </p>
+      <ul>
+        <li>Kör du 7 mil tur och retur varje arbetsdag kan det handla om tusenlappar i sänkt skatt.</li>
+      </ul>
+      <p>
+        Det tar ungefär 2 minuter att räkna ut. Ingen inloggning, vi sparar inget – allt räknas i
+        din webbläsare.
+      </p>
+      <button type="button" class="btn-primary"
+        onclick="document.getElementById('calculator').scrollIntoView({behavior: 'smooth'});">
+        Räkna ut ditt reseavdrag
+      </button>
+    </section>
+
+    <!-- Så fungerar det -->
+    <section class="card">
+      <h2>Så här fungerar Avdragsjakten</h2>
+      <ol>
+        <li>Du svarar på några frågor om din pendling och situation.</li>
+        <li>Vi räknar på kostnaden enligt förenklade versioner av gällande regler.</li>
+        <li>Du ser direkt om du kan göra avdrag – och ungefär hur mycket.</li>
+      </ol>
+      <p>Enkelt, gratis och utan krångel.</p>
+    </section>
+
+    <!-- Vad är reseavdrag -->
+    <section class="card">
+      <h2>Vad är reseavdrag?</h2>
+      <p>
+        Reseavdraget är ett skatteavdrag för dina arbetsresor. Du kan i vissa fall få avdrag om:
+      </p>
+      <ul>
+        <li>Du reser minst cirka 5 km till jobbet (tur och retur) per dag</li>
+        <li>Kollektivtrafik inte finns eller skulle göra att din restid ökar kraftigt</li>
+        <li>Dina kostnader överstiger ett fast grundbelopp per år</li>
+      </ul>
+      <p>
+        Avdraget gör du sedan i deklarationen – vilket kan innebära lägre skatt att betala eller
+        högre återbäring.
+      </p>
+      <p class="helper-text">
+        Tips: du måste själv ange avdraget i deklarationen – det fylls inte i automatiskt.
+      </p>
+    </section>
+
+    <!-- Vanliga misstag -->
+    <section class="card">
+      <h2>Vanliga misstag vid reseavdrag ⚠️</h2>
+      <p>Många gör fel när de deklarerar reseavdrag. Till exempel att man:</p>
+      <ul>
+        <li>Tror att man får avdrag för hela kostnaden (det gör man inte)</li>
+        <li>Missar avdrag om man jobbar skift eller oregelbundna tider</li>
+        <li>Räknar fel på antal dagar man faktiskt rest</li>
+        <li>Glömmer avdrag även för hemresor om man jobbar på annan ort</li>
+      </ul>
+      <p>Vi guidar dig genom en förenklad beräkning så att du ser om det kan vara värt att gå vidare.</p>
+      <button type="button" class="btn-primary"
+        onclick="document.getElementById('calculator').scrollIntoView({behavior: 'smooth'});">
+        Se om du har rätt till avdrag
+      </button>
+    </section>
+
+    <!-- Räkneexempel -->
+    <section class="card">
+      <h2>Räkneexempel – vad kan du spara?</h2>
+      <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse: collapse; font-size: 0.95rem;">
+          <thead>
+            <tr>
+              <th style="text-align:left; border-bottom: 1px solid #e5e7eb; padding: 6px;">Din pendling</th>
+              <th style="text-align:left; border-bottom: 1px solid #e5e7eb; padding: 6px;">Avstånd tur/retur</th>
+              <th style="text-align:left; border-bottom: 1px solid #e5e7eb; padding: 6px;">Arbetsdagar/år</th>
+              <th style="text-align:left; border-bottom: 1px solid #e5e7eb; padding: 6px;">Ungefärligt resultat</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 6px;">Bilpendling</td>
+              <td style="padding: 6px;">60 km</td>
+              <td style="padding: 6px;">200</td>
+              <td style="padding: 6px;">Kan bli ca 4 000–8 000 kr i sänkt skatt</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px;">Bilpendling</td>
+              <td style="padding: 6px;">100 km</td>
+              <td style="padding: 6px;">210</td>
+              <td style="padding: 6px;">10 000+ kr kan vara möjligt</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px;">Dåliga bussförbindelser</td>
+              <td style="padding: 6px;">30 km</td>
+              <td style="padding: 6px;">180</td>
+              <td style="padding: 6px;">Ofta avdragsgillt!</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="helper-text">
+        Det här är bara exempel – den faktiska beräkningen beror på din situation och gällande regler.
+        Testa med dina egna värden för en mer träffsäker uppskattning.
+      </p>
+      <button type="button" class="btn-primary"
+        onclick="document.getElementById('calculator').scrollIntoView({behavior: 'smooth'});">
+        Testa med dina värden
+      </button>
+    </section>
+
+    <!-- FAQ -->
+    <section class="card">
+      <h2>FAQ – vanliga frågor om reseavdrag</h2>
+
+      <h3>Får jag reseavdrag om jag jobbar hemifrån ibland?</h3>
+      <p>
+        Ja, du får avdrag för de dagar du faktiskt åkt till jobbet. Du kan inte göra avdrag för dagar
+        du jobbar hemifrån.
+      </p>
+
+      <h3>Måste jag kunna bevisa mina kostnader?</h3>
+      <p>
+        Du behöver kunna visa hur långt du har till jobbet, hur du rest och ungefär hur många
+        arbetsdagar du haft. Spara gärna underlag som biljetter, kvitton eller körjournal.
+      </p>
+
+      <h3>Gäller reseavdrag vid elbil?</h3>
+      <p>
+        Ja, reglerna för bilresor gäller även elbil. Kostnadsnivåerna kan skilja sig åt, men
+        principen för avdraget är densamma.
+      </p>
+
+      <h3>Sparar ni mina uppgifter?</h3>
+      <p>
+        Nej. Allt räknas i din webbläsare – inget lagras i den här versionen av Avdragsjakten.
+      </p>
+    </section>
+
+    <!-- Kalkylatorn (måste behålla samma struktur/ID:n som index.html) -->
     <section id="calculator" class="card">
-      <h2>Steg 1 – Din pendling</h2>
+      <h2>Räkna ut ditt reseavdrag</h2>
       <form id="deductionForm">
         <div class="form-group">
           <label for="daysPerYear">Hur många dagar per år pendlar du till jobbet?</label>
@@ -94,7 +234,7 @@
 
         <hr />
 
-        <h3>Steg 4 – Dubbel bosättning & hemresor</h3>
+        <h3>Steg 4 – Dubbel bosättning &amp; hemresor</h3>
 
         <div class="form-group">
           <label>
@@ -134,14 +274,18 @@
       <h2>Din uppskattade skattesänkning</h2>
       <p id="resultText"></p>
       <p class="disclaimer">
-        Obs! Detta är en <strong>förenklad uppskattning</strong> baserad på schablonantaganden och avrundningar. Regler för avdrag kan ändras och skilja sig åt beroende på din situation. Kontrollera alltid mot Skatteverkets information innan du deklarerar eller gör ändringar.
+        Obs! Detta är en <strong>förenklad uppskattning</strong> baserad på schablonantaganden och avrundningar.
+        Regler för avdrag kan ändras och skilja sig åt beroende på din situation. Kontrollera alltid mot
+        Skatteverkets information innan du deklarerar eller gör ändringar.
       </p>
     </section>
 
+    <!-- Email / leads -->
     <section id="emailSection" class="card">
       <h2>Vill du följa utvecklingen?</h2>
       <p>
-        Vi kommer löpande lägga till fler avdrag och göra beräkningarna smartare. Lämna din e-post om du vill få uppdateringar inför deklarationssäsongen.
+        Vi kommer löpande lägga till fler avdrag och göra beräkningarna smartare. Lämna din e-post om
+        du vill få uppdateringar inför deklarationssäsongen.
       </p>
       <form id="emailForm">
         <div class="form-group">
@@ -151,6 +295,16 @@
         <button type="submit" class="btn-primary">Spara mig på listan</button>
         <p id="emailFeedback" class="helper-text" style="display:none;"></p>
       </form>
+    </section>
+
+    <!-- Internlänkar / SEO-hub -->
+    <section class="card">
+      <h2>Läs mer om andra skatteavdrag</h2>
+      <ul class="link-list">
+        <li><a href="/dubbel-bosattning.html">Dubbel bosättning &amp; hemresor</a></li>
+        <li><a href="/arbetsrum-avdrag.html">Avdrag för arbetsrum hemma</a></li>
+        <li><span class="helper-text">✨ Komplett deklarationsguide 2026 – kommer när hubben är live.</span></li>
+      </ul>
     </section>
   </main>
 
