@@ -49,127 +49,222 @@
     </div>
   </header>
 
-  <main class="container">
-    <section id="calculator" class="card">
-      <h2>Steg 1 – Din pendling</h2>
-      <form id="deductionForm">
-        <div class="form-group">
-          <label for="daysPerYear">Hur många dagar per år pendlar du till jobbet?</label>
-          <input type="number" id="daysPerYear" name="daysPerYear" min="0" value="210" required />
+ <main class="container">
+  <!-- Avdragskollen – ny motor -->
+  <div class="ak-main">
+    <section class="ak-shell" aria-label="Avdragskollen">
+      <!-- Start / hero -->
+      <div class="ak-hero" data-step="intro">
+        <div class="ak-badge">
+          <span class="ak-badge-dot"></span>
+          Avdragskollen · Beta
+        </div>
+        <h2 class="ak-hero-title">Ta reda på vilka avdrag du kan ha rätt till</h2>
+        <p class="ak-hero-sub">
+          Svara på några frågor om din vardag, så får du en uppskattning av vilka
+          <span class="ak-hero-highlight">skatteavdrag</span> du kan göra och ungefär hur mycket din skatt kan minska.
+          Verktyget bygger på offentliga regler men är inte personlig rådgivning.
+        </p>
+
+        <div class="ak-hero-meta">
+          <div class="ak-hero-meta-item">
+            Under 2 minuter
+          </div>
+          <div class="ak-hero-meta-item">
+            <span class="ak-meta-dot"></span>
+            Ingen inloggning, ingen persondata
+          </div>
+          <div class="ak-hero-meta-item">
+            <span class="ak-meta-dot"></span>
+            Uppdaterat för aktuellt beskattningsår
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="distanceKm">Avstånd hem–jobb (enkel väg) i kilometer</label>
-          <input type="number" id="distanceKm" name="distanceKm" min="0" step="0.1" required />
+        <div class="ak-cta-row">
+          <button type="button" class="ak-btn ak-btn-primary" id="ak-start-btn">
+            Kom igång
+          </button>
+          <button type="button" class="ak-btn ak-btn-secondary" id="ak-read-more-btn">
+            <span>Läs mer om hur vi räknar</span>
+          </button>
         </div>
 
-        <div class="form-group">
-          <p>Hur pendlar du oftast?</p>
-          <label><input type="radio" name="transportMode" value="car" checked /> Bil</label>
-          <label><input type="radio" name="transportMode" value="public" /> Kollektivtrafik</label>
-          <label><input type="radio" name="transportMode" value="mixed" /> Blandat / annat</label>
+        <p class="ak-disclaimer">
+          Avdragsjakten drivs av SWe-handel AB. Verktyget är fristående från Skatteverket och
+          ersätter inte professionell rådgivning. Du ansvarar själv för din deklaration.
+        </p>
+
+        <div class="ak-divider"></div>
+      </div>
+
+      <!-- Steg-wrapper -->
+      <div class="ak-step-shell" data-step="flow" hidden>
+        <div class="ak-progress" aria-hidden="true">
+          <div class="ak-progress-label" id="ak-progress-label">Steg 1 av 3</div>
+          <div class="ak-progress-bar">
+            <div class="ak-progress-bar-fill" id="ak-progress-bar"></div>
+          </div>
         </div>
 
-        <hr />
-
-        <h3>Steg 2 – Dina kostnader (valfritt)</h3>
-
-        <div class="form-group">
-          <p>Har du ungefärlig koll på vad pendlingen kostar dig per år?</p>
-          <label><input type="radio" name="costKnowledge" value="no" checked /> Nej, räkna åt mig</label>
-          <label><input type="radio" name="costKnowledge" value="yes" /> Ja, ungefär</label>
-        </div>
-
-        <div class="form-group" id="knownCostGroup" style="display: none;">
-          <label for="knownYearlyCost">Ungefärlig kostnad per år (kr)</label>
-          <input type="number" id="knownYearlyCost" name="knownYearlyCost" min="0" />
-          <p class="helper-text">
-            Till exempel bränsle, bilslitage, parkeringskostnad eller periodkort.
+        <!-- Steg 1: Reseavdrag -->
+        <section data-step-index="1" aria-labelledby="ak-step1-title">
+          <h2 class="ak-step-title" id="ak-step1-title">Har du rest till jobbet eller uppdrag under året?</h2>
+          <p class="ak-step-sub">
+            Vi börjar med resor. Det kan handla om daglig pendling till och från arbetet.
           </p>
-        </div>
 
-        <hr />
+          <div class="ak-options" role="radiogroup" aria-label="Resor till och från jobbet">
+            <button type="button" class="ak-option" data-option="travel_car">
+              <div class="ak-option-label">
+                <span class="ak-option-title">Ja, mest med bil</span>
+                <span class="ak-option-meta">Till exempel daglig pendling till din arbetsplats.</span>
+              </div>
+              <span class="ak-option-pill">Vanlig grund för reseavdrag</span>
+            </button>
 
-        <h3>Steg 3 – Arbetsrum hemma</h3>
-        <div class="form-group">
-          <label>
-            <input type="checkbox" id="hasHomeOffice" />
-            Jag har ett särskilt rum i bostaden som i huvudsak används som arbetsrum.
-          </label>
-          <p class="helper-text">
-            Här gör vi en schablonuppskattning av ett möjligt avdrag för arbetsrum. Detta är mycket förenklat.
+            <button type="button" class="ak-option" data-option="travel_public">
+              <div class="ak-option-label">
+                <span class="ak-option-title">Ja, mest med kollektivtrafik</span>
+                <span class="ak-option-meta">Till exempel tåg, buss eller tunnelbana.</span>
+              </div>
+            </button>
+
+            <button type="button" class="ak-option" data-option="travel_none">
+              <div class="ak-option-label">
+                <span class="ak-option-title">Nej, inga regelbundna resor</span>
+                <span class="ak-option-meta">Till exempel om du arbetat hemifrån hela året.</span>
+              </div>
+            </button>
+          </div>
+        </section>
+
+        <!-- Steg 2: Körsträcka (endast om bil) -->
+        <section data-step-index="2" aria-labelledby="ak-step2-title" hidden>
+          <h2 class="ak-step-title" id="ak-step2-title">Ungefär hur många mil körde du till och från jobbet?</h2>
+          <p class="ak-step-sub">
+            En grov uppskattning räcker. Vi använder en schablonbaserad beräkning.
           </p>
-        </div>
 
-        <hr />
+          <div class="ak-input-group">
+            <label for="ak-km-input" class="ak-input-label">Antal mil under året</label>
+            <div class="ak-input-help">
+              Exempel: 5 mil per dag, 220 dagar ≈ 1&nbsp;100 mil.
+            </div>
+            <input
+              id="ak-km-input"
+              class="ak-input"
+              type="number"
+              inputmode="decimal"
+              min="0"
+              step="1"
+              placeholder="Skriv ett ungefärligt antal mil"
+            />
+            <p class="ak-input-error-msg" id="ak-km-error" hidden>
+              Ange ett rimligt antal mil större än noll.
+            </p>
+          </div>
+        </section>
 
-        <h3>Steg 4 – Dubbel bosättning & hemresor</h3>
-
-        <div class="form-group">
-          <label>
-            <input type="checkbox" id="hasDoubleHousing" />
-            Jag har extra boendekostnader eftersom jag jobbar på annan ort (dubbel bosättning).
-          </label>
-        </div>
-
-        <div class="form-group" id="doubleHousingGroup" style="display: none;">
-          <label for="doubleHousingYearlyCost">Ungefärlig extra boendekostnad per år (kr)</label>
-          <input type="number" id="doubleHousingYearlyCost" min="0" />
-          <p class="helper-text">
-            Till exempel hyra för tillfällig bostad på arbetsorten, utöver din vanliga bostad.
+        <!-- Steg 3: Arbetsrum -->
+        <section data-step-index="3" aria-labelledby="ak-step3-title" hidden>
+          <h2 class="ak-step-title" id="ak-step3-title">Har du haft ett särskilt arbetsrum hemma?</h2>
+          <p class="ak-step-sub">
+            Till exempel ett rum som i huvudsak används för arbete och som inte samtidigt är vardagsrum eller sovrum.
           </p>
-        </div>
 
-        <div class="form-group">
-          <label>
-            <input type="checkbox" id="hasHomeTravel" />
-            Jag betalar själv för hemresor på grund av arbete på annan ort.
-          </label>
-        </div>
+          <div class="ak-options" role="radiogroup" aria-label="Arbetsrum hemma">
+            <button type="button" class="ak-option" data-option="homeoffice_yes">
+              <div class="ak-option-label">
+                <span class="ak-option-title">Ja, jag har haft ett särskilt arbetsrum</span>
+                <span class="ak-option-meta">Till exempel ett separat rum i bostaden som används för arbete.</span>
+              </div>
+            </button>
 
-        <div class="form-group" id="homeTravelGroup" style="display: none;">
-          <label for="homeTravelYearlyCost">Ungefärlig kostnad för hemresor per år (kr)</label>
-          <input type="number" id="homeTravelYearlyCost" min="0" />
-          <p class="helper-text">
-            Till exempel tågbiljetter eller flyg hem till familjen under perioden med dubbel bosättning.
+            <button type="button" class="ak-option" data-option="homeoffice_no">
+              <div class="ak-option-label">
+                <span class="ak-option-title">Nej, inget särskilt arbetsrum</span>
+                <span class="ak-option-meta">Till exempel om du arbetar vid köksbordet eller i vardagsrummet.</span>
+              </div>
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <!-- Resultat-vy -->
+      <div data-step="result" hidden aria-live="polite">
+        <header class="ak-result-hero">
+          <div class="ak-result-label">Preliminär uppskattning</div>
+          <div class="ak-result-amount" id="ak-result-total">0 kr</div>
+          <p class="ak-result-sub" id="ak-result-sub">
+            Baserat på dina svar kan du eventuellt ha rätt till avdrag. Nedan ser du en grov uppskattning.
           </p>
+        </header>
+
+        <ul class="ak-result-list" id="ak-result-list">
+          <!-- Fylls i via JavaScript -->
+        </ul>
+
+        <div class="ak-cta-row">
+          <button type="button" class="ak-btn ak-btn-primary" id="ak-result-howto-btn">
+            Visa hur jag gör avdragen i deklarationen
+          </button>
+          <button type="button" class="ak-btn ak-btn-secondary" id="ak-result-restart-btn">
+            <span>Börja om och ändra svar</span>
+          </button>
         </div>
 
-        <button type="submit" class="button-primary">Visa resultat</button>
-      </form>
-    </section>
+        <p class="ak-result-footer">
+          Beloppen är förenklade och avrundade. Den slutliga bedömningen görs alltid av Skatteverket och
+          bygger på fullständig information i din deklaration.
+        </p>
+      </div>
 
-    <section id="resultSection" class="card" style="display:none;">
-      <h2>Din uppskattade skattesänkning</h2>
-      <p id="resultText"></p>
-      <p class="disclaimer">
-        Obs! Detta är en <strong>förenklad uppskattning</strong> baserad på schablonantaganden och avrundningar. Regler för avdrag kan ändras och skilja sig åt beroende på din situation. Kontrollera alltid mot Skatteverkets information innan du deklarerar eller gör ändringar.
-      </p>
-    </section>
-    <section class="card">
-      <h2>Läs mer om olika avdrag</h2>
-      <ul class="link-list">
-        <li><a href="/skatteavdrag/resavdrag">Resavdrag – så funkar det</a></li>
-        <li><a href="/skatteavdrag/arbetsrum-avdrag">Avdrag för arbetsrum hemma</a></li>
-        <li><a href="/skatteavdrag/dubbel-bosattning">Avdrag för dubbel bosättning &amp; hemresor</a></li>
-      </ul>
-    </section>
-
-    <section id="emailSection" class="card">
-      <h2>Vill du följa utvecklingen?</h2>
-      <p>
-        Vi kommer löpande lägga till fler avdrag och göra beräkningarna smartare. Lämna din e-post om du vill få uppdateringar inför deklarationssäsongen.
-      </p>
-      <form id="emailForm">
-        <div class="form-group">
-          <label for="emailInput">E-postadress</label>
-          <input type="email" id="emailInput" placeholder="namn@exempel.se" required />
+      <!-- Sticky navigation -->
+      <div class="ak-sticky-bar" aria-hidden="false">
+        <div class="ak-sticky-inner">
+          <div class="ak-sticky-text" id="ak-sticky-text">
+            Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.
+          </div>
+          <div class="ak-sticky-actions">
+            <button type="button" class="ak-btn ak-btn-ghost" id="ak-back-btn" disabled>
+              Tillbaka
+            </button>
+            <button type="button" class="ak-btn ak-btn-primary" id="ak-next-btn" disabled>
+              Nästa
+            </button>
+          </div>
         </div>
-        <button type="submit" class="button-primary">Spara mig på listan</button>
-        <p id="emailFeedback" class="helper-text" style="display:none;"></p>
-      </form>
+      </div>
     </section>
-  </main>
+  </div>
+
+  <!-- Befintligt SEO-innehåll: Läs mer om avdrag -->
+  <section class="card">
+    <h2>Läs mer om olika avdrag</h2>
+    <ul class="link-list">
+      <li><a href="/skatteavdrag/resavdrag">Resavdrag – så funkar det</a></li>
+      <li><a href="/skatteavdrag/arbetsrum-avdrag">Avdrag för arbetsrum hemma</a></li>
+      <li><a href="/skatteavdrag/dubbel-bosattning">Avdrag för dubbel bosättning &amp; hemresor</a></li>
+    </ul>
+  </section>
+
+  <!-- Befintlig e-postsektion -->
+  <section id="emailSection" class="card">
+    <h2>Vill du följa utvecklingen?</h2>
+    <p>
+      Vi kommer löpande lägga till fler avdrag och göra beräkningarna smartare. Lämna din e-post om du vill få uppdateringar inför deklarationssäsongen.
+    </p>
+    <form id="emailForm">
+      <div class="form-group">
+        <label for="emailInput">E-postadress</label>
+        <input type="email" id="emailInput" placeholder="namn@exempel.se" required />
+      </div>
+      <button type="submit" class="button-primary">Spara mig på listan</button>
+      <p id="emailFeedback" class="helper-text" style="display:none;"></p>
+    </form>
+  </section>
+</main>
+
 
   <footer class="footer">
     <div class="container">
@@ -177,6 +272,280 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+(function () {
+  const introEl = document.querySelector('[data-step="intro"]');
+  const flowEl = document.querySelector('[data-step="flow"]');
+  const resultEl = document.querySelector('[data-step="result"]');
+  const startLink = document.querySelector('.hero a.button-primary');
+  const startBtn = document.getElementById('ak-start-btn');
+  const readMoreBtn = document.getElementById('ak-read-more-btn');
+  const nextBtn = document.getElementById('ak-next-btn');
+  const backBtn = document.getElementById('ak-back-btn');
+  const stickyText = document.getElementById('ak-sticky-text');
+  const progressLabel = document.getElementById('ak-progress-label');
+  const progressBarFill = document.getElementById('ak-progress-bar');
+  const kmInput = document.getElementById('ak-km-input');
+  const kmError = document.getElementById('ak-km-error');
+  const resultTotalEl = document.getElementById('ak-result-total');
+  const resultListEl = document.getElementById('ak-result-list');
+  const resultHowToBtn = document.getElementById('ak-result-howto-btn');
+  const resultRestartBtn = document.getElementById('ak-result-restart-btn');
+  const steps = Array.from(flowEl.querySelectorAll('[data-step-index]'));
+  const totalSteps = steps.length;
+
+  const state = {
+    currentStep: 1,
+    travelType: null,
+    travelKm: null,
+    homeOffice: null
+  };
+
+  function setView(view) {
+    introEl.hidden = view !== 'intro';
+    flowEl.hidden = view !== 'flow';
+    resultEl.hidden = view !== 'result';
+
+    if (view === 'intro') {
+      nextBtn.disabled = true;
+      backBtn.disabled = true;
+      stickyText.textContent = 'Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.';
+    } else if (view === 'flow') {
+      updateStepVisibility();
+      updateProgress();
+      updateButtons();
+    } else if (view === 'result') {
+      nextBtn.disabled = true;
+      backBtn.disabled = false;
+      stickyText.textContent = 'Detta är en preliminär uppskattning. Läs alltid reglerna innan du deklarerar.';
+    }
+  }
+
+  function updateStepVisibility() {
+    steps.forEach((stepEl) => {
+      const index = Number(stepEl.dataset.stepIndex);
+      stepEl.hidden = index !== state.currentStep;
+    });
+  }
+
+  function updateProgress() {
+    const clampedStep = Math.min(state.currentStep, totalSteps);
+    const pct = (clampedStep / totalSteps) * 100;
+    progressBarFill.style.width = pct + '%';
+    progressLabel.textContent = 'Steg ' + clampedStep + ' av ' + totalSteps;
+  }
+
+  function updateButtons() {
+    backBtn.disabled = state.currentStep <= 1 && introEl.hidden;
+    const stepIndex = state.currentStep;
+
+    if (introEl.hidden === false) {
+      nextBtn.disabled = true;
+      return;
+    }
+
+    if (stepIndex === 1) {
+      nextBtn.disabled = !state.travelType;
+      stickyText.textContent = 'Börja med dina resor till och från arbetet.';
+    } else if (stepIndex === 2) {
+      const km = parseFloat(kmInput.value.replace(',', '.'));
+      nextBtn.disabled = !(km > 0);
+      stickyText.textContent = 'En uppskattning räcker.';
+    } else if (stepIndex === 3) {
+      nextBtn.disabled = !state.homeOffice;
+      stickyText.textContent = 'Till sist tittar vi på arbetsrum hemma.';
+    } else {
+      nextBtn.disabled = false;
+    }
+  }
+
+  function goToNextStep() {
+    if (state.currentStep >= totalSteps) {
+      calculateAndShowResult();
+      setView('result');
+      return;
+    }
+    if (state.currentStep === 1 && state.travelType !== 'car') {
+      state.currentStep = 3;
+    } else {
+      state.currentStep = Math.min(state.currentStep + 1, totalSteps);
+    }
+    setView('flow');
+  }
+
+  function goToPreviousStep() {
+    if (!resultEl.hidden) {
+      state.currentStep = totalSteps;
+      setView('flow');
+      return;
+    }
+    if (state.currentStep <= 1) {
+      setView('intro');
+      return;
+    }
+    if (state.currentStep === 3 && state.travelType !== 'car') {
+      state.currentStep = 1;
+    } else {
+      state.currentStep--;
+    }
+    setView('flow');
+  }
+
+  function clearKmError() {
+    kmError.hidden = true;
+    kmInput.classList.remove('ak-input-error');
+  }
+
+  function validateKmInput() {
+    const value = kmInput.value.trim();
+    if (!value) {
+      kmError.hidden = false;
+      kmError.textContent = 'Ange ett antal mil.';
+      kmInput.classList.add('ak-input-error');
+      return false;
+    }
+    const num = Number(value.replace(',', '.'));
+    if (!(num > 0) || num > 20000) {
+      kmError.hidden = false;
+      kmError.textTextContent = 'Ange ett rimligt antal mil mellan 1 och 20 000.';
+      kmInput.classList.add('ak-input-error');
+      return false;
+    }
+    clearKmError();
+    state.travelKm = num;
+    return true;
+  }
+
+  function formatCurrency(sek) {
+    return new Intl.NumberFormat('sv-SE', {
+      style: 'currency',
+      currency: 'SEK',
+      maximumFractionDigits: 0
+    }).format(sek);
+  }
+
+  function calculateAndShowResult() {
+    let total = 0;
+    const items = [];
+
+    if (state.travelType === 'car' && state.travelKm && state.travelKm > 0) {
+      const brutto = state.travelKm * 25;
+      const net = Math.max(0, brutto - 11000);
+      if (net > 0) {
+        total += net;
+        items.push({
+          label: 'Resor till och från arbetet (bil)',
+          value: net
+        });
+      }
+    }
+
+    if (state.travelType === 'public') {
+      const approx = 4000;
+      total += approx;
+      items.push({
+        label: 'Resor med kollektivtrafik',
+        value: approx
+      });
+    }
+
+    if (state.homeOffice === 'yes') {
+      const approx = 2000;
+      total += approx;
+      items.push({
+        label: 'Särskilt arbetsrum',
+        value: approx
+      });
+    }
+
+    if (total > 0) {
+      resultTotalEl.textContent = formatCurrency(total);
+      resultListEl.innerHTML =
+        items
+          .map(i => `<li class="ak-result-item"><span>${i.label}</span><span>${formatCurrency(i.value)}</span></li>`)
+          .join('');
+    } else {
+      resultTotalEl.textContent = 'Inga tydliga avdrag';
+      resultListEl.innerHTML = `<li class="ak-result-item"><span>Vi hittar inga tydliga avdrag.</span></li>`;
+    }
+  }
+
+  // Event listeners
+  if (startLink) {
+    startLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector('.ak-shell').scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  }
+
+  startBtn.addEventListener('click', () => setView('flow'));
+  readMoreBtn.addEventListener('click', () =>
+    document.querySelector('.ak-disclaimer').scrollIntoView({ behavior: 'smooth' })
+  );
+  nextBtn.addEventListener('click', () => {
+    if (state.currentStep === 2 && state.travelType === 'car') {
+      const ok = validateKmInput();
+      if (!ok) return;
+    }
+    goToNextStep();
+    updateButtons();
+  });
+  backBtn.addEventListener('click', () => {
+    goToPreviousStep();
+    updateButtons();
+  });
+
+  flowEl.addEventListener('click', (event) => {
+    const optionBtn = event.target.closest('.ak-option');
+    if (!optionBtn) return;
+
+    const section = optionBtn.closest('[data-step-index]');
+    const stepIndex = Number(section.dataset.stepIndex);
+    const optionValue = optionBtn.dataset.option;
+
+    section.querySelectorAll('.ak-option').forEach((btn) => {
+      btn.classList.toggle('ak-option-selected', btn === optionBtn);
+    });
+
+    if (stepIndex === 1) {
+      state.travelType =
+        optionValue === 'travel_car'
+          ? 'car'
+          : optionValue === 'travel_public'
+          ? 'public'
+          : 'none';
+    } else if (stepIndex === 3) {
+      state.homeOffice = optionValue === 'homeoffice_yes' ? 'yes' : 'no';
+    }
+
+    updateButtons();
+  });
+
+  kmInput.addEventListener('input', () => {
+    clearKmError();
+    const value = kmInput.value.trim();
+    state.travelKm = value ? Number(value.replace(',', '.')) : null;
+    updateButtons();
+  });
+
+  resultHowToBtn.addEventListener('click', () => {
+    window.location.href = '/skatteavdrag/';
+  });
+
+  resultRestartBtn.addEventListener('click', () => {
+    state.currentStep = 1;
+    state.travelType = null;
+    state.travelKm = null;
+    state.homeOffice = null;
+    kmInput.value = '';
+    setView('intro');
+  });
+
+  setView('intro');
+})();
+</script>
+
 </body>
 </html>
