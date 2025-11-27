@@ -264,60 +264,58 @@
     </form>
   </section>
 </main>
-
-
-  <footer class="footer">
-    <div class="container">
-      <p>© <span id="year"></span> Avdragsjakten. Ingen data sparas i denna version – alla beräkningar görs i din webbläsare.</p>
-    </div>
-  </footer>
-
-  <script>
-(function () {
+<script>
+document.addEventListener("DOMContentLoaded", function () {
   const introEl = document.querySelector('[data-step="intro"]');
   const flowEl = document.querySelector('[data-step="flow"]');
   const resultEl = document.querySelector('[data-step="result"]');
-  const startLink = document.querySelector('.hero a.button-primary');
-  const startBtn = document.getElementById('ak-start-btn');
-  const readMoreBtn = document.getElementById('ak-read-more-btn');
-  const nextBtn = document.getElementById('ak-next-btn');
-  const backBtn = document.getElementById('ak-back-btn');
-  const stickyText = document.getElementById('ak-sticky-text');
-  const progressLabel = document.getElementById('ak-progress-label');
-  const progressBarFill = document.getElementById('ak-progress-bar');
-  const kmInput = document.getElementById('ak-km-input');
-  const kmError = document.getElementById('ak-km-error');
-  const resultTotalEl = document.getElementById('ak-result-total');
-  const resultListEl = document.getElementById('ak-result-list');
-  const resultHowToBtn = document.getElementById('ak-result-howto-btn');
-  const resultRestartBtn = document.getElementById('ak-result-restart-btn');
-  const steps = Array.from(flowEl.querySelectorAll('[data-step-index]'));
+
+  const startBtn = document.getElementById("ak-start-btn");
+  const readMoreBtn = document.getElementById("ak-read-more-btn");
+  const nextBtn = document.getElementById("ak-next-btn");
+  const backBtn = document.getElementById("ak-back-btn");
+
+  const stickyText = document.getElementById("ak-sticky-text");
+  const progressLabel = document.getElementById("ak-progress-label");
+  const progressBarFill = document.getElementById("ak-progress-bar");
+
+  const kmInput = document.getElementById("ak-km-input");
+  const kmError = document.getElementById("ak-km-error");
+
+  const resultTotalEl = document.getElementById("ak-result-total");
+  const resultListEl = document.getElementById("ak-result-list");
+  const resultHowToBtn = document.getElementById("ak-result-howto-btn");
+  const resultRestartBtn = document.getElementById("ak-result-restart-btn");
+
+  const steps = Array.from(flowEl.querySelectorAll("[data-step-index]"));
   const totalSteps = steps.length;
 
   const state = {
     currentStep: 1,
-    travelType: null,
+    travelType: null,   // "car" | "public" | "none"
     travelKm: null,
-    homeOffice: null
+    homeOffice: null    // "yes" | "no"
   };
 
   function setView(view) {
-    introEl.hidden = view !== 'intro';
-    flowEl.hidden = view !== 'flow';
-    resultEl.hidden = view !== 'result';
+    introEl.hidden = view !== "intro";
+    flowEl.hidden = view !== "flow";
+    resultEl.hidden = view !== "result";
 
-    if (view === 'intro') {
+    if (view === "intro") {
       nextBtn.disabled = true;
       backBtn.disabled = true;
-      stickyText.textContent = 'Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.';
-    } else if (view === 'flow') {
+      stickyText.textContent =
+        "Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.";
+    } else if (view === "flow") {
       updateStepVisibility();
       updateProgress();
       updateButtons();
-    } else if (view === 'result') {
+    } else if (view === "result") {
       nextBtn.disabled = true;
       backBtn.disabled = false;
-      stickyText.textContent = 'Detta är en preliminär uppskattning. Läs alltid reglerna innan du deklarerar.';
+      stickyText.textContent =
+        "Detta är en preliminär uppskattning. Läs alltid reglerna innan du deklarerar.";
     }
   }
 
@@ -331,29 +329,31 @@
   function updateProgress() {
     const clampedStep = Math.min(state.currentStep, totalSteps);
     const pct = (clampedStep / totalSteps) * 100;
-    progressBarFill.style.width = pct + '%';
-    progressLabel.textContent = 'Steg ' + clampedStep + ' av ' + totalSteps;
+    progressBarFill.style.width = pct + "%";
+    progressLabel.textContent = "Steg " + clampedStep + " av " + totalSteps;
   }
 
   function updateButtons() {
+    // Tillbaka-knapp
     backBtn.disabled = state.currentStep <= 1 && introEl.hidden;
-    const stepIndex = state.currentStep;
 
-    if (introEl.hidden === false) {
+    if (!flowEl || flowEl.hidden) {
       nextBtn.disabled = true;
       return;
     }
 
-    if (stepIndex === 1) {
+    if (state.currentStep === 1) {
       nextBtn.disabled = !state.travelType;
-      stickyText.textContent = 'Börja med dina resor till och från arbetet.';
-    } else if (stepIndex === 2) {
-      const km = parseFloat(kmInput.value.replace(',', '.'));
+      stickyText.textContent = "Börja med dina resor till och från arbetet.";
+    } else if (state.currentStep === 2) {
+      const km = parseFloat((kmInput.value || "").replace(",", "."));
       nextBtn.disabled = !(km > 0);
-      stickyText.textContent = 'En uppskattning räcker.';
-    } else if (stepIndex === 3) {
+      stickyText.textContent =
+        "En uppskattning räcker. Du kan justera antalet mil vid behov.";
+    } else if (state.currentStep === 3) {
       nextBtn.disabled = !state.homeOffice;
-      stickyText.textContent = 'Till sist tittar vi på arbetsrum hemma.';
+      stickyText.textContent =
+        "Till sist tittar vi på om du haft ett särskilt arbetsrum hemma.";
     } else {
       nextBtn.disabled = false;
     }
@@ -362,53 +362,59 @@
   function goToNextStep() {
     if (state.currentStep >= totalSteps) {
       calculateAndShowResult();
-      setView('result');
+      setView("result");
       return;
     }
-    if (state.currentStep === 1 && state.travelType !== 'car') {
+
+    if (state.currentStep === 1 && state.travelType !== "car") {
       state.currentStep = 3;
     } else {
       state.currentStep = Math.min(state.currentStep + 1, totalSteps);
     }
-    setView('flow');
+
+    setView("flow");
   }
 
   function goToPreviousStep() {
     if (!resultEl.hidden) {
       state.currentStep = totalSteps;
-      setView('flow');
+      setView("flow");
       return;
     }
+
     if (state.currentStep <= 1) {
-      setView('intro');
+      setView("intro");
       return;
     }
-    if (state.currentStep === 3 && state.travelType !== 'car') {
+
+    if (state.currentStep === 3 && state.travelType !== "car") {
       state.currentStep = 1;
     } else {
-      state.currentStep--;
+      state.currentStep = Math.max(state.currentStep - 1, 1);
     }
-    setView('flow');
+
+    setView("flow");
   }
 
   function clearKmError() {
     kmError.hidden = true;
-    kmInput.classList.remove('ak-input-error');
+    kmInput.classList.remove("ak-input-error");
   }
 
   function validateKmInput() {
-    const value = kmInput.value.trim();
+    const value = (kmInput.value || "").trim();
     if (!value) {
       kmError.hidden = false;
-      kmError.textContent = 'Ange ett antal mil.';
-      kmInput.classList.add('ak-input-error');
+      kmError.textContent = "Ange ett antal mil.";
+      kmInput.classList.add("ak-input-error");
       return false;
     }
-    const num = Number(value.replace(',', '.'));
+    const num = Number(value.replace(",", "."));
     if (!(num > 0) || num > 20000) {
       kmError.hidden = false;
-      kmError.textTextContent = 'Ange ett rimligt antal mil mellan 1 och 20 000.';
-      kmInput.classList.add('ak-input-error');
+      kmError.textContent =
+        "Ange ett rimligt antal mil mellan 1 och 20 000.";
+      kmInput.classList.add("ak-input-error");
       return false;
     }
     clearKmError();
@@ -417,135 +423,214 @@
   }
 
   function formatCurrency(sek) {
-    return new Intl.NumberFormat('sv-SE', {
-      style: 'currency',
-      currency: 'SEK',
+    return new Intl.NumberFormat("sv-SE", {
+      style: "currency",
+      currency: "SEK",
       maximumFractionDigits: 0
     }).format(sek);
   }
 
-  function calculateAndShowResult() {
+  function computeEstimate() {
     let total = 0;
     const items = [];
 
-    if (state.travelType === 'car' && state.travelKm && state.travelKm > 0) {
-      const brutto = state.travelKm * 25;
-      const net = Math.max(0, brutto - 11000);
+    // Reseavdrag bil
+    if (state.travelType === "car" && state.travelKm && state.travelKm > 0) {
+      const brutto = state.travelKm * 25; // 25 kr/mil
+      const net = Math.max(0, brutto - 11000); // schablonavdrag 11 000 kr
       if (net > 0) {
         total += net;
         items.push({
-          label: 'Resor till och från arbetet (bil)',
+          label: "Resor till och från arbetet (bil)",
           value: net
         });
       }
     }
 
-    if (state.travelType === 'public') {
+    // Kollektivtrafik – förenklad schablon
+    if (state.travelType === "public") {
       const approx = 4000;
       total += approx;
       items.push({
-        label: 'Resor med kollektivtrafik',
+        label: "Resor till och från arbetet (kollektivtrafik)",
         value: approx
       });
     }
 
-    if (state.homeOffice === 'yes') {
+    // Arbetsrum – förenklad schablon
+    if (state.homeOffice === "yes") {
       const approx = 2000;
       total += approx;
       items.push({
-        label: 'Särskilt arbetsrum',
+        label: "Särskilt arbetsrum i bostaden",
         value: approx
       });
     }
 
+    return { total, items };
+  }
+
+  function calculateAndShowResult() {
+    const { total, items } = computeEstimate();
+
     if (total > 0) {
       resultTotalEl.textContent = formatCurrency(total);
-      resultListEl.innerHTML =
-        items
-          .map(i => `<li class="ak-result-item"><span>${i.label}</span><span>${formatCurrency(i.value)}</span></li>`)
-          .join('');
+      document.getElementById("ak-result-sub").textContent =
+        "Detta är ett grovt estimat på hur mycket dina samlade avdrag kan minska din beskattningsbara inkomst. Den faktiska effekten på skatten beror på hela din deklaration.";
+    } else if (state.travelType !== "none" || state.homeOffice === "yes") {
+      resultTotalEl.textContent = "Beloppet är för lågt för ett tydligt estimat";
+      document.getElementById("ak-result-sub").textContent =
+        "Baserat på dina svar ser det ut som att de möjliga avdragen är relativt små eller inte över schablonnivån. Se våra guider för att gå igenom reglerna mer i detalj.";
     } else {
-      resultTotalEl.textContent = 'Inga tydliga avdrag';
-      resultListEl.innerHTML = `<li class="ak-result-item"><span>Vi hittar inga tydliga avdrag.</span></li>`;
+      resultTotalEl.textContent = "Inga tydliga avdrag identifierade";
+      document.getElementById("ak-result-sub").textContent =
+        "Utifrån de här svaren hittar vi inga tydliga avdrag. Det kan ändå finnas andra situationer där avdrag är aktuella. Gå gärna vidare till våra guider.";
+    }
+
+    resultListEl.innerHTML = "";
+    if (items.length > 0) {
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.className = "ak-result-item";
+        const labelSpan = document.createElement("span");
+        labelSpan.className = "ak-result-item-label";
+        labelSpan.textContent = item.label;
+        const valueSpan = document.createElement("span");
+        valueSpan.className = "ak-result-item-value";
+        valueSpan.textContent = formatCurrency(item.value);
+        li.appendChild(labelSpan);
+        li.appendChild(valueSpan);
+        resultListEl.appendChild(li);
+      });
+    } else {
+      const li = document.createElement("li");
+      li.className = "ak-result-item";
+      const labelSpan = document.createElement("span");
+      labelSpan.className = "ak-result-item-label";
+      labelSpan.textContent =
+        "Vi hittar inga tydliga avdrag baserat på de här svaren.";
+      li.appendChild(labelSpan);
+      resultListEl.appendChild(li);
     }
   }
 
-  // Event listeners
-  if (startLink) {
-    startLink.addEventListener('click', function (e) {
-      e.preventDefault();
-      document.querySelector('.ak-shell').scrollIntoView({
-        behavior: 'smooth'
-      });
+  // Koppla header-knappen "Börja räkna" till verktyget
+  const headerStartBtn = document.getElementById("startBtn");
+  if (headerStartBtn) {
+    headerStartBtn.addEventListener("click", function () {
+      const shell = document.querySelector(".ak-shell");
+      if (shell) {
+        shell.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      setView("flow");
+      updateButtons();
     });
   }
 
-  startBtn.addEventListener('click', () => setView('flow'));
-  readMoreBtn.addEventListener('click', () =>
-    document.querySelector('.ak-disclaimer').scrollIntoView({ behavior: 'smooth' })
-  );
-  nextBtn.addEventListener('click', () => {
-    if (state.currentStep === 2 && state.travelType === 'car') {
-      const ok = validateKmInput();
-      if (!ok) return;
-    }
-    goToNextStep();
-    updateButtons();
-  });
-  backBtn.addEventListener('click', () => {
-    goToPreviousStep();
-    updateButtons();
-  });
+  // Knappen "Kom igång" i själva verktyget
+  if (startBtn) {
+    startBtn.addEventListener("click", function () {
+      setView("flow");
+      updateButtons();
+    });
+  }
 
-  flowEl.addEventListener('click', (event) => {
-    const optionBtn = event.target.closest('.ak-option');
+  if (readMoreBtn) {
+    readMoreBtn.addEventListener("click", function () {
+      const disclaimer = document.querySelector(".ak-disclaimer");
+      if (disclaimer) {
+        disclaimer.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", function () {
+      if (state.currentStep === 2 && state.travelType === "car") {
+        const ok = validateKmInput();
+        if (!ok) return;
+      }
+      goToNextStep();
+      updateButtons();
+    });
+  }
+
+  if (backBtn) {
+    backBtn.addEventListener("click", function () {
+      goToPreviousStep();
+      updateButtons();
+    });
+  }
+
+  flowEl.addEventListener("click", function (event) {
+    const optionBtn = event.target.closest(".ak-option");
     if (!optionBtn) return;
 
-    const section = optionBtn.closest('[data-step-index]');
+    const section = optionBtn.closest("[data-step-index]");
+    if (!section) return;
+
     const stepIndex = Number(section.dataset.stepIndex);
     const optionValue = optionBtn.dataset.option;
 
-    section.querySelectorAll('.ak-option').forEach((btn) => {
-      btn.classList.toggle('ak-option-selected', btn === optionBtn);
+    section.querySelectorAll(".ak-option").forEach((btn) => {
+      btn.classList.toggle("ak-option-selected", btn === optionBtn);
     });
 
     if (stepIndex === 1) {
-      state.travelType =
-        optionValue === 'travel_car'
-          ? 'car'
-          : optionValue === 'travel_public'
-          ? 'public'
-          : 'none';
+      if (optionValue === "travel_car") state.travelType = "car";
+      else if (optionValue === "travel_public") state.travelType = "public";
+      else state.travelType = "none";
     } else if (stepIndex === 3) {
-      state.homeOffice = optionValue === 'homeoffice_yes' ? 'yes' : 'no';
+      state.homeOffice =
+        optionValue === "homeoffice_yes" ? "yes" : "no";
     }
 
     updateButtons();
   });
 
-  kmInput.addEventListener('input', () => {
+  kmInput.addEventListener("input", function () {
     clearKmError();
     const value = kmInput.value.trim();
-    state.travelKm = value ? Number(value.replace(',', '.')) : null;
+    if (!value) {
+      state.travelKm = null;
+    } else {
+      const num = Number(value.replace(",", "."));
+      state.travelKm = num > 0 ? num : null;
+    }
     updateButtons();
   });
 
-  resultHowToBtn.addEventListener('click', () => {
-    window.location.href = '/skatteavdrag/';
+  resultHowToBtn.addEventListener("click", function () {
+    window.location.href = "/skatteavdrag/";
   });
 
-  resultRestartBtn.addEventListener('click', () => {
+  resultRestartBtn.addEventListener("click", function () {
     state.currentStep = 1;
     state.travelType = null;
     state.travelKm = null;
     state.homeOffice = null;
-    kmInput.value = '';
-    setView('intro');
+    kmInput.value = "";
+    clearKmError();
+    steps.forEach((stepEl) => {
+      stepEl.querySelectorAll(".ak-option").forEach((btn) => {
+        btn.classList.remove("ak-option-selected");
+      });
+    });
+    setView("flow");
+    updateButtons();
   });
 
-  setView('intro');
-})();
+  // Init
+  setView("intro");
+});
 </script>
+
+
+  <footer class="footer">
+    <div class="container">
+      <p>© <span id="year"></span> Avdragsjakten. Ingen data sparas i denna version – alla beräkningar görs i din webbläsare.</p>
+    </div>
+  </footer>
 
 </body>
 </html>
