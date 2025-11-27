@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <title>Avdragskollen – Avdragsjakten</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Antag att fonts och grundläggande design-variabler redan sätts globalt.
+       Här används bara var(--color-primary) m.fl. som pekar på ert designsystem. -->
+  <style>
+    :root {
+      /* Fallbacks om variabler saknas globalt */
+      --color-primary: #005078;
+      --color-primary-hover: #003b58;
+      --color-accent: #3BB273;
+      --color-bg: #f5f5f7;
+      --color-surface: #ffffff;
+      --color-border: #dde0e5;
+      --color-text: #111827;
+      --color-text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-full: 999px;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.12);
+      --font-heading: "Bricolage Grotesque", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+    }
+
+    .ak-main {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 1.5rem 1rem 6rem;
+    }
+
+    .ak-shell {
+      width: 100%;
+      max-width: 720px;
+      background: var(--color-surface);
+      border-radius: 24px;
+      box-shadow: var(--shadow-soft);
+      padding: 1.5rem 1.25rem 1.25rem;
+      box-sizing: border-box;
+    }
+
+    @media (min-width: 768px) {
+      .ak-main {
+        padding: 3rem 1.5rem 6rem;
+      }
+      .ak-shell {
+        padding: 2.5rem 2.5rem 2rem;
+      }
+    }
+
+    .ak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.2rem 0.8rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: rgba(0, 80, 120, 0.06);
+      color: var(--color-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .ak-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--color-primary);
+    }
+
+    .ak-hero-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.9rem, 4vw, 2.3rem);
+      line-height: 1.1;
+      margin: 0 0 0.75rem;
+      letter-spacing: -0.02em;
+    }
+
+    .ak-hero-sub {
+      margin: 0 0 1.5rem;
+      color: var(--color-text-muted);
+      font-size: 0.95rem;
+      max-width: 40rem;
+    }
+
+    .ak-hero-highlight {
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .ak-hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.25rem;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    .ak-hero-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .ak-meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--color-text-muted);
+    }
+
+    .ak-cta-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .ak-cta-row {
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+      }
+    }
+
+    .ak-btn {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.85rem 1.3rem;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+      white-space: nowrap;
+    }
+
+    .ak-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .ak-btn-primary {
+      background: var(--color-primary);
+      color: #fff;
+      box-shadow: 0 14px 30px rgba(0, 80, 120, 0.35);
+    }
+    .ak-btn-primary:hover:not(:disabled),
+    .ak-btn-primary:focus-visible:not(:disabled) {
+      background: var(--color-primary-hover);
+      box-shadow: 0 18px 36px rgba(0, 80, 120, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .ak-btn-secondary {
+      background: transparent;
+      color: var(--color-text);
+      border-radius: 999px;
+      padding-inline: 0;
+    }
+
+    .ak-btn-secondary span {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .ak-disclaimer {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+
+    .ak-divider {
+      height: 1px;
+      background: var(--color-border);
+      margin: 1.5rem 0 1rem;
+    }
+
+    /* Steg-wrapper */
+    .ak-step-shell {
+      margin-top: 0.75rem;
+    }
+
+    .ak-progress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .ak-progress-label {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .ak-progress-bar {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+    }
+
+    .ak-progress-bar-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: var(--color-primary);
+      transition: width 0.2s ease;
+    }
+
+    .ak-step-title {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      margin: 0 0 0.4rem;
+    }
+
+    .ak-step-sub {
+      margin: 0 0 1.25rem;
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+    }
+
+    .ak-options {
+      display: grid;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .ak-option {
+      width: 100%;
+      text-align: left;
+      border-radius: var(--radius-lg);
+      padding: 0.7rem 0.9rem;
+      border: 1px solid var(--color-border);
+      background: #fff;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--color-text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      transition: border 0.15s ease, background 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+    }
+
+    .ak-option:hover:not(.ak-option-selected) {
+      border-color: rgba(0, 80, 120, 0.35);
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .ak-option-selected {
+      border-color: var(--color-primary);
+      box-shadow: 0 12px 28px rgba(0, 80, 120, 0.18);
+      background: linear-gradient(135deg, rgba(0, 80, 120, 0.03), #fff);
+    }
+
+    .ak-option-label {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ak-option-title {
+      font-weight: 600;
+    }
+
+    .ak-option-meta {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .ak-option-pill {
+      font-size: 0.75rem;
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(0, 80, 120, 0.06);
+      color: var(--color-primary);
+      font-weight: 500;
+    }
+
+    .ak-input-group {
+      margin-bottom: 1rem;
+    }
+
+    .ak-input-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+
+    .ak-input-help {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .ak-input {
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 999px;
+      border: 1px solid var(--color-border);
+      padding: 0.6rem 0.9rem;
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: box-shadow 0.15s ease, border 0.15s ease;
+    }
+
+    .ak-input:focus-visible {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 1px rgba(0, 80, 120, 0.25);
+    }
+
+    .ak-input-error {
+      border-color: #b91c1c;
+    }
+
+    .ak-input-error-msg {
+      margin-top: 0.3rem;
+      font-size: 0.8rem;
+      color: #b91c1c;
+    }
+
+    /* Sticky bottom bar */
+    .ak-sticky-bar {
+      position: sticky;
+      bottom: -1px;
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      padding-bottom: 0.25rem;
+      background: linear-gradient(to top, rgba(245, 245, 247, 0.95), rgba(245, 245, 247, 0));
+    }
+
+    .ak-sticky-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .ak-sticky-text {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      flex: 1;
+    }
+
+    .ak-sticky-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .ak-btn-ghost {
+      background: transparent;
+      color: var(--color-text-muted);
+      font-weight: 500;
+      padding-inline: 0.4rem;
+    }
+
+    /* Result-vy */
+    .ak-result-hero {
+      margin-top: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .ak-result-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .ak-result-amount {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 4vw, 2.6rem);
+      letter-spacing: -0.03em;
+      margin-bottom: 0.2rem;
+    }
+
+    .ak-result-sub {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+    }
+
+    .ak-result-list {
+      margin: 1.25rem 0 1.25rem;
+      padding: 0;
+      list-style: none;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.02);
+      padding: 0.9rem 0.9rem;
+    }
+
+    .ak-result-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.9rem;
+      padding: 0.25rem 0;
+    }
+
+    .ak-result-item-label {
+      color: var(--color-text-muted);
+    }
+
+    .ak-result-item-value {
+      font-weight: 600;
+    }
+
+    .ak-result-footer {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-top: 0.75rem;
+    }
+
+    [data-step][hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+<main class="ak-main">
+  <section class="ak-shell" aria-label="Avdragskollen">
+    <!-- Start / hero -->
+    <div class="ak-hero" data-step="intro">
+      <div class="ak-badge">
+        <span class="ak-badge-dot"></span>
+        Avdragskollen · Beta
+      </div>
+      <h1 class="ak-hero-title">Ta reda på vilka avdrag du kan ha rätt till</h1>
+      <p class="ak-hero-sub">
+        Svara på några frågor om din vardag, så får du en uppskattning av vilka
+        <span class="ak-hero-highlight">skatteavdrag</span> du kan göra och ungefär hur mycket din skatt kan minska.
+        Verktyget bygger på offentliga regler men är inte personlig rådgivning.
+      </p>
+
+      <div class="ak-hero-meta">
+        <div class="ak-hero-meta-item">
+          Under 2 minuter
+        </div>
+        <div class="ak-hero-meta-item">
+          <span class="ak-meta-dot"></span>
+          Ingen inloggning, ingen persondata
+        </div>
+        <div class="ak-hero-meta-item">
+          <span class="ak-meta-dot"></span>
+          Uppdaterat för aktuellt beskattningsår
+        </div>
+      </div>
+
+      <div class="ak-cta-row">
+        <button type="button" class="ak-btn ak-btn-primary" id="ak-start-btn">
+          Kom igång
+        </button>
+        <button type="button" class="ak-btn ak-btn-secondary" id="ak-read-more-btn">
+          <span>Läs mer om hur vi räknar</span>
+        </button>
+      </div>
+
+      <p class="ak-disclaimer">
+        Avdragsjakten drivs av SWe-handel AB. Verktyget är fristående från Skatteverket och
+        ersätter inte professionell rådgivning. Du ansvarar själv för din deklaration.
+      </p>
+
+      <div class="ak-divider"></div>
+    </div>
+
+    <!-- Steg-wrapper -->
+    <div class="ak-step-shell" data-step="flow" hidden>
+      <div class="ak-progress" aria-hidden="true">
+        <div class="ak-progress-label" id="ak-progress-label">Steg 1 av 3</div>
+        <div class="ak-progress-bar">
+          <div class="ak-progress-bar-fill" id="ak-progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- Steg 1: Reseavdrag -->
+      <section data-step-index="1" aria-labelledby="ak-step1-title">
+        <h2 class="ak-step-title" id="ak-step1-title">Har du rest till jobbet eller uppdrag under året?</h2>
+        <p class="ak-step-sub">
+          Vi börjar med resor. Det kan handla om daglig pendling till och från arbetet.
+        </p>
+
+        <div class="ak-options" role="radiogroup" aria-label="Resor till och från jobbet">
+          <button type="button" class="ak-option" data-option="travel_car">
+            <div class="ak-option-label">
+              <span class="ak-option-title">Ja, mest med bil</span>
+              <span class="ak-option-meta">Till exempel daglig pendling till din arbetsplats.</span>
+            </div>
+            <span class="ak-option-pill">Vanlig grund för reseavdrag</span>
+          </button>
+
+          <button type="button" class="ak-option" data-option="travel_public">
+            <div class="ak-option-label">
+              <span class="ak-option-title">Ja, mest med kollektivtrafik</span>
+              <span class="ak-option-meta">Till exempel tåg, buss eller tunnelbana.</span>
+            </div>
+          </button>
+
+          <button type="button" class="ak-option" data-option="travel_none">
+            <div class="ak-option-label">
+              <span class="ak-option-title">Nej, inga regelbundna resor</span>
+              <span class="ak-option-meta">Till exempel om du arbetat hemifrån hela året.</span>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <!-- Steg 2: Körsträcka (endast om bil) -->
+      <section data-step-index="2" aria-labelledby="ak-step2-title" hidden>
+        <h2 class="ak-step-title" id="ak-step2-title">Ungefär hur många mil körde du till och från jobbet?</h2>
+        <p class="ak-step-sub">
+          En grov uppskattning räcker. Vi använder en schablonbaserad beräkning.
+        </p>
+
+        <div class="ak-input-group">
+          <label for="ak-km-input" class="ak-input-label">Antal mil under året</label>
+          <div class="ak-input-help">
+            Exempel: 5 mil per dag, 220 dagar ≈ 1&nbsp;100 mil.
+          </div>
+          <input
+            id="ak-km-input"
+            class="ak-input"
+            type="number"
+            inputmode="decimal"
+            min="0"
+            step="1"
+            placeholder="Skriv ett ungefärligt antal mil"
+          />
+          <p class="ak-input-error-msg" id="ak-km-error" hidden>
+            Ange ett rimligt antal mil större än noll.
+          </p>
+        </div>
+      </section>
+
+      <!-- Steg 3: Arbetsrum -->
+      <section data-step-index="3" aria-labelledby="ak-step3-title" hidden>
+        <h2 class="ak-step-title" id="ak-step3-title">Har du haft ett särskilt arbetsrum hemma?</h2>
+        <p class="ak-step-sub">
+          Till exempel ett rum som i huvudsak används för arbete och som inte samtidigt är vardagsrum eller sovrum.
+        </p>
+
+        <div class="ak-options" role="radiogroup" aria-label="Arbetsrum hemma">
+          <button type="button" class="ak-option" data-option="homeoffice_yes">
+            <div class="ak-option-label">
+              <span class="ak-option-title">Ja, jag har haft ett särskilt arbetsrum</span>
+              <span class="ak-option-meta">Till exempel ett separat rum i bostaden som används för arbete.</span>
+            </div>
+          </button>
+
+          <button type="button" class="ak-option" data-option="homeoffice_no">
+            <div class="ak-option-label">
+              <span class="ak-option-title">Nej, inget särskilt arbetsrum</span>
+              <span class="ak-option-meta">Till exempel om du arbetar vid köksbordet eller i vardagsrummet.</span>
+            </div>
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Resultat-vy -->
+    <div data-step="result" hidden aria-live="polite">
+      <header class="ak-result-hero">
+        <div class="ak-result-label">Preliminär uppskattning</div>
+        <div class="ak-result-amount" id="ak-result-total">0 kr</div>
+        <p class="ak-result-sub" id="ak-result-sub">
+          Baserat på dina svar kan du eventuellt ha rätt till avdrag. Nedan ser du en grov uppskattning.
+        </p>
+      </header>
+
+      <ul class="ak-result-list" id="ak-result-list">
+        <!-- Fylls i via JavaScript -->
+      </ul>
+
+      <div class="ak-cta-row">
+        <button type="button" class="ak-btn ak-btn-primary" id="ak-result-howto-btn">
+          Visa hur jag gör avdragen i deklarationen
+        </button>
+        <button type="button" class="ak-btn ak-btn-secondary" id="ak-result-restart-btn">
+          <span>Börja om och ändra svar</span>
+        </button>
+      </div>
+
+      <p class="ak-result-footer">
+        Beloppen är förenklade och avrundade. Den slutliga bedömningen görs alltid av Skatteverket och
+        bygger på fullständig information i din deklaration.
+      </p>
+    </div>
+
+    <!-- Sticky navigation -->
+    <div class="ak-sticky-bar" aria-hidden="false">
+      <div class="ak-sticky-inner">
+        <div class="ak-sticky-text" id="ak-sticky-text">
+          Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.
+        </div>
+        <div class="ak-sticky-actions">
+          <button type="button" class="ak-btn ak-btn-ghost" id="ak-back-btn" disabled>
+            Tillbaka
+          </button>
+          <button type="button" class="ak-btn ak-btn-primary" id="ak-next-btn" disabled>
+            Nästa
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  (function () {
+    const introEl = document.querySelector('[data-step="intro"]');
+    const flowEl = document.querySelector('[data-step="flow"]');
+    const resultEl = document.querySelector('[data-step="result"]');
+
+    const startBtn = document.getElementById('ak-start-btn');
+    const readMoreBtn = document.getElementById('ak-read-more-btn');
+    const nextBtn = document.getElementById('ak-next-btn');
+    const backBtn = document.getElementById('ak-back-btn');
+
+    const stickyText = document.getElementById('ak-sticky-text');
+    const progressLabel = document.getElementById('ak-progress-label');
+    const progressBarFill = document.getElementById('ak-progress-bar');
+
+    const kmInput = document.getElementById('ak-km-input');
+    const kmError = document.getElementById('ak-km-error');
+
+    const resultTotalEl = document.getElementById('ak-result-total');
+    const resultListEl = document.getElementById('ak-result-list');
+    const resultHowToBtn = document.getElementById('ak-result-howto-btn');
+    const resultRestartBtn = document.getElementById('ak-result-restart-btn');
+
+    const steps = Array.from(flowEl.querySelectorAll('[data-step-index]'));
+    const totalSteps = steps.length;
+
+    const state = {
+      currentStep: 1,
+      travelType: null,        // "car" | "public" | "none"
+      travelKm: null,
+      homeOffice: null         // "yes" | "no"
+    };
+
+    function setView(view) {
+      introEl.hidden = view !== 'intro';
+      flowEl.hidden = view !== 'flow';
+      resultEl.hidden = view !== 'result';
+
+      if (view === 'intro') {
+        nextBtn.disabled = true;
+        backBtn.disabled = true;
+        stickyText.textContent = 'Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.';
+      } else if (view === 'flow') {
+        updateStepVisibility();
+        updateProgress();
+        updateButtons();
+      } else if (view === 'result') {
+        nextBtn.disabled = true;
+        backBtn.disabled = false;
+        stickyText.textContent = 'Detta är en preliminär uppskattning. Läs alltid reglerna innan du deklarerar.';
+      }
+    }
+
+    function updateStepVisibility() {
+      steps.forEach((stepEl) => {
+        const index = Number(stepEl.dataset.stepIndex);
+        stepEl.hidden = index !== state.currentStep;
+      });
+    }
+
+    function updateProgress() {
+      const clampedStep = Math.min(state.currentStep, totalSteps);
+      const pct = (clampedStep / totalSteps) * 100;
+      progressBarFill.style.width = pct + '%';
+      progressLabel.textContent = 'Steg ' + clampedStep + ' av ' + totalSteps;
+    }
+
+    function updateButtons() {
+      // Tillbaka-knapp
+      backBtn.disabled = state.currentStep <= 1 && introEl.hidden;
+
+      // Nästa-knapp (endast aktiv när något är valt ifall aktuellt steg kräver det)
+      const stepIndex = state.currentStep;
+
+      if (introEl.hidden === false) {
+        nextBtn.disabled = true;
+        return;
+      }
+
+      if (stepIndex === 1) {
+        nextBtn.disabled = !state.travelType;
+        stickyText.textContent = 'Börja med dina resor till och från arbetet.';
+      } else if (stepIndex === 2) {
+        // Steg 2 visas bara om bil är valt, annars hoppar vi över i logiken
+        const km = parseFloat(kmInput.value.replace(',', '.'));
+        nextBtn.disabled = !(km > 0);
+        stickyText.textContent = 'En uppskattning räcker. Du kan justera antalet mil vid behov.';
+      } else if (stepIndex === 3) {
+        nextBtn.disabled = !state.homeOffice;
+        stickyText.textContent = 'Till sist tittar vi på om du haft ett särskilt arbetsrum hemma.';
+      } else {
+        nextBtn.disabled = false;
+      }
+    }
+
+    function goToNextStep() {
+      // Om vi är på sista riktiga steget går vi till resultat
+      if (state.currentStep >= totalSteps) {
+        calculateAndShowResult();
+        setView('result');
+        return;
+      }
+
+      // Speciell logik: om resor "ingen" eller "kollektivtrafik" hoppa över körsträcka-steg
+      if (state.currentStep === 1 && state.travelType !== 'car') {
+        state.currentStep = 3;
+      } else {
+        state.currentStep = Math.min(state.currentStep + 1, totalSteps);
+      }
+
+      setView('flow');
+    }
+
+    function goToPreviousStep() {
+      if (!introEl.hidden && flowEl.hidden && resultEl.hidden) {
+        return;
+      }
+
+      if (!resultEl.hidden) {
+        // Från resultat tillbaka till sista frågesteget
+        state.currentStep = totalSteps;
+        setView('flow');
+        return;
+      }
+
+      if (state.currentStep <= 1) {
+        // Tillbaka till intro från första steget
+        setView('intro');
+        return;
+      }
+
+      if (state.currentStep === 3 && state.travelType !== 'car') {
+        // Om vi hoppade över steg 2 tidigare går vi direkt tillbaka till steg 1
+        state.currentStep = 1;
+      } else {
+        state.currentStep = Math.max(state.currentStep - 1, 1);
+      }
+
+      setView('flow');
+    }
+
+    function clearKmError() {
+      kmError.hidden = true;
+      kmInput.classList.remove('ak-input-error');
+    }
+
+    function validateKmInput() {
+      const value = kmInput.value.trim();
+      if (!value) {
+        kmError.hidden = false;
+        kmError.textContent = 'Ange ett antal mil.';
+        kmInput.classList.add('ak-input-error');
+        return false;
+      }
+      const num = Number(value.replace(',', '.'));
+      if (!(num > 0) || num > 20000) {
+        kmError.hidden = false;
+        kmError.textContent = 'Ange ett rimligt antal mil mellan 1 och 20 000.';
+        kmInput.classList.add('ak-input-error');
+        return false;
+      }
+      clearKmError();
+      state.travelKm = num;
+      return true;
+    }
+
+    function formatCurrency(sek) {
+      return new Intl.NumberFormat('sv-SE', {
+        style: 'currency',
+        currency: 'SEK',
+        maximumFractionDigits: 0
+      }).format(sek);
+    }
+
+    function calculateAndShowResult() {
+      let total = 0;
+      const items = [];
+
+      // Enkel, förenklad logik bara för prototyp
+      // Reseavdrag bil
+      if (state.travelType === 'car' && state.travelKm && state.travelKm > 0) {
+        // schablon 25 kr/mil, schablonavdrag 11 000 kr
+        const brutto = state.travelKm * 25;
+        const net = Math.max(0, brutto - 11000);
+        if (net > 0) {
+          total += net;
+          items.push({
+            label: 'Resor till och från arbetet (bil)',
+            value: net
+          });
+        }
+      }
+
+      // Resor kollektivtrafik – här endast som symboliskt belopp
+      if (state.travelType === 'public') {
+        const approx = 4000;
+        total += approx;
+        items.push({
+          label: 'Resor till och från arbetet (kollektivtrafik)',
+          value: approx
+        });
+      }
+
+      // Arbetsrum – förenklad schablon
+      if (state.homeOffice === 'yes') {
+        const approx = 2000;
+        total += approx;
+        items.push({
+          label: 'Särskilt arbetsrum i bostaden',
+          value: approx
+        });
+      }
+
+      // Om totalen är noll men användaren svarat att de rest eller har arbetsrum,
+      // så visar vi ändå ett neutralare budskap.
+      if (total <= 0 && (state.travelType !== 'none' || state.homeOffice === 'yes')) {
+        resultTotalEl.textContent = 'Beloppet är för lågt för ett tydligt estimat';
+        document.getElementById('ak-result-sub').textContent =
+          'Baserat på dina svar ser det ut som att de möjliga avdragen är relativt små eller inte över schablonnivån. Se våra guider för att gå igenom reglerna mer i detalj.';
+      } else if (total > 0) {
+        resultTotalEl.textContent = formatCurrency(total);
+        document.getElementById('ak-result-sub').textContent =
+          'Detta är ett grovt estimat på hur mycket dina samlade avdrag kan minska din beskattningsbara inkomst. Den faktiska effekten på skatten beror på hela din deklaration.';
+      } else {
+        resultTotalEl.textContent = 'Inga tydliga avdrag identifierade';
+        document.getElementById('ak-result-sub').textContent =
+          'Utifrån de här svaren hittar vi inga tydliga avdrag. Det kan ändå finnas andra situationer där avdrag är aktuella. Gå gärna vidare till våra guider.';
+      }
+
+      // Bygg lista
+      resultListEl.innerHTML = '';
+      if (items.length > 0) {
+        items.forEach((item) => {
+          const li = document.createElement('li');
+          li.className = 'ak-result-item';
+          const labelSpan = document.createElement('span');
+          labelSpan.className = 'ak-result-item-label';
+          labelSpan.textContent = item.label;
+          const valueSpan = document.createElement('span');
+          valueSpan.className = 'ak-result-item-value';
+          valueSpan.textContent = formatCurrency(item.value);
+          li.appendChild(labelSpan);
+          li.appendChild(valueSpan);
+          resultListEl.appendChild(li);
+        });
+      } else {
+        const li = document.createElement('li');
+        li.className = 'ak-result-item';
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'ak-result-item-label';
+        labelSpan.textContent =
+          'Vi hittar inga tydliga avdrag baserat på de här svaren.';
+        li.appendChild(labelSpan);
+        resultListEl.appendChild(li);
+      }
+    }
+
+    // Händelser
+
+    startBtn.addEventListener('click', function () {
+      setView('flow');
+      state.currentStep = 1;
+      updateButtons();
+    });
+
+    readMoreBtn.addEventListener('click', function () {
+      // För prototyp: scrolla ner till disclaimer, eller ersätt med länk till separat sida
+      const disclaimer = document.querySelector('.ak-disclaimer');
+      if (disclaimer) {
+        disclaimer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+
+    nextBtn.addEventListener('click', function () {
+      if (!flowEl.hidden && state.currentStep === 2 && state.travelType === 'car') {
+        const ok = validateKmInput();
+        if (!ok) return;
+      }
+      goToNextStep();
+      updateButtons();
+    });
+
+    backBtn.addEventListener('click', function () {
+      goToPreviousStep();
+      updateButtons();
+    });
+
+    // Options (radioknappar)
+    flowEl.addEventListener('click', function (event) {
+      const optionBtn = event.target.closest('.ak-option');
+      if (!optionBtn) return;
+
+      const section = optionBtn.closest('[data-step-index]');
+      if (!section) return;
+
+      const stepIndex = Number(section.dataset.stepIndex);
+      const optionValue = optionBtn.dataset.option;
+
+      // markera valt
+      section.querySelectorAll('.ak-option').forEach((btn) => {
+        btn.classList.toggle('ak-option-selected', btn === optionBtn);
+      });
+
+      if (stepIndex === 1) {
+        if (optionValue === 'travel_car') state.travelType = 'car';
+        else if (optionValue === 'travel_public') state.travelType = 'public';
+        else state.travelType = 'none';
+      } else if (stepIndex === 3) {
+        state.homeOffice = optionValue === 'homeoffice_yes' ? 'yes' : 'no';
+      }
+
+      updateButtons();
+    });
+
+    // Körsträcka
+    kmInput.addEventListener('input', function () {
+      clearKmError();
+      const value = kmInput.value.trim();
+      if (!value) {
+        state.travelKm = null;
+      } else {
+        const num = Number(value.replace(',', '.'));
+        state.travelKm = num > 0 ? num : null;
+      }
+      updateButtons();
+    });
+
+    // Resultatsidan – knappar
+    resultHowToBtn.addEventListener('click', function () {
+      // Här kan ni senare länka till en hubbsida för "Så gör du avdragen i deklarationen"
+      window.location.href = '/skatteavdrag/';
+    });
+
+    resultRestartBtn.addEventListener('click', function () {
+      // Reset state
+      state.currentStep = 1;
+      state.travelType = null;
+      state.travelKm = null;
+      state.homeOffice = null;
+      kmInput.value = '';
+      clearKmError();
+      // Återställ valda alternativ
+      steps.forEach((stepEl) => {
+        stepEl.querySelectorAll('.ak-option').forEach((btn) => {
+          btn.classList.remove('ak-option-selected');
+        });
+      });
+      setView('flow');
+      updateButtons();
+    });
+
+    // Init
+    setView('intro');
+  })();
+</script>
+</body>
+</html>
