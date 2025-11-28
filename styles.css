@@ -597,7 +597,7 @@ hr {
       color: #b91c1c;
     }
 
- /* Sticky bottom bar – mobil först */
+/* Sticky bottom bar – mobil först, opak och tydlig */
 .ak-sticky-bar {
   position: fixed;
   left: 0;
@@ -605,13 +605,11 @@ hr {
   bottom: 0;
   z-index: 40;
   padding-top: 0.75rem;
-  padding-bottom: 0.5rem;
-  background: linear-gradient(
-    to top,
-    rgba(245, 245, 247, 0.98),
-    rgba(245, 245, 247, 0)
-  );
+  padding-bottom: 0.75rem;
+  background: var(--color-bg-elevated, #f5f5f7); /* opak yta */
+  box-shadow: 0 -4px 12px rgba(15, 23, 42, 0.08);
 }
+
 
 .ak-sticky-inner {
   max-width: 800px;
