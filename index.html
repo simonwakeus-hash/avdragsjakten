@@ -953,8 +953,49 @@ const emailForm = document.getElementById("ak-email-form");
 const emailInput = document.getElementById("ak-email-input");
 const emailFeedback = document.getElementById("ak-email-feedback");
 
-emailForm.addEventListener("submit", function (e) {
+// --- CTA: Spara rapport via Brevo/Worker --- //
+emailForm.addEventListener("submit", async function (e) {
   e.preventDefault();
+
+  const email = (emailInput.value || "").trim();
+  if (!email) return;
+
+  const submitButton = emailForm.querySelector("button[type='submit']");
+  submitButton.disabled = true;
+  emailFeedback.style.display = "block";
+  emailFeedback.style.color = "#555";
+  emailFeedback.textContent = "Sparar din e-post...";
+
+  try {
+    const res = await fetch("https://avdragsjakten-signup.simonwakeus.workers.dev/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        // Dynamiskt värde från resultatet på sidan
+        estimate: (resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")
+      })
+    });
+
+    if (!res.ok) throw new Error("Server error");
+
+    // Lyckad sparning
+    emailInput.disabled = true;
+    submitButton.disabled = true;
+    emailFeedback.style.color = "green";
+    emailFeedback.textContent =
+      "Tack! Vi hör av oss inför deklarationssäsongen.";
+  } catch (err) {
+    // Felhantering
+    submitButton.disabled = false;
+    emailFeedback.style.color = "red";
+    emailFeedback.textContent =
+      "Ett fel uppstod när vi skulle spara din e-post. Försök igen om en stund.";
+  }
+});
+
 
   const email = (emailInput.value || "").trim();
   if (!email) return;
