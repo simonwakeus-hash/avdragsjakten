@@ -335,6 +335,31 @@
           <!-- Fylls i via JavaScript -->
         </ul>
 
+        <!-- CTA: Spara min rapport -->
+<div id="ak-save-report" class="ak-card" style="margin-top: 2rem; padding: 1.5rem; border: 1px solid #d0d0d0; border-radius: 12px;">
+  <h3 style="margin-top: 0;">Spara min rapport inför deklarationen</h3>
+  <p style="margin-bottom: 1rem;">
+    Vi skickar en påminnelse inför deklarationssäsongen och din personliga rapport med avdrag du kan ha rätt till.
+  </p>
+
+  <form id="ak-email-form">
+    <div class="form-group" style="margin-bottom: 1rem;">
+      <label for="ak-email-input" class="ak-input-label">E-postadress</label>
+      <input type="email" id="ak-email-input" class="ak-input" placeholder="namn@exempel.se" required style="max-width: 320px;">
+    </div>
+
+    <button type="submit" class="button-primary">
+      Spara min rapport
+    </button>
+
+    <p id="ak-email-feedback" style="display:none; margin-top:0.75rem; font-size:0.9rem;"></p>
+  </form>
+</div>
+<p style="font-size: 0.8rem; color: #666; margin-top: 1rem;">
+  Vi sparar endast din e-post och en sammanställning av dina avdrag för att kunna hjälpa dig inför deklarationen.
+  Inga uppgifter delas med tredje part.
+</p>
+
         <div class="ak-cta-row">
           <button type="button" class="ak-btn ak-btn-primary" id="ak-result-howto-btn">
             Visa hur jag gör avdragen i deklarationen
@@ -923,6 +948,41 @@ document.addEventListener("DOMContentLoaded", function () {
     state.homeTravelCost = parseNumberField(homeTravelInput);
     updateButtons();
   });
+// --- CTA: Spara rapport --- //
+const emailForm = document.getElementById("ak-email-form");
+const emailInput = document.getElementById("ak-email-input");
+const emailFeedback = document.getElementById("ak-email-feedback");
+
+emailForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const email = (emailInput.value || "").trim();
+  if (!email) return;
+
+  // Spara anonymt i localStorage (kan ersättas med API/Braze)
+  const saved = {
+    timestamp: new Date().toISOString(),
+    email: email,
+    estimate: resultTotalEl.textContent,
+    items: Array.from(resultListEl.querySelectorAll(".ak-result-item")).map(x => ({
+      label: x.querySelector(".ak-result-item-label").textContent,
+      value: x.querySelector(".ak-result-item-value")?.textContent || null
+    }))
+  };
+
+  let list = JSON.parse(localStorage.getItem("ak_signups") || "[]");
+  list.push(saved);
+  localStorage.setItem("ak_signups", JSON.stringify(list));
+
+  emailInput.disabled = true;
+  emailForm.querySelector("button").disabled = true;
+
+  emailFeedback.style.display = "block";
+  emailFeedback.style.color = "green";
+  emailFeedback.textContent = "Tack! Vi hör av oss inför deklarationssäsongen.";
+
+  // TODO: Skicka till Braze senare
+});
 
   resultHowToBtn.addEventListener("click", function () {
     window.location.href = "/skatteavdrag/";
