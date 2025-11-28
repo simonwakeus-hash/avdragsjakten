@@ -584,14 +584,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const homeTravelGroup = document.getElementById("ak-hometravel-group");
   const homeTravelInput = document.getElementById("ak-hometravel-cost");
 
-    // Nya inputs i steg 5 (övriga avdrag)
+  // Nya inputs i steg 5 (övriga avdrag)
   const unionFeeMonthlyInput = document.getElementById("ak-union-fee-monthly");
   const unemploymentFeeMonthlyInput = document.getElementById("ak-unemployment-fee-monthly");
   const annualInterestPaidInput = document.getElementById("ak-annual-interest-paid");
   const workToolsCostInput = document.getElementById("ak-worktools-cost");
   const homeEquipmentCostInput = document.getElementById("ak-homeequipment-cost");
   const businessTravelDaysInput = document.getElementById("ak-businesstravel-days");
-
 
   const resultTotalEl = document.getElementById("ak-result-total");
   const resultListEl = document.getElementById("ak-result-list");
@@ -616,7 +615,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     homeOffice: null,          // "yes" | "no"
 
-    // NYA FÄLT: rådata
+    // Nya fält – rådata
     unionFeeMonthly: 0,
     unemploymentFeeMonthly: 0,
     annualInterestPaid: 0,
@@ -624,7 +623,7 @@ document.addEventListener("DOMContentLoaded", function () {
     homeEquipmentCost: 0,
     businessTravelDays: 0,
 
-    // NYA FÄLT: beräknade avdrag
+    // Nya fält – beräknade avdrag
     unionFeeDeduction: 0,
     unemploymentFeeDeduction: 0,
     interestDeduction: 0,
@@ -632,10 +631,9 @@ document.addEventListener("DOMContentLoaded", function () {
     homeEquipmentDeduction: 0,
     perDiemDeduction: 0,
 
-    // total uppskattning (sparad)
+    // total uppskattning
     totalEstimate: 0
   };
-
 
   function setView(view) {
     introEl.hidden = view !== "intro";
@@ -715,7 +713,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (step === 5) {
       nextBtn.disabled = !state.homeOffice;
       stickyText.textContent =
-        "Till sist tittar vi på om du haft ett särskilt arbetsrum hemma.";
+        "Till sist tittar vi på om du haft ett särskilt arbetsrum hemma och andra vanliga avdragskostnader.";
     } else {
       nextBtn.disabled = false;
     }
@@ -962,7 +960,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     state.workToolsDeduction = toolsDeduction;
 
-    // 5) Hemutrustning (skrivbord, stol m.m.) – preliminärt 100%
+    // 5) Hemutrustning – preliminärt 100%
     const homeEquipCost = Number(state.homeEquipmentCost) || 0;
     let homeEquipDeduction = 0;
     if (homeEquipCost > 0) {
@@ -989,12 +987,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     state.perDiemDeduction = perDiem;
 
-    // Spara total i state också
     state.totalEstimate = total;
 
     return { total, items };
   }
-
 
   function calculateAndShowResult() {
     const { total, items } = computeEstimate();
@@ -1184,7 +1180,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateButtons();
   });
 
-    // Nya fält – övriga avdrag
+  // Nya fält – övriga avdrag
   if (unionFeeMonthlyInput) {
     unionFeeMonthlyInput.addEventListener("input", function () {
       const val = parseNumberField(unionFeeMonthlyInput);
@@ -1227,7 +1223,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-
   // --- CTA: Spara rapport via Brevo/Worker + GA4 --- //
   const emailForm = document.getElementById("ak-email-form");
   const emailInput = document.getElementById("ak-email-input");
@@ -1246,16 +1241,16 @@ document.addEventListener("DOMContentLoaded", function () {
       emailFeedback.style.color = "#555";
       emailFeedback.textContent = "Sparar din e-post...";
 
-      // GA4-event: avdrag_signup (oförändrat, vi använder fortfarande totalEstimate)
+      // GA4-event: avdrag_signup
       try {
         if (typeof gtag === "function") {
-          const totalEstimate =
+          const totalEstimateNumber =
             Number((resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")) || 0;
 
           gtag("event", "avdrag_signup", {
-            value: totalEstimate,
+            value: totalEstimateNumber,
             currency: "SEK",
-            estimate_sek: totalEstimate,
+            estimate_sek: totalEstimateNumber,
             travel_type: state.travelType || "unknown",
             works_away: state.worksAway || "unknown",
             home_office: state.homeOffice || "unknown"
@@ -1279,10 +1274,10 @@ document.addEventListener("DOMContentLoaded", function () {
             body: JSON.stringify({
               email: email,
 
-              // samma som tidigare
+              // tidigare fält
               estimate: numericEstimate,
 
-              // rådata från de nya fälten
+              // rådata
               unionFeeMonthly: state.unionFeeMonthly || 0,
               unemploymentFeeMonthly: state.unemploymentFeeMonthly || 0,
               annualInterestPaid: state.annualInterestPaid || 0,
@@ -1298,7 +1293,7 @@ document.addEventListener("DOMContentLoaded", function () {
               homeEquipmentDeduction: state.homeEquipmentDeduction || 0,
               perDiemDeduction: state.perDiemDeduction || 0,
 
-              // total beräkning i klartext (från computeEstimate)
+              // total beräkning
               totalEstimate: state.totalEstimate || numericEstimate
             })
           }
@@ -1320,73 +1315,72 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-
-  resultHowToBtn.addEventListener("click", function () {
-    window.location.href = "/skatteavdrag/";
-  });
-
-  resultRestartBtn.addEventListener("click", function () {
-    state.currentStep = 1;
-    state.travelType = null;
-    state.travelKm = null;
-    state.worksAway = null;
-    state.doubleHousingCost = null;
-    state.livingCostDays = null;
-    state.homeTravelPaid = null;
-    state.homeTravelCost = null;
-    state.homeOffice = null;
-
-    // Nya fält
-    state.unionFeeMonthly = 0;
-    state.unemploymentFeeMonthly = 0;
-    state.annualInterestPaid = 0;
-    state.workToolsCost = 0;
-    state.homeEquipmentCost = 0;
-    state.businessTravelDays = 0;
-    state.unionFeeDeduction = 0;
-    state.unemploymentFeeDeduction = 0;
-    state.interestDeduction = 0;
-    state.workToolsDeduction = 0;
-    state.homeEquipmentDeduction = 0;
-    state.perDiemDeduction = 0;
-    state.totalEstimate = 0;
-
-    kmInput.value = "";
-    doubleHousingInput.value = "";
-    livingCostInput.value = "";
-    homeTravelInput.value = "";
-
-    if (unionFeeMonthlyInput) unionFeeMonthlyInput.value = "";
-    if (unemploymentFeeMonthlyInput) unemploymentFeeMonthlyInput.value = "";
-    if (annualInterestPaidInput) annualInterestPaidInput.value = "";
-    if (workToolsCostInput) workToolsCostInput.value = "";
-    if (homeEquipmentCostInput) homeEquipmentCostInput.value = "";
-    if (businessTravelDaysInput) businessTravelDaysInput.value = "";
-
-    clearKmError();
-    doubleHousingGroup.hidden = true;
-    livingCostGroup.hidden = true;
-    homeTravelGroup.hidden = true;
-
-    steps.forEach((stepEl) => {
-      stepEl.querySelectorAll(".ak-option").forEach((btn) => {
-        btn.classList.remove("ak-option-selected");
-      });
+  if (resultHowToBtn) {
+    resultHowToBtn.addEventListener("click", function () {
+      window.location.href = "/skatteavdrag/";
     });
+  }
 
-    setView("flow");
-    updateButtons();
-  });
+  if (resultRestartBtn) {
+    resultRestartBtn.addEventListener("click", function () {
+      state.currentStep = 1;
+      state.travelType = null;
+      state.travelKm = null;
+      state.worksAway = null;
+      state.doubleHousingCost = null;
+      state.livingCostDays = null;
+      state.homeTravelPaid = null;
+      state.homeTravelCost = null;
+      state.homeOffice = null;
 
+      // Nollställ nya fält
+      state.unionFeeMonthly = 0;
+      state.unemploymentFeeMonthly = 0;
+      state.annualInterestPaid = 0;
+      state.workToolsCost = 0;
+      state.homeEquipmentCost = 0;
+      state.businessTravelDays = 0;
+      state.unionFeeDeduction = 0;
+      state.unemploymentFeeDeduction = 0;
+      state.interestDeduction = 0;
+      state.workToolsDeduction = 0;
+      state.homeEquipmentDeduction = 0;
+      state.perDiemDeduction = 0;
+      state.totalEstimate = 0;
 
-    setView("flow");
-    updateButtons();
-  });
+      kmInput.value = "";
+      doubleHousingInput.value = "";
+      livingCostInput.value = "";
+      homeTravelInput.value = "";
+
+      if (unionFeeMonthlyInput) unionFeeMonthlyInput.value = "";
+      if (unemploymentFeeMonthlyInput) unemploymentFeeMonthlyInput.value = "";
+      if (annualInterestPaidInput) annualInterestPaidInput.value = "";
+      if (workToolsCostInput) workToolsCostInput.value = "";
+      if (homeEquipmentCostInput) homeEquipmentCostInput.value = "";
+      if (businessTravelDaysInput) businessTravelDaysInput.value = "";
+
+      clearKmError();
+      doubleHousingGroup.hidden = true;
+      livingCostGroup.hidden = true;
+      homeTravelGroup.hidden = true;
+
+      steps.forEach((stepEl) => {
+        stepEl.querySelectorAll(".ak-option").forEach((btn) => {
+          btn.classList.remove("ak-option-selected");
+        });
+      });
+
+      setView("flow");
+      updateButtons();
+    });
+  }
 
   // Initiera
   setView("intro");
 });
 </script>
+
 
 
 
