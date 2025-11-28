@@ -609,6 +609,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const resultHowToBtn = document.getElementById("ak-result-howto-btn");
   const resultRestartBtn = document.getElementById("ak-result-restart-btn");
 
+  const stickyBar = document.querySelector(".ak-sticky-bar");
+  const stickySummaryValue = document.getElementById("ak-sticky-summary-value");
+
+
   const steps = Array.from(flowEl.querySelectorAll("[data-step-index]"));
   const totalSteps = steps.length;
 
@@ -651,6 +655,27 @@ document.addEventListener("DOMContentLoaded", function () {
     introEl.hidden = view !== "intro";
     flowEl.hidden = view !== "flow";
     resultEl.hidden = view !== "result";
+    if (stickyBar) {
+      // Dölj sticky-baren på introt, visa i flödet och på resultatet
+      stickyBar.hidden = view === "intro";
+    }
+
+    if (view === "intro") {
+      nextBtn.disabled = true;
+      backBtn.disabled = true;
+      stickyText.textContent =
+        "Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.";
+    } else if (view === "flow") {
+      updateStepVisibility();
+      updateProgress();
+      updateButtons();
+    } else if (view === "result") {
+      nextBtn.disabled = true;
+      backBtn.disabled = false;
+      stickyText.textContent =
+        "Detta är en preliminär uppskattning. Läs alltid reglerna innan du deklarerar.";
+    }
+  }
 
     if (view === "intro") {
       nextBtn.disabled = true;
@@ -722,20 +747,27 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       stickyText.textContent =
         "Om du själv betalat hemresor kan det ibland ge avdragsrätt.";
-    } else if (step === 5) {
+        } else if (step === 5) {
       nextBtn.disabled = !state.homeOffice;
       stickyText.textContent =
         "Till sist tittar vi på om du haft ett särskilt arbetsrum hemma och andra vanliga avdragskostnader.";
     } else {
       nextBtn.disabled = false;
     }
+
+    // Uppdatera den löpande besparingen i sticky-baren
+    updateLiveSavings();
   }
+
 
   function goToNextStep() {
     if (state.currentStep >= totalSteps) {
       calculateAndShowResult();
       setView("result");
       return;
+          // Säkerställ att sticky-baren visar samma total som resultatet
+    updateLiveSavings();
+  }
     }
 
     if (state.currentStep === 1) {
@@ -841,7 +873,18 @@ document.addEventListener("DOMContentLoaded", function () {
   function computeEstimate() {
     let total = 0;
     const items = [];
+  function updateLiveSavings() {
+    if (!stickySummaryValue) return;
 
+    // Beräkna baserat på aktuella svar
+    const { total } = computeEstimate();
+
+    if (total > 0) {
+      stickySummaryValue.textContent = formatCurrency(total);
+    } else {
+      stickySummaryValue.textContent = "0 kr";
+    }
+  }
     // --- BEFINTLIGA AVDRAG ---
 
     // Reseavdrag bil
