@@ -586,7 +586,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const homeTravelGroup = document.getElementById("ak-hometravel-group");
   const homeTravelInput = document.getElementById("ak-hometravel-cost");
 
-  // Extra inputs (om du har lagt in dem i HTML – annars ignoreras de)
+  // Extra inputs i steg 5 (om de finns i HTML)
   const unionFeeMonthlyInput = document.getElementById("ak-union-fee-monthly");
   const unemploymentFeeMonthlyInput = document.getElementById("ak-unemployment-fee-monthly");
   const annualInterestPaidInput = document.getElementById("ak-annual-interest-paid");
@@ -680,6 +680,20 @@ document.addEventListener("DOMContentLoaded", function () {
     progressLabel.textContent = "Steg " + clampedStep + " av " + totalSteps;
   }
 
+  // Hjälpfunktion: lägg till löpande besparing i sticky-texten
+  function decorateStickyText(baseText) {
+    const { total } = computeEstimate(); // använder nuvarande svar
+    if (total > 0) {
+      return (
+        baseText +
+        " Din preliminära besparing just nu: " +
+        formatCurrency(total) +
+        "."
+      );
+    }
+    return baseText;
+  }
+
   function updateButtons() {
     // Tillbaka-knappen
     backBtn.disabled = state.currentStep <= 1 && introEl.hidden;
@@ -690,14 +704,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const step = state.currentStep;
+    let baseSticky = "";
 
     if (step === 1) {
       nextBtn.disabled = !state.travelType;
-      stickyText.textContent = "Börja med dina resor till och från arbetet.";
+      baseSticky = "Börja med dina resor till och från arbetet.";
     } else if (step === 2) {
       const km = parseFloat((kmInput.value || "").replace(",", "."));
       nextBtn.disabled = !(km > 0);
-      stickyText.textContent =
+      baseSticky =
         "En uppskattning räcker. Du kan justera antalet mil vid behov.";
     } else if (step === 3) {
       if (!state.worksAway) {
@@ -707,7 +722,7 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         nextBtn.disabled = false;
       }
-      stickyText.textContent =
+      baseSticky =
         "Här tittar vi på om du haft extra boende och ökade kostnader vid jobb på annan ort.";
     } else if (step === 4) {
       if (!state.homeTravelPaid) {
@@ -717,15 +732,20 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         nextBtn.disabled = false;
       }
-      stickyText.textContent =
+      baseSticky =
         "Om du själv betalat hemresor kan det ibland ge avdragsrätt.";
     } else if (step === 5) {
       nextBtn.disabled = !state.homeOffice;
-      stickyText.textContent =
+      baseSticky =
         "Till sist tittar vi på om du haft ett särskilt arbetsrum hemma och andra vanliga avdragskostnader.";
     } else {
       nextBtn.disabled = false;
+      baseSticky =
+        "Fortsätt genom stegen för att få en samlad uppskattning av dina avdrag.";
     }
+
+    // Lägg till löpande besparing i sticky-texten
+    stickyText.textContent = decorateStickyText(baseSticky);
   }
 
   function goToNextStep() {
@@ -1190,6 +1210,7 @@ document.addEventListener("DOMContentLoaded", function () {
     unionFeeMonthlyInput.addEventListener("input", function () {
       const val = parseNumberField(unionFeeMonthlyInput);
       state.unionFeeMonthly = val || 0;
+      updateButtons();
     });
   }
 
@@ -1197,6 +1218,7 @@ document.addEventListener("DOMContentLoaded", function () {
     unemploymentFeeMonthlyInput.addEventListener("input", function () {
       const val = parseNumberField(unemploymentFeeMonthlyInput);
       state.unemploymentFeeMonthly = val || 0;
+      updateButtons();
     });
   }
 
@@ -1204,6 +1226,7 @@ document.addEventListener("DOMContentLoaded", function () {
     annualInterestPaidInput.addEventListener("input", function () {
       const val = parseNumberField(annualInterestPaidInput);
       state.annualInterestPaid = val || 0;
+      updateButtons();
     });
   }
 
@@ -1211,6 +1234,7 @@ document.addEventListener("DOMContentLoaded", function () {
     workToolsCostInput.addEventListener("input", function () {
       const val = parseNumberField(workToolsCostInput);
       state.workToolsCost = val || 0;
+      updateButtons();
     });
   }
 
@@ -1218,6 +1242,7 @@ document.addEventListener("DOMContentLoaded", function () {
     homeEquipmentCostInput.addEventListener("input", function () {
       const val = parseNumberField(homeEquipmentCostInput);
       state.homeEquipmentCost = val || 0;
+      updateButtons();
     });
   }
 
@@ -1225,6 +1250,7 @@ document.addEventListener("DOMContentLoaded", function () {
     businessTravelDaysInput.addEventListener("input", function () {
       const val = parseNumberField(businessTravelDaysInput);
       state.businessTravelDays = val || 0;
+      updateButtons();
     });
   }
 
@@ -1377,12 +1403,6 @@ document.addEventListener("DOMContentLoaded", function () {
   setView("intro");
 });
 </script>
-
-
-
-
-
-
 
 </body>
 </html>
