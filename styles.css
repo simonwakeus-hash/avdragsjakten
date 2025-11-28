@@ -597,42 +597,68 @@ hr {
       color: #b91c1c;
     }
 
-    /* Sticky bottom bar */
-    .ak-sticky-bar {
-      position: sticky;
-      bottom: -1px;
-      margin-top: 1rem;
-      padding-top: 0.75rem;
-      padding-bottom: 0.25rem;
-      background: linear-gradient(to top, rgba(245, 245, 247, 0.95), rgba(245, 245, 247, 0));
-    }
+ /* Sticky bottom bar – mobil först */
+.ak-sticky-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  padding-top: 0.75rem;
+  padding-bottom: 0.5rem;
+  background: linear-gradient(
+    to top,
+    rgba(245, 245, 247, 0.98),
+    rgba(245, 245, 247, 0)
+  );
+}
 
-    .ak-sticky-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.75rem;
-      padding-top: 0.75rem;
-      border-top: 1px solid rgba(148, 163, 184, 0.5);
-    }
+.ak-sticky-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 0.75rem;
+  padding-inline: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.5);
+}
 
-    .ak-sticky-text {
-      font-size: 0.8rem;
-      color: var(--color-text-muted);
-      flex: 1;
-    }
+.ak-sticky-text {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  flex: 1;
+}
 
-    .ak-sticky-actions {
-      display: flex;
-      gap: 0.5rem;
-    }
+.ak-sticky-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
 
-    .ak-btn-ghost {
-      background: transparent;
-      color: var(--color-text-muted);
-      font-weight: 500;
-      padding-inline: 0.4rem;
-    }
+.ak-btn-ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  padding-inline: 0.4rem;
+}
+
+/* Desktop: inte fixed, bara under verktyget */
+@media (min-width: 960px) {
+  .ak-sticky-bar {
+    position: static;
+    padding-top: 1rem;
+    padding-bottom: 0;
+    background: transparent;
+  }
+
+  .ak-sticky-inner {
+    padding-inline: 0;
+  }
+}
+
+
 
     /* Result-vy */
     .ak-result-hero {
