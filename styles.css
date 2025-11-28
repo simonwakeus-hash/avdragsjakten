@@ -694,4 +694,63 @@ hr {
     [data-step][hidden] {
       display: none !important;
     }
+
+/* Sticky-bar layout – mobil först */
+.ak-sticky-bar {
+  /* här behåller du gärna dina befintliga värden (position, background etc) */
+}
+
+.ak-sticky-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ak-sticky-top {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ak-sticky-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.ak-sticky-summary {
+  padding-top: 0.25rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.ak-sticky-summary-label {
+  display: block;
+  color: #555;
+}
+
+.ak-sticky-summary-value {
+  font-weight: 600;
+}
+
+/* En lite mer komprimerad layout på större skärm */
+@media (min-width: 768px) {
+  .ak-sticky-top {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ak-sticky-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .ak-sticky-summary-label {
+    margin-right: 0.75rem;
+  }
+}
+
   </style>
