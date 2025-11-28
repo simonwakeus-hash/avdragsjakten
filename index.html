@@ -461,6 +461,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const resultHowToBtn = document.getElementById("ak-result-howto-btn");
   const resultRestartBtn = document.getElementById("ak-result-restart-btn");
 
+  const emailForm = document.getElementById("ak-email-form");
+  const emailInput = document.getElementById("ak-email-input");
+  const emailFeedback = document.getElementById("ak-email-feedback");
+
   const steps = Array.from(flowEl.querySelectorAll("[data-step-index]"));
   const totalSteps = steps.length;
 
@@ -468,15 +472,11 @@ document.addEventListener("DOMContentLoaded", function () {
     currentStep: 1,
     travelType: null,          // "car" | "public" | "none"
     travelKm: null,
-
     worksAway: null,           // "yes_cost" | "yes_employer" | "no"
     doubleHousingCost: null,   // kr per år
-
     livingCostDays: null,      // antal dagar med ökade levnadskostnader
-
     homeTravelPaid: null,      // "yes" | "no"
     homeTravelCost: null,      // kr per år
-
     homeOffice: null           // "yes" | "no"
   };
 
@@ -517,7 +517,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function updateButtons() {
-    // Tillbaka
     backBtn.disabled = state.currentStep <= 1 && introEl.hidden;
 
     if (flowEl.hidden) {
@@ -539,10 +538,8 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!state.worksAway) {
         nextBtn.disabled = true;
       } else if (state.worksAway === "yes_cost") {
-        // Då kräver vi att extra boendekostnad är ifylld för att gå vidare
         nextBtn.disabled = !(state.doubleHousingCost && state.doubleHousingCost > 0);
       } else {
-        // yes_employer eller no – inga krav på belopp
         nextBtn.disabled = false;
       }
       stickyText.textContent =
@@ -567,7 +564,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function goToNextStep() {
-    // Om vi är vid sista steget -> resultat
     if (state.currentStep >= totalSteps) {
       calculateAndShowResult();
       setView("result");
@@ -575,25 +571,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (state.currentStep === 1) {
-      // Efter resor: om bil -> steg 2, annars direkt till steg 3
       if (state.travelType === "car") {
         state.currentStep = 2;
       } else {
         state.currentStep = 3;
       }
     } else if (state.currentStep === 2) {
-      // Efter mil -> steg 3
       state.currentStep = 3;
     } else if (state.currentStep === 3) {
-      // Efter jobb på annan ort
       if (state.worksAway === "no") {
-        // Hoppa över hemresor -> arbetsrum
         state.currentStep = 5;
       } else {
         state.currentStep = 4;
       }
     } else if (state.currentStep === 4) {
-      // Efter hemresor -> arbetsrum
       state.currentStep = 5;
     } else {
       state.currentStep = Math.min(state.currentStep + 1, totalSteps);
@@ -615,17 +606,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (state.currentStep === 5) {
-      // Tillbaka från arbetsrum
       if (state.worksAway === "no" || !state.worksAway) {
         state.currentStep = 3;
       } else {
         state.currentStep = 4;
       }
     } else if (state.currentStep === 4) {
-      // Tillbaka från hemresor
       state.currentStep = 3;
     } else if (state.currentStep === 3) {
-      // Tillbaka från jobb på annan ort
       if (state.travelType === "car") {
         state.currentStep = 2;
       } else {
@@ -686,10 +674,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let total = 0;
     const items = [];
 
-    // Reseavdrag bil
     if (state.travelType === "car" && state.travelKm && state.travelKm > 0) {
-      const brutto = state.travelKm * 25; // 25 kr/mil
-      const net = Math.max(0, brutto - 11000); // schablonavdrag 11 000 kr
+      const brutto = state.travelKm * 25;
+      const net = Math.max(0, brutto - 11000);
       if (net > 0) {
         total += net;
         items.push({
@@ -699,7 +686,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // Kollektivtrafik – förenklad schablon
     if (state.travelType === "public") {
       const approx = 4000;
       total += approx;
@@ -709,7 +695,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
-    // Dubbel bosättning – förenklad
     if (
       state.worksAway === "yes_cost" &&
       state.doubleHousingCost &&
@@ -723,10 +708,9 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
-    // Ökade levnadskostnader – förenklad (t.ex. mat/småutgifter utan traktamente)
     if (state.livingCostDays && state.livingCostDays > 0) {
       const days = Math.min(state.livingCostDays, 365);
-      const approx = days * 200; // försiktig schablon, lägre än maximibeloppet
+      const approx = days * 200;
       total += approx;
       items.push({
         label: "Ökade levnadskostnader vid arbete på annan ort",
@@ -734,7 +718,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
-    // Hemresor – förenklad
     if (
       state.homeTravelPaid === "yes" &&
       state.homeTravelCost &&
@@ -748,7 +731,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
-    // Arbetsrum – förenklad schablon
     if (state.homeOffice === "yes") {
       const approx = 2000;
       total += approx;
@@ -811,7 +793,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Header-knappen "Börja räkna" → scrolla till verktyget och starta flödet
   const headerStartBtn = document.getElementById("startBtn");
   if (headerStartBtn) {
     headerStartBtn.addEventListener("click", function () {
@@ -858,7 +839,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Klick på alternativ (alla steg)
   flowEl.addEventListener("click", function (event) {
     const optionBtn = event.target.closest(".ak-option");
     if (!optionBtn) return;
@@ -915,7 +895,6 @@ document.addEventListener("DOMContentLoaded", function () {
     updateButtons();
   });
 
-  // Inputs
   kmInput.addEventListener("input", function () {
     clearKmError();
     const value = kmInput.value.trim();
@@ -948,121 +927,97 @@ document.addEventListener("DOMContentLoaded", function () {
     state.homeTravelCost = parseNumberField(homeTravelInput);
     updateButtons();
   });
-// --- CTA: Spara rapport --- //
-const emailForm = document.getElementById("ak-email-form");
-const emailInput = document.getElementById("ak-email-input");
-const emailFeedback = document.getElementById("ak-email-feedback");
 
-// --- CTA: Spara rapport via Brevo/Worker --- //
-emailForm.addEventListener("submit", async function (e) {
-  e.preventDefault();
-
-  const email = (emailInput.value || "").trim();
-  if (!email) return;
-
-  const submitButton = emailForm.querySelector("button[type='submit']");
-  submitButton.disabled = true;
-  emailFeedback.style.display = "block";
-  emailFeedback.style.color = "#555";
-  emailFeedback.textContent = "Sparar din e-post...";
-
-  try {
-    const res = await fetch("https://avdragsjakten-signup.simonwakeus.workers.dev/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email: email,
-        // Dynamiskt värde från resultatet på sidan
-        estimate: (resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")
-      })
+  if (resultHowToBtn) {
+    resultHowToBtn.addEventListener("click", function () {
+      window.location.href = "/skatteavdrag/";
     });
-
-    if (!res.ok) throw new Error("Server error");
-
-    // Lyckad sparning
-    emailInput.disabled = true;
-    submitButton.disabled = true;
-    emailFeedback.style.color = "green";
-    emailFeedback.textContent =
-      "Tack! Vi hör av oss inför deklarationssäsongen.";
-  } catch (err) {
-    // Felhantering
-    submitButton.disabled = false;
-    emailFeedback.style.color = "red";
-    emailFeedback.textContent =
-      "Ett fel uppstod när vi skulle spara din e-post. Försök igen om en stund.";
   }
-});
 
+  if (resultRestartBtn) {
+    resultRestartBtn.addEventListener("click", function () {
+      state.currentStep = 1;
+      state.travelType = null;
+      state.travelKm = null;
+      state.worksAway = null;
+      state.doubleHousingCost = null;
+      state.livingCostDays = null;
+      state.homeTravelPaid = null;
+      state.homeTravelCost = null;
+      state.homeOffice = null;
 
-  const email = (emailInput.value || "").trim();
-  if (!email) return;
+      kmInput.value = "";
+      doubleHousingInput.value = "";
+      livingCostInput.value = "";
+      homeTravelInput.value = "";
+      clearKmError();
+      doubleHousingGroup.hidden = true;
+      livingCostGroup.hidden = true;
+      homeTravelGroup.hidden = true;
 
-  // Spara anonymt i localStorage (kan ersättas med API/Braze)
-  const saved = {
-    timestamp: new Date().toISOString(),
-    email: email,
-    estimate: resultTotalEl.textContent,
-    items: Array.from(resultListEl.querySelectorAll(".ak-result-item")).map(x => ({
-      label: x.querySelector(".ak-result-item-label").textContent,
-      value: x.querySelector(".ak-result-item-value")?.textContent || null
-    }))
-  };
-
-  let list = JSON.parse(localStorage.getItem("ak_signups") || "[]");
-  list.push(saved);
-  localStorage.setItem("ak_signups", JSON.stringify(list));
-
-  emailInput.disabled = true;
-  emailForm.querySelector("button").disabled = true;
-
-  emailFeedback.style.display = "block";
-  emailFeedback.style.color = "green";
-  emailFeedback.textContent = "Tack! Vi hör av oss inför deklarationssäsongen.";
-
-  // TODO: Skicka till Braze senare
-});
-
-  resultHowToBtn.addEventListener("click", function () {
-    window.location.href = "/skatteavdrag/";
-  });
-
-  resultRestartBtn.addEventListener("click", function () {
-    state.currentStep = 1;
-    state.travelType = null;
-    state.travelKm = null;
-    state.worksAway = null;
-    state.doubleHousingCost = null;
-    state.livingCostDays = null;
-    state.homeTravelPaid = null;
-    state.homeTravelCost = null;
-    state.homeOffice = null;
-
-    kmInput.value = "";
-    doubleHousingInput.value = "";
-    livingCostInput.value = "";
-    homeTravelInput.value = "";
-    clearKmError();
-    doubleHousingGroup.hidden = true;
-    livingCostGroup.hidden = true;
-    homeTravelGroup.hidden = true;
-
-    steps.forEach((stepEl) => {
-      stepEl.querySelectorAll(".ak-option").forEach((btn) => {
-        btn.classList.remove("ak-option-selected");
+      steps.forEach((stepEl) => {
+        stepEl.querySelectorAll(".ak-option").forEach((btn) => {
+          btn.classList.remove("ak-option-selected");
+        });
       });
+
+      setView("flow");
+      updateButtons();
     });
+  }
 
-    setView("flow");
-    updateButtons();
-  });
+  // CTA: Spara rapport via Brevo/Worker
+  if (emailForm) {
+    emailForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
 
-  // Init
+      const email = (emailInput.value || "").trim();
+      if (!email) return;
+
+      const submitButton = emailForm.querySelector("button[type='submit']");
+      submitButton.disabled = true;
+      emailFeedback.style.display = "block";
+      emailFeedback.style.color = "#555";
+      emailFeedback.textContent = "Sparar din e-post...";
+
+      try {
+        const res = await fetch("https://avdragsjakten-signup.simonwakeus.workers.dev/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: email,
+            estimate: resultTotalEl ? resultTotalEl.textContent : null
+          })
+        });
+
+        if (!res.ok) throw new Error("Server error");
+
+        emailInput.disabled = true;
+        submitButton.disabled = true;
+        emailFeedback.style.color = "green";
+        emailFeedback.textContent =
+          "Tack! Vi hör av oss inför deklarationssäsongen.";
+      } catch (err) {
+        submitButton.disabled = false;
+        emailFeedback.style.color = "red";
+        emailFeedback.textContent =
+          "Ett fel uppstod när vi skulle spara din e-post. Försök igen om en stund.";
+      }
+    });
+  }
+
+  // Footer-år
+  const yearSpan = document.getElementById("year");
+  if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
+  }
+
   setView("intro");
 });
 </script>
+
 
 
 </body>
