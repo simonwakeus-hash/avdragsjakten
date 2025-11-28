@@ -503,22 +503,34 @@
         </p>
       </div>
 
-      <!-- Sticky navigation -->
-      <div class="ak-sticky-bar" aria-hidden="false">
+      <!-- Sticky navigation + löpande besparing -->
+      <div class="ak-sticky-bar" aria-hidden="false" hidden>
         <div class="ak-sticky-inner">
-          <div class="ak-sticky-text" id="ak-sticky-text">
-            Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.
+          <div class="ak-sticky-top">
+            <div class="ak-sticky-text" id="ak-sticky-text">
+              Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.
+            </div>
+            <div class="ak-sticky-actions">
+              <button type="button" class="ak-btn ak-btn-ghost" id="ak-back-btn" disabled>
+                Tillbaka
+              </button>
+              <button type="button" class="ak-btn ak-btn-primary" id="ak-next-btn" disabled>
+                Nästa
+              </button>
+            </div>
           </div>
-          <div class="ak-sticky-actions">
-            <button type="button" class="ak-btn ak-btn-ghost" id="ak-back-btn" disabled>
-              Tillbaka
-            </button>
-            <button type="button" class="ak-btn ak-btn-primary" id="ak-next-btn" disabled>
-              Nästa
-            </button>
+
+          <div class="ak-sticky-summary" id="ak-sticky-summary">
+            <span class="ak-sticky-summary-label">
+              Preliminär besparing baserat på dina svar:
+            </span>
+            <span class="ak-sticky-summary-value" id="ak-sticky-summary-value">
+              0 kr
+            </span>
           </div>
         </div>
       </div>
+
     </section>
   </div>
 
