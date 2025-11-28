@@ -6,15 +6,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LYDQZ362WC"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LYDQZ362WC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LYDQZ362WC');
+  </script>
 
-  gtag('config', 'G-LYDQZ362WC');
-</script>
 
   <!-- Favicons -->
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
@@ -978,29 +978,67 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // CTA: Spara rapport via Brevo/Worker
   if (emailForm) {
-    emailForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
+// --- CTA: Spara rapport via Brevo/Worker + GA4 --- //
+emailForm.addEventListener("submit", async function (e) {
+  e.preventDefault();
 
-      const email = (emailInput.value || "").trim();
-      if (!email) return;
+  const email = (emailInput.value || "").trim();
+  if (!email) return;
 
-      const submitButton = emailForm.querySelector("button[type='submit']");
-      submitButton.disabled = true;
-      emailFeedback.style.display = "block";
-      emailFeedback.style.color = "#555";
-      emailFeedback.textContent = "Sparar din e-post...";
+  const submitButton = emailForm.querySelector("button[type='submit']");
+  submitButton.disabled = true;
+  emailFeedback.style.display = "block";
+  emailFeedback.style.color = "#555";
+  emailFeedback.textContent = "Sparar din e-post...";
 
-      try {
-        const res = await fetch("https://avdragsjakten-signup.simonwakeus.workers.dev/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            email: email,
-            estimate: resultTotalEl ? resultTotalEl.textContent : null
-          })
-        });
+  // GA4-event: avdrag_signup
+  try {
+    if (typeof gtag === "function") {
+      const totalEstimate =
+        Number((resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")) || 0;
+
+      gtag("event", "avdrag_signup", {
+        value: totalEstimate,            // standard GA4-fält
+        currency: "SEK",
+        estimate_sek: totalEstimate,     // eget fält
+        travel_type: state.travelType || "unknown",
+        works_away: state.worksAway || "unknown",
+        home_office: state.homeOffice || "unknown"
+      });
+    }
+  } catch (err) {
+    // Vi vill inte att ev. fel i tracking stoppar själva signupen
+    console.warn("GA4 tracking failed", err);
+  }
+
+  try {
+    const res = await fetch("https://avdragsjakten-signup.simonwakeus.workers.dev/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        estimate: (resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")
+      })
+    });
+
+    if (!res.ok) throw new Error("Server error");
+
+    // Lyckad sparning
+    emailInput.disabled = true;
+    submitButton.disabled = true;
+    emailFeedback.style.color = "green";
+    emailFeedback.textContent =
+      "Tack! Vi hör av oss inför deklarationssäsongen.";
+  } catch (err) {
+    // Felhantering
+    submitButton.disabled = false;
+    emailFeedback.style.color = "red";
+    emailFeedback.textContent =
+      "Ett fel uppstod när vi skulle spara din e-post. Försök igen om en stund.";
+  }
+});
 
         if (!res.ok) throw new Error("Server error");
 
