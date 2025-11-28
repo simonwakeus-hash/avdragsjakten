@@ -471,10 +471,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const resultHowToBtn = document.getElementById("ak-result-howto-btn");
   const resultRestartBtn = document.getElementById("ak-result-restart-btn");
 
-  const emailForm = document.getElementById("ak-email-form");
-  const emailInput = document.getElementById("ak-email-input");
-  const emailFeedback = document.getElementById("ak-email-feedback");
-
   const steps = Array.from(flowEl.querySelectorAll("[data-step-index]"));
   const totalSteps = steps.length;
 
@@ -482,11 +478,15 @@ document.addEventListener("DOMContentLoaded", function () {
     currentStep: 1,
     travelType: null,          // "car" | "public" | "none"
     travelKm: null,
+
     worksAway: null,           // "yes_cost" | "yes_employer" | "no"
     doubleHousingCost: null,   // kr per år
+
     livingCostDays: null,      // antal dagar med ökade levnadskostnader
+
     homeTravelPaid: null,      // "yes" | "no"
     homeTravelCost: null,      // kr per år
+
     homeOffice: null           // "yes" | "no"
   };
 
@@ -527,6 +527,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function updateButtons() {
+    // Tillbaka-knappen
     backBtn.disabled = state.currentStep <= 1 && introEl.hidden;
 
     if (flowEl.hidden) {
@@ -684,9 +685,10 @@ document.addEventListener("DOMContentLoaded", function () {
     let total = 0;
     const items = [];
 
+    // Reseavdrag bil
     if (state.travelType === "car" && state.travelKm && state.travelKm > 0) {
-      const brutto = state.travelKm * 25;
-      const net = Math.max(0, brutto - 11000);
+      const brutto = state.travelKm * 25; // 25 kr/mil
+      const net = Math.max(0, brutto - 11000); // schablonavdrag 11 000 kr
       if (net > 0) {
         total += net;
         items.push({
@@ -696,6 +698,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
+    // Kollektivtrafik – förenklad schablon
     if (state.travelType === "public") {
       const approx = 4000;
       total += approx;
@@ -705,6 +708,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
+    // Dubbel bosättning – förenklad
     if (
       state.worksAway === "yes_cost" &&
       state.doubleHousingCost &&
@@ -718,6 +722,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
+    // Ökade levnadskostnader – förenklad
     if (state.livingCostDays && state.livingCostDays > 0) {
       const days = Math.min(state.livingCostDays, 365);
       const approx = days * 200;
@@ -728,6 +733,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
+    // Hemresor – förenklad
     if (
       state.homeTravelPaid === "yes" &&
       state.homeTravelCost &&
@@ -741,6 +747,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
+    // Arbetsrum – förenklad schablon
     if (state.homeOffice === "yes") {
       const approx = 2000;
       total += approx;
@@ -803,6 +810,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // Header-knappen "Börja räkna" högst upp på sidan
   const headerStartBtn = document.getElementById("startBtn");
   if (headerStartBtn) {
     headerStartBtn.addEventListener("click", function () {
@@ -815,6 +823,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Start-knapp inne i verktyget
   if (startBtn) {
     startBtn.addEventListener("click", function () {
       setView("flow");
@@ -849,6 +858,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Klick på alternativ
   flowEl.addEventListener("click", function (event) {
     const optionBtn = event.target.closest(".ak-option");
     if (!optionBtn) return;
@@ -898,13 +908,13 @@ document.addEventListener("DOMContentLoaded", function () {
         homeTravelInput.value = "";
       }
     } else if (stepIndex === 5) {
-      state.homeOffice =
-        optionValue === "homeoffice_yes" ? "yes" : "no";
+      state.homeOffice = optionValue === "homeoffice_yes" ? "yes" : "no";
     }
 
     updateButtons();
   });
 
+  // Inputs
   kmInput.addEventListener("input", function () {
     clearKmError();
     const value = kmInput.value.trim();
@@ -938,107 +948,57 @@ document.addEventListener("DOMContentLoaded", function () {
     updateButtons();
   });
 
-  if (resultHowToBtn) {
-    resultHowToBtn.addEventListener("click", function () {
-      window.location.href = "/skatteavdrag/";
-    });
-  }
+  // --- CTA: Spara rapport via Brevo/Worker + GA4 --- //
+  const emailForm = document.getElementById("ak-email-form");
+  const emailInput = document.getElementById("ak-email-input");
+  const emailFeedback = document.getElementById("ak-email-feedback");
 
-  if (resultRestartBtn) {
-    resultRestartBtn.addEventListener("click", function () {
-      state.currentStep = 1;
-      state.travelType = null;
-      state.travelKm = null;
-      state.worksAway = null;
-      state.doubleHousingCost = null;
-      state.livingCostDays = null;
-      state.homeTravelPaid = null;
-      state.homeTravelCost = null;
-      state.homeOffice = null;
-
-      kmInput.value = "";
-      doubleHousingInput.value = "";
-      livingCostInput.value = "";
-      homeTravelInput.value = "";
-      clearKmError();
-      doubleHousingGroup.hidden = true;
-      livingCostGroup.hidden = true;
-      homeTravelGroup.hidden = true;
-
-      steps.forEach((stepEl) => {
-        stepEl.querySelectorAll(".ak-option").forEach((btn) => {
-          btn.classList.remove("ak-option-selected");
-        });
-      });
-
-      setView("flow");
-      updateButtons();
-    });
-  }
-
-  // CTA: Spara rapport via Brevo/Worker
   if (emailForm) {
-// --- CTA: Spara rapport via Brevo/Worker + GA4 --- //
-emailForm.addEventListener("submit", async function (e) {
-  e.preventDefault();
+    emailForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
 
-  const email = (emailInput.value || "").trim();
-  if (!email) return;
+      const email = (emailInput.value || "").trim();
+      if (!email) return;
 
-  const submitButton = emailForm.querySelector("button[type='submit']");
-  submitButton.disabled = true;
-  emailFeedback.style.display = "block";
-  emailFeedback.style.color = "#555";
-  emailFeedback.textContent = "Sparar din e-post...";
+      const submitButton = emailForm.querySelector("button[type='submit']");
+      submitButton.disabled = true;
+      emailFeedback.style.display = "block";
+      emailFeedback.style.color = "#555";
+      emailFeedback.textContent = "Sparar din e-post...";
 
-  // GA4-event: avdrag_signup
-  try {
-    if (typeof gtag === "function") {
-      const totalEstimate =
-        Number((resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")) || 0;
+      // GA4-event: avdrag_signup
+      try {
+        if (typeof gtag === "function") {
+          const totalEstimate =
+            Number((resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")) || 0;
 
-      gtag("event", "avdrag_signup", {
-        value: totalEstimate,            // standard GA4-fält
-        currency: "SEK",
-        estimate_sek: totalEstimate,     // eget fält
-        travel_type: state.travelType || "unknown",
-        works_away: state.worksAway || "unknown",
-        home_office: state.homeOffice || "unknown"
-      });
-    }
-  } catch (err) {
-    // Vi vill inte att ev. fel i tracking stoppar själva signupen
-    console.warn("GA4 tracking failed", err);
-  }
+          gtag("event", "avdrag_signup", {
+            value: totalEstimate,
+            currency: "SEK",
+            estimate_sek: totalEstimate,
+            travel_type: state.travelType || "unknown",
+            works_away: state.worksAway || "unknown",
+            home_office: state.homeOffice || "unknown"
+          });
+        }
+      } catch (err) {
+        console.warn("GA4 tracking failed", err);
+      }
 
-  try {
-    const res = await fetch("https://avdragsjakten-signup.simonwakeus.workers.dev/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email: email,
-        estimate: (resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")
-      })
-    });
-
-    if (!res.ok) throw new Error("Server error");
-
-    // Lyckad sparning
-    emailInput.disabled = true;
-    submitButton.disabled = true;
-    emailFeedback.style.color = "green";
-    emailFeedback.textContent =
-      "Tack! Vi hör av oss inför deklarationssäsongen.";
-  } catch (err) {
-    // Felhantering
-    submitButton.disabled = false;
-    emailFeedback.style.color = "red";
-    emailFeedback.textContent =
-      "Ett fel uppstod när vi skulle spara din e-post. Försök igen om en stund.";
-  }
-});
+      try {
+        const res = await fetch(
+          "https://avdragsjakten-signup.simonwakeus.workers.dev/signup",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              email: email,
+              estimate: (resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")
+            })
+          }
+        );
 
         if (!res.ok) throw new Error("Server error");
 
@@ -1056,12 +1016,41 @@ emailForm.addEventListener("submit", async function (e) {
     });
   }
 
-  // Footer-år
-  const yearSpan = document.getElementById("year");
-  if (yearSpan) {
-    yearSpan.textContent = new Date().getFullYear();
-  }
+  resultHowToBtn.addEventListener("click", function () {
+    window.location.href = "/skatteavdrag/";
+  });
 
+  resultRestartBtn.addEventListener("click", function () {
+    state.currentStep = 1;
+    state.travelType = null;
+    state.travelKm = null;
+    state.worksAway = null;
+    state.doubleHousingCost = null;
+    state.livingCostDays = null;
+    state.homeTravelPaid = null;
+    state.homeTravelCost = null;
+    state.homeOffice = null;
+
+    kmInput.value = "";
+    doubleHousingInput.value = "";
+    livingCostInput.value = "";
+    homeTravelInput.value = "";
+    clearKmError();
+    doubleHousingGroup.hidden = true;
+    livingCostGroup.hidden = true;
+    homeTravelGroup.hidden = true;
+
+    steps.forEach((stepEl) => {
+      stepEl.querySelectorAll(".ak-option").forEach((btn) => {
+        btn.classList.remove("ak-option-selected");
+      });
+    });
+
+    setView("flow");
+    updateButtons();
+  });
+
+  // Initiera
   setView("intro");
 });
 </script>
