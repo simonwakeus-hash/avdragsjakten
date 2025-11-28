@@ -830,7 +830,576 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function parseNumberField(inputEl) {
-    const raw = (input
+    const raw = (inputEl.value || "").trim();
+    if (!raw) return null;
+    const num = Number(raw.replace(",", "."));
+    if (!(num > 0)) return null;
+    return num;
+  }
+
+  function formatCurrency(sek) {
+    return new Intl.NumberFormat("sv-SE", {
+      style: "currency",
+      currency: "SEK",
+      maximumFractionDigits: 0
+    }).format(sek);
+  }
+
+  function computeEstimate() {
+    let total = 0;
+    const items = [];
+
+    // --- BEFINTLIGA AVDRAG ---
+
+    // Reseavdrag bil
+    if (state.travelType === "car" && state.travelKm && state.travelKm > 0) {
+      const brutto = state.travelKm * 25; // 25 kr/mil
+      const net = Math.max(0, brutto - 11000); // schablonavdrag 11 000 kr
+      if (net > 0) {
+        total += net;
+        items.push({
+          label: "Resor till och från arbetet (bil)",
+          value: net
+        });
+      }
+    }
+
+    // Kollektivtrafik – förenklad schablon
+    if (state.travelType === "public") {
+      const approx = 4000;
+      total += approx;
+      items.push({
+        label: "Resor till och från arbetet (kollektivtrafik)",
+        value: approx
+      });
+    }
+
+    // Dubbel bosättning – förenklad
+    if (
+      state.worksAway === "yes_cost" &&
+      state.doubleHousingCost &&
+      state.doubleHousingCost > 0
+    ) {
+      const approx = state.doubleHousingCost;
+      total += approx;
+      items.push({
+        label: "Extra boendekostnader vid arbete på annan ort",
+        value: approx
+      });
+    }
+
+    // Ökade levnadskostnader – förenklad
+    if (state.livingCostDays && state.livingCostDays > 0) {
+      const days = Math.min(state.livingCostDays, 365);
+      const approx = days * 200;
+      total += approx;
+      items.push({
+        label: "Ökade levnadskostnader vid arbete på annan ort",
+        value: approx
+      });
+    }
+
+    // Hemresor – förenklad
+    if (
+      state.homeTravelPaid === "yes" &&
+      state.homeTravelCost &&
+      state.homeTravelCost > 0
+    ) {
+      const approx = state.homeTravelCost;
+      total += approx;
+      items.push({
+        label: "Hemresor vid arbete på annan ort",
+        value: approx
+      });
+    }
+
+    // Arbetsrum – förenklad schablon
+    if (state.homeOffice === "yes") {
+      const approx = 2000;
+      total += approx;
+      items.push({
+        label: "Särskilt arbetsrum i bostaden",
+        value: approx
+      });
+    }
+
+    // --- NYA AVDRAG ---
+
+    // 1) Fackavgift – preliminärt (12 * månadsavgift)
+    const unionMonthly = Number(state.unionFeeMonthly) || 0;
+    let unionYearly = 0;
+    if (unionMonthly > 0) {
+      unionYearly = unionMonthly * 12;
+      total += unionYearly;
+      items.push({
+        label: "Fackavgift (preliminär uppskattning)",
+        value: unionYearly
+      });
+    }
+    state.unionFeeDeduction = unionYearly;
+
+    // 2) A-kassa – preliminärt (12 * månadsavgift)
+    const unemploymentMonthly = Number(state.unemploymentFeeMonthly) || 0;
+    let unemploymentYearly = 0;
+    if (unemploymentMonthly > 0) {
+      unemploymentYearly = unemploymentMonthly * 12;
+      total += unemploymentYearly;
+      items.push({
+        label: "Avgift till a-kassa",
+        value: unemploymentYearly
+      });
+    }
+    state.unemploymentFeeDeduction = unemploymentYearly;
+
+    // 3) Räntor – 30 % upp till 100 000 kr, 21 % över
+    const interest = Number(state.annualInterestPaid) || 0;
+    let interestDeduction = 0;
+    if (interest > 0) {
+      const upTo100k = Math.min(interest, 100000);
+      const above100k = Math.max(interest - 100000, 0);
+      interestDeduction = upTo100k * 0.30 + above100k * 0.21;
+      total += interestDeduction;
+      items.push({
+        label: "Ränteavdrag på lån",
+        value: interestDeduction
+      });
+    }
+    state.interestDeduction = interestDeduction;
+
+    // 4) Verktyg för jobbet – preliminärt 100% av kostnaden
+    const toolsCost = Number(state.workToolsCost) || 0;
+    let toolsDeduction = 0;
+    if (toolsCost > 0) {
+      toolsDeduction = toolsCost;
+      total += toolsDeduction;
+      items.push({
+        label: "Verktyg och utrustning för arbetet",
+        value: toolsDeduction
+      });
+    }
+    state.workToolsDeduction = toolsDeduction;
+
+    // 5) Hemutrustning – preliminärt 100%
+    const homeEquipCost = Number(state.homeEquipmentCost) || 0;
+    let homeEquipDeduction = 0;
+    if (homeEquipCost > 0) {
+      homeEquipDeduction = homeEquipCost;
+      total += homeEquipDeduction;
+      items.push({
+        label: "Hemutrustning för arbete (skrivbord, stol m.m.)",
+        value: homeEquipDeduction
+      });
+    }
+    state.homeEquipmentDeduction = homeEquipDeduction;
+
+    // 6) Traktamente – schablon 260 kr per dag
+    const businessDays = Number(state.businessTravelDays) || 0;
+    let perDiem = 0;
+    if (businessDays > 0) {
+      const PER_DIEM_RATE = 260;
+      perDiem = businessDays * PER_DIEM_RATE;
+      total += perDiem;
+      items.push({
+        label: "Traktamente vid tjänsteresor (preliminärt)",
+        value: perDiem
+      });
+    }
+    state.perDiemDeduction = perDiem;
+
+    state.totalEstimate = total;
+
+    return { total, items };
+  }
+
+  function calculateAndShowResult() {
+    const { total, items } = computeEstimate();
+
+    if (total > 0) {
+      resultTotalEl.textContent = formatCurrency(total);
+      document.getElementById("ak-result-sub").textContent =
+        "Detta är ett grovt estimat på hur mycket dina samlade avdrag kan minska din beskattningsbara inkomst. Den faktiska effekten på skatten beror på hela din deklaration.";
+    } else if (
+      state.travelType !== "none" ||
+      state.worksAway === "yes_cost" ||
+      state.worksAway === "yes_employer" ||
+      state.homeOffice === "yes"
+    ) {
+      resultTotalEl.textContent =
+        "Beloppet är för lågt för ett tydligt estimat";
+      document.getElementById("ak-result-sub").textContent =
+        "Baserat på dina svar ser det ut som att de möjliga avdragen är relativt små eller inte över schablonnivån. Se våra guider för att gå igenom reglerna mer i detalj.";
+    } else {
+      resultTotalEl.textContent = "Inga tydliga avdrag identifierade";
+      document.getElementById("ak-result-sub").textContent =
+        "Utifrån de här svaren hittar vi inga tydliga avdrag. Det kan ändå finnas andra situationer där avdrag är aktuella. Gå gärna vidare till våra guider.";
+    }
+
+    resultListEl.innerHTML = "";
+    if (items.length > 0) {
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.className = "ak-result-item";
+        const labelSpan = document.createElement("span");
+        labelSpan.className = "ak-result-item-label";
+        labelSpan.textContent = item.label;
+        const valueSpan = document.createElement("span");
+        valueSpan.className = "ak-result-item-value";
+        valueSpan.textContent = formatCurrency(item.value);
+        li.appendChild(labelSpan);
+        li.appendChild(valueSpan);
+        resultListEl.appendChild(li);
+      });
+    } else {
+      const li = document.createElement("li");
+      li.className = "ak-result-item";
+      const labelSpan = document.createElement("span");
+      labelSpan.className = "ak-result-item-label";
+      labelSpan.textContent =
+        "Vi hittar inga tydliga avdrag baserat på de här svaren.";
+      li.appendChild(labelSpan);
+      resultListEl.appendChild(li);
+    }
+  }
+
+  // Header-knappen "Börja räkna" högst upp på sidan
+  const headerStartBtn = document.getElementById("startBtn");
+  if (headerStartBtn) {
+    headerStartBtn.addEventListener("click", function () {
+      const shell = document.querySelector(".ak-shell");
+      if (shell) {
+        shell.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      setView("flow");
+      updateButtons();
+    });
+  }
+
+  // Start-knapp inne i verktyget
+  if (startBtn) {
+    startBtn.addEventListener("click", function () {
+      setView("flow");
+      updateButtons();
+    });
+  }
+
+  if (readMoreBtn) {
+    readMoreBtn.addEventListener("click", function () {
+      const disclaimer = document.querySelector(".ak-disclaimer");
+      if (disclaimer) {
+        disclaimer.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", function () {
+      if (state.currentStep === 2 && state.travelType === "car") {
+        const ok = validateKmInput();
+        if (!ok) return;
+      }
+      goToNextStep();
+      updateButtons();
+    });
+  }
+
+  if (backBtn) {
+    backBtn.addEventListener("click", function () {
+      goToPreviousStep();
+      updateButtons();
+    });
+  }
+
+  // Klick på alternativ
+  flowEl.addEventListener("click", function (event) {
+    const optionBtn = event.target.closest(".ak-option");
+    if (!optionBtn) return;
+
+    const section = optionBtn.closest("[data-step-index]");
+    if (!section) return;
+
+    const stepIndex = Number(section.dataset.stepIndex);
+    const optionValue = optionBtn.dataset.option;
+
+    section.querySelectorAll(".ak-option").forEach((btn) => {
+      btn.classList.toggle("ak-option-selected", btn === optionBtn);
+    });
+
+    if (stepIndex === 1) {
+      if (optionValue === "travel_car") state.travelType = "car";
+      else if (optionValue === "travel_public") state.travelType = "public";
+      else state.travelType = "none";
+    } else if (stepIndex === 3) {
+      if (optionValue === "away_yes_cost") {
+        state.worksAway = "yes_cost";
+        doubleHousingGroup.hidden = false;
+        livingCostGroup.hidden = false;
+      } else if (optionValue === "away_yes_employer") {
+        state.worksAway = "yes_employer";
+        doubleHousingGroup.hidden = true;
+        state.doubleHousingCost = null;
+        doubleHousingInput.value = "";
+        livingCostGroup.hidden = false;
+      } else {
+        state.worksAway = "no";
+        doubleHousingGroup.hidden = true;
+        state.doubleHousingCost = null;
+        doubleHousingInput.value = "";
+        livingCostGroup.hidden = true;
+        state.livingCostDays = null;
+        livingCostInput.value = "";
+      }
+    } else if (stepIndex === 4) {
+      if (optionValue === "home_travel_yes") {
+        state.homeTravelPaid = "yes";
+        homeTravelGroup.hidden = false;
+      } else {
+        state.homeTravelPaid = "no";
+        homeTravelGroup.hidden = true;
+        state.homeTravelCost = null;
+        homeTravelInput.value = "";
+      }
+    } else if (stepIndex === 5) {
+      state.homeOffice = optionValue === "homeoffice_yes" ? "yes" : "no";
+    }
+
+    updateButtons();
+  });
+
+  // Inputs
+  kmInput.addEventListener("input", function () {
+    clearKmError();
+    const value = kmInput.value.trim();
+    if (!value) {
+      state.travelKm = null;
+    } else {
+      const num = Number(value.replace(",", "."));
+      state.travelKm = num > 0 ? num : null;
+    }
+    updateButtons();
+  });
+
+  doubleHousingInput.addEventListener("input", function () {
+    state.doubleHousingCost = parseNumberField(doubleHousingInput);
+    updateButtons();
+  });
+
+  livingCostInput.addEventListener("input", function () {
+    const val = parseNumberField(livingCostInput);
+    if (val && val > 365) {
+      state.livingCostDays = 365;
+      livingCostInput.value = "365";
+    } else {
+      state.livingCostDays = val;
+    }
+    updateButtons();
+  });
+
+  homeTravelInput.addEventListener("input", function () {
+    state.homeTravelCost = parseNumberField(homeTravelInput);
+    updateButtons();
+  });
+
+  // Nya fält – övriga avdrag
+  if (unionFeeMonthlyInput) {
+    unionFeeMonthlyInput.addEventListener("input", function () {
+      const val = parseNumberField(unionFeeMonthlyInput);
+      state.unionFeeMonthly = val || 0;
+    });
+  }
+
+  if (unemploymentFeeMonthlyInput) {
+    unemploymentFeeMonthlyInput.addEventListener("input", function () {
+      const val = parseNumberField(unemploymentFeeMonthlyInput);
+      state.unemploymentFeeMonthly = val || 0;
+    });
+  }
+
+  if (annualInterestPaidInput) {
+    annualInterestPaidInput.addEventListener("input", function () {
+      const val = parseNumberField(annualInterestPaidInput);
+      state.annualInterestPaid = val || 0;
+    });
+  }
+
+  if (workToolsCostInput) {
+    workToolsCostInput.addEventListener("input", function () {
+      const val = parseNumberField(workToolsCostInput);
+      state.workToolsCost = val || 0;
+    });
+  }
+
+  if (homeEquipmentCostInput) {
+    homeEquipmentCostInput.addEventListener("input", function () {
+      const val = parseNumberField(homeEquipmentCostInput);
+      state.homeEquipmentCost = val || 0;
+    });
+  }
+
+  if (businessTravelDaysInput) {
+    businessTravelDaysInput.addEventListener("input", function () {
+      const val = parseNumberField(businessTravelDaysInput);
+      state.businessTravelDays = val || 0;
+    });
+  }
+
+  // --- CTA: Spara rapport via Brevo/Worker + GA4 --- //
+  const emailForm = document.getElementById("ak-email-form");
+  const emailInput = document.getElementById("ak-email-input");
+  const emailFeedback = document.getElementById("ak-email-feedback");
+
+  if (emailForm) {
+    emailForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const email = (emailInput.value || "").trim();
+      if (!email) return;
+
+      const submitButton = emailForm.querySelector("button[type='submit']");
+      submitButton.disabled = true;
+      emailFeedback.style.display = "block";
+      emailFeedback.style.color = "#555";
+      emailFeedback.textContent = "Sparar din e-post...";
+
+      // GA4-event: avdrag_signup
+      try {
+        if (typeof gtag === "function") {
+          const totalEstimateNumber =
+            Number((resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")) || 0;
+
+          gtag("event", "avdrag_signup", {
+            value: totalEstimateNumber,
+            currency: "SEK",
+            estimate_sek: totalEstimateNumber,
+            travel_type: state.travelType || "unknown",
+            works_away: state.worksAway || "unknown",
+            home_office: state.homeOffice || "unknown"
+          });
+        }
+      } catch (err) {
+        console.warn("GA4 tracking failed", err);
+      }
+
+      try {
+        const numericEstimate =
+          Number((resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")) || 0;
+
+        const res = await fetch(
+          "https://avdragsjakten-signup.simonwakeus.workers.dev/signup",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              email: email,
+
+              // tidigare fält
+              estimate: numericEstimate,
+
+              // rådata
+              unionFeeMonthly: state.unionFeeMonthly || 0,
+              unemploymentFeeMonthly: state.unemploymentFeeMonthly || 0,
+              annualInterestPaid: state.annualInterestPaid || 0,
+              workToolsCost: state.workToolsCost || 0,
+              homeEquipmentCost: state.homeEquipmentCost || 0,
+              businessTravelDays: state.businessTravelDays || 0,
+
+              // uträknade avdrag
+              unionFeeDeduction: state.unionFeeDeduction || 0,
+              unemploymentFeeDeduction: state.unemploymentFeeDeduction || 0,
+              interestDeduction: state.interestDeduction || 0,
+              workToolsDeduction: state.workToolsDeduction || 0,
+              homeEquipmentDeduction: state.homeEquipmentDeduction || 0,
+              perDiemDeduction: state.perDiemDeduction || 0,
+
+              // total beräkning
+              totalEstimate: state.totalEstimate || numericEstimate
+            })
+          }
+        );
+
+        if (!res.ok) throw new Error("Server error");
+
+        emailInput.disabled = true;
+        submitButton.disabled = true;
+        emailFeedback.style.color = "green";
+        emailFeedback.textContent =
+          "Tack! Vi hör av oss inför deklarationssäsongen.";
+      } catch (err) {
+        submitButton.disabled = false;
+        emailFeedback.style.color = "red";
+        emailFeedback.textContent =
+          "Ett fel uppstod när vi skulle spara din e-post. Försök igen om en stund.";
+      }
+    });
+  }
+
+  if (resultHowToBtn) {
+    resultHowToBtn.addEventListener("click", function () {
+      window.location.href = "/skatteavdrag/";
+    });
+  }
+
+  if (resultRestartBtn) {
+    resultRestartBtn.addEventListener("click", function () {
+      state.currentStep = 1;
+      state.travelType = null;
+      state.travelKm = null;
+      state.worksAway = null;
+      state.doubleHousingCost = null;
+      state.livingCostDays = null;
+      state.homeTravelPaid = null;
+      state.homeTravelCost = null;
+      state.homeOffice = null;
+
+      // Nollställ nya fält
+      state.unionFeeMonthly = 0;
+      state.unemploymentFeeMonthly = 0;
+      state.annualInterestPaid = 0;
+      state.workToolsCost = 0;
+      state.homeEquipmentCost = 0;
+      state.businessTravelDays = 0;
+      state.unionFeeDeduction = 0;
+      state.unemploymentFeeDeduction = 0;
+      state.interestDeduction = 0;
+      state.workToolsDeduction = 0;
+      state.homeEquipmentDeduction = 0;
+      state.perDiemDeduction = 0;
+      state.totalEstimate = 0;
+
+      kmInput.value = "";
+      doubleHousingInput.value = "";
+      livingCostInput.value = "";
+      homeTravelInput.value = "";
+
+      if (unionFeeMonthlyInput) unionFeeMonthlyInput.value = "";
+      if (unemploymentFeeMonthlyInput) unemploymentFeeMonthlyInput.value = "";
+      if (annualInterestPaidInput) annualInterestPaidInput.value = "";
+      if (workToolsCostInput) workToolsCostInput.value = "";
+      if (homeEquipmentCostInput) homeEquipmentCostInput.value = "";
+      if (businessTravelDaysInput) businessTravelDaysInput.value = "";
+
+      clearKmError();
+      doubleHousingGroup.hidden = true;
+      livingCostGroup.hidden = true;
+      homeTravelGroup.hidden = true;
+
+      steps.forEach((stepEl) => {
+        stepEl.querySelectorAll(".ak-option").forEach((btn) => {
+          btn.classList.remove("ak-option-selected");
+        });
+      });
+
+      setView("flow");
+      updateButtons();
+    });
+  }
+
+  // Initiera
+  setView("intro");
+});
+</script>
+
 
 
 
