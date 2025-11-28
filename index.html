@@ -503,33 +503,23 @@
         </p>
       </div>
 
-      <!-- Sticky navigation + löpande besparing -->
-      <div class="ak-sticky-bar" aria-hidden="false" hidden>
+      <!-- Sticky navigation -->
+      <div class="ak-sticky-bar" aria-hidden="false">
         <div class="ak-sticky-inner">
-          <div class="ak-sticky-top">
-            <div class="ak-sticky-text" id="ak-sticky-text">
-              Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.
-            </div>
-            <div class="ak-sticky-actions">
-              <button type="button" class="ak-btn ak-btn-ghost" id="ak-back-btn" disabled>
-                Tillbaka
-              </button>
-              <button type="button" class="ak-btn ak-btn-primary" id="ak-next-btn" disabled>
-                Nästa
-              </button>
-            </div>
+          <div class="ak-sticky-text" id="ak-sticky-text">
+            Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.
           </div>
-
-          <div class="ak-sticky-summary" id="ak-sticky-summary">
-            <span class="ak-sticky-summary-label">
-              Preliminär besparing baserat på dina svar:
-            </span>
-            <span class="ak-sticky-summary-value" id="ak-sticky-summary-value">
-              0 kr
-            </span>
+          <div class="ak-sticky-actions">
+            <button type="button" class="ak-btn ak-btn-ghost" id="ak-back-btn" disabled>
+              Tillbaka
+            </button>
+            <button type="button" class="ak-btn ak-btn-primary" id="ak-next-btn" disabled>
+              Nästa
+            </button>
           </div>
         </div>
       </div>
+
 
     </section>
   </div>
@@ -596,7 +586,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const homeTravelGroup = document.getElementById("ak-hometravel-group");
   const homeTravelInput = document.getElementById("ak-hometravel-cost");
 
-  // Nya inputs i steg 5 (övriga avdrag)
+  // Extra inputs (om du har lagt in dem i HTML – annars ignoreras de)
   const unionFeeMonthlyInput = document.getElementById("ak-union-fee-monthly");
   const unemploymentFeeMonthlyInput = document.getElementById("ak-unemployment-fee-monthly");
   const annualInterestPaidInput = document.getElementById("ak-annual-interest-paid");
@@ -654,7 +644,7 @@ document.addEventListener("DOMContentLoaded", function () {
     flowEl.hidden = view !== "flow";
     resultEl.hidden = view !== "result";
 
-    // Dölj sticky-baren på introt (fix för mobilen)
+    // Sticky-baren ska inte synas på introt (fix för mobilen)
     if (stickyBar) {
       stickyBar.hidden = (view === "intro");
     }
@@ -849,8 +839,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let total = 0;
     const items = [];
 
-    // --- BEFINTLIGA AVDRAG ---
-
     // Reseavdrag bil
     if (state.travelType === "car" && state.travelKm && state.travelKm > 0) {
       const brutto = state.travelKm * 25; // 25 kr/mil
@@ -922,8 +910,6 @@ document.addEventListener("DOMContentLoaded", function () {
         value: approx
       });
     }
-
-    // --- NYA AVDRAG ---
 
     // 1) Fackavgift – preliminärt (12 * månadsavgift)
     const unionMonthly = Number(state.unionFeeMonthly) || 0;
@@ -1061,7 +1047,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Header-knappen "Börja räkna" högst upp på sidan
+  // Header-knappen "Börja räkna"
   const headerStartBtn = document.getElementById("startBtn");
   if (headerStartBtn) {
     headerStartBtn.addEventListener("click", function () {
@@ -1199,7 +1185,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateButtons();
   });
 
-  // Nya fält – övriga avdrag
+  // Extra fält – bara om de finns i HTML
   if (unionFeeMonthlyInput) {
     unionFeeMonthlyInput.addEventListener("input", function () {
       const val = parseNumberField(unionFeeMonthlyInput);
@@ -1260,7 +1246,6 @@ document.addEventListener("DOMContentLoaded", function () {
       emailFeedback.style.color = "#555";
       emailFeedback.textContent = "Sparar din e-post...";
 
-      // GA4-event: avdrag_signup
       try {
         if (typeof gtag === "function") {
           const totalEstimateNumber =
@@ -1292,11 +1277,8 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify({
               email: email,
-
-              // tidigare fält
               estimate: numericEstimate,
 
-              // rådata
               unionFeeMonthly: state.unionFeeMonthly || 0,
               unemploymentFeeMonthly: state.unemploymentFeeMonthly || 0,
               annualInterestPaid: state.annualInterestPaid || 0,
@@ -1304,7 +1286,6 @@ document.addEventListener("DOMContentLoaded", function () {
               homeEquipmentCost: state.homeEquipmentCost || 0,
               businessTravelDays: state.businessTravelDays || 0,
 
-              // uträknade avdrag
               unionFeeDeduction: state.unionFeeDeduction || 0,
               unemploymentFeeDeduction: state.unemploymentFeeDeduction || 0,
               interestDeduction: state.interestDeduction || 0,
@@ -1312,7 +1293,6 @@ document.addEventListener("DOMContentLoaded", function () {
               homeEquipmentDeduction: state.homeEquipmentDeduction || 0,
               perDiemDeduction: state.perDiemDeduction || 0,
 
-              // total beräkning
               totalEstimate: state.totalEstimate || numericEstimate
             })
           }
@@ -1352,7 +1332,6 @@ document.addEventListener("DOMContentLoaded", function () {
       state.homeTravelCost = null;
       state.homeOffice = null;
 
-      // Nollställ nya fält
       state.unionFeeMonthly = 0;
       state.unemploymentFeeMonthly = 0;
       state.annualInterestPaid = 0;
@@ -1395,10 +1374,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Initiera
   setView("intro");
 });
 </script>
+
 
 
 
