@@ -441,7 +441,15 @@
             </div>
           </section>
         </div>
-<section id="results-view" class="results-view" hidden>
+        
+<section
+  id="results-view"
+  class="results-view"
+  data-step="result"
+  hidden
+  aria-live="polite"
+>
+
   <!-- HEADER -->
   <header class="results-header">
     <p class="results-kicker">Resultat</p>
@@ -592,10 +600,14 @@
     const moreToggle = document.getElementById("ak-more-toggle");
     const moreWrapper = document.getElementById("ak-more-wrapper");
 
-    const resultTotalEl = document.getElementById("ak-result-total");
-    const resultListEl = document.getElementById("ak-result-list");
-    const resultHowToBtn = document.getElementById("ak-result-howto-btn");
-    const resultRestartBtn = document.getElementById("ak-result-restart-btn");
+    const resultTotalEl = document.getElementById("resultsTotalAmount");
+    const resultsSubtitleEl = document.getElementById("resultsSubtitle");
+    const topDeductionsListEl = document.getElementById("topDeductionsList");
+    const otherDeductionsListEl = document.getElementById("otherDeductionsList");
+
+    const showHowButton = document.getElementById("showHowButton");
+    const scrollToHowButton = document.getElementById("scrollToHowButton");
+
 
     const stickyBar = document.querySelector(".ak-sticky-bar");
 
@@ -633,8 +645,10 @@
       homeEquipmentDeduction: 0,
       perDiemDeduction: 0,
 
-      totalEstimate: 0
+      totalEstimate: 0,
+      deductionsCount: 0
     };
+
 
     function setView(view) {
       introEl.hidden = view !== "intro";
@@ -657,10 +671,22 @@
       } else if (view === "result") {
         nextBtn.disabled = true;
         backBtn.disabled = false;
-        stickyText.textContent =
-          "Detta är en preliminär uppskattning. Läs alltid reglerna innan du deklarerar.";
+
+        if (state.totalEstimate > 0) {
+          const countText =
+            state.deductionsCount && state.deductionsCount > 0
+              ? " · " + state.deductionsCount + " möjliga avdrag"
+              : "";
+          stickyText.textContent =
+            "Preliminär skattesänkning: " +
+            formatCurrency(state.totalEstimate) +
+            countText;
+        } else {
+          stickyText.textContent =
+            "Detta är en preliminär uppskattning. Läs alltid reglerna innan du deklarerar.";
+        }
       }
-    }
+
 
     function updateStepVisibility() {
       steps.forEach((stepEl) => {
@@ -1009,29 +1035,216 @@
 
       return { total, items };
     }
+    function getDeductionMeta(label) {
+      // Standardvärden
+      const meta = {
+        description: "Ett möjligt avdrag baserat på dina svar.",
+        difficulty: "medium",
+        tags: [],
+        helpUrl: "/skatteavdrag/"
+      };
+
+      switch (label) {
+        case "Resor till och från arbetet (bil)":
+        case "Resor till och från arbetet (kollektivtrafik)":
+          meta.description =
+            "Du har angett resor till och från arbete som kan ge rätt till reseavdrag.";
+          meta.difficulty = "medium";
+          meta.tags = ["Resor till jobbet"];
+          meta.helpUrl = "/skatteavdrag/resavdrag";
+          break;
+
+        case "Extra boendekostnader vid arbete på annan ort":
+        case "Ökade levnadskostnader vid arbete på annan ort":
+        case "Hemresor vid arbete på annan ort":
+          meta.description =
+            "Du har haft kostnader kopplade till arbete på annan ort som kan ge rätt till avdrag.";
+          meta.difficulty = "medium";
+          meta.tags = ["Jobb på annan ort"];
+          meta.helpUrl = "/skatteavdrag/dubbel-bosattning";
+          break;
+
+        case "Särskilt arbetsrum i bostaden":
+          meta.description =
+            "Du har uppgett att du haft ett särskilt arbetsrum hemma som i vissa fall kan ge avdrag.";
+          meta.difficulty = "medium";
+          meta.tags = ["Arbete hemifrån"];
+          meta.helpUrl = "/skatteavdrag/arbetsrum-avdrag";
+          break;
+
+        case "Fackavgift (preliminär uppskattning)":
+          meta.description =
+            "Du har betalat avgift till fackförbund som kan vara avdragsgill till viss del.";
+          meta.difficulty = "easy";
+          meta.tags = ["Återkommande avgifter"];
+          meta.helpUrl = "/skatteavdrag/fackavgift";
+          break;
+
+        case "Avgift till a-kassa":
+          meta.description =
+            "Du har betalat avgift till a-kassa som kan vara avdragsgill till viss del.";
+          meta.difficulty = "easy";
+          meta.tags = ["Återkommande avgifter"];
+          meta.helpUrl = "/skatteavdrag/a-kassa";
+          break;
+
+        case "Ränteavdrag på lån":
+          meta.description =
+            "Du har betalat ränta på lån som kan ge rätt till ränteavdrag.";
+          meta.difficulty = "medium";
+          meta.tags = ["Bolån och andra lån"];
+          meta.helpUrl = "/skatteavdrag/ranteavdrag";
+          break;
+
+        case "Verktyg och utrustning för arbetet":
+          meta.description =
+            "Du har köpt verktyg eller utrustning för jobbet som i vissa fall kan ge avdrag.";
+          meta.difficulty = "medium";
+          meta.tags = ["Egen utrustning"];
+          meta.helpUrl = "/skatteavdrag/verktyg";
+          break;
+
+        case "Hemutrustning för arbete (skrivbord, stol m.m.)":
+          meta.description =
+            "Du har köpt utrustning till hemmakontoret kopplad till ditt arbete.";
+          meta.difficulty = "medium";
+          meta.tags = ["Hemmakontor"];
+          meta.helpUrl = "/skatteavdrag/hemutrustning";
+          break;
+
+        case "Traktamente vid tjänsteresor (preliminärt)":
+          meta.description =
+            "Du har haft tjänsteresor utan traktamente som kan ge rätt till avdrag.";
+          meta.difficulty = "medium";
+          meta.tags = ["Tjänsteresor"];
+          meta.helpUrl = "/skatteavdrag/tjansteresor-traktamente";
+          break;
+      }
+
+      return meta;
+    }
+
+    function createDeductionCard(deduction) {
+      const article = document.createElement("article");
+      article.className = "deduction-card";
+
+      const tagsHtml = (deduction.tags || [])
+        .map((t) => `<span class="deduction-tag">${t}</span>`)
+        .join("");
+
+      article.innerHTML = `
+        <header class="deduction-card-header">
+          <h4 class="deduction-title">${deduction.name}</h4>
+          <p class="deduction-amount">${formatCurrency(deduction.amount)}</p>
+        </header>
+        <p class="deduction-description">${deduction.description || ""}</p>
+        <div class="deduction-meta">
+          ${
+            deduction.difficulty
+              ? `<span class="deduction-tag deduction-tag-${deduction.difficulty}">
+                   ${deduction.difficulty === "easy" ? "Enkelt" : deduction.difficulty === "medium" ? "Tar lite tid" : "Mer avancerat"}
+                 </span>`
+              : ""
+          }
+          ${tagsHtml}
+        </div>
+        ${
+          deduction.helpUrl
+            ? `<a href="${deduction.helpUrl}" class="deduction-link">Hur gör jag avdraget?</a>`
+            : ""
+        }
+      `;
+
+      return article;
+    }
+
+    function renderResultsView(total, results) {
+      const headerAmountEl = document.getElementById("resultsTotalAmount");
+      const summaryAmountEl = document.getElementById("summaryTotalAmount");
+      const summaryMetaEl = document.getElementById("summaryMeta");
+      const subtitleEl = document.getElementById("resultsSubtitle");
+      const topContainer = document.getElementById("topDeductionsList");
+      const otherContainer = document.getElementById("otherDeductionsList");
+
+      const count = results.length;
+
+      if (headerAmountEl) {
+        headerAmountEl.textContent =
+          total > 0 ? formatCurrency(total) : "0 kr";
+      }
+      if (summaryAmountEl) {
+        summaryAmountEl.textContent =
+          total > 0 ? formatCurrency(total) : "0 kr";
+      }
+      if (summaryMetaEl) {
+        summaryMetaEl.textContent =
+          count > 0
+            ? count + " möjliga avdrag identifierade"
+            : "Inga tydliga avdrag identifierade";
+      }
+
+      if (subtitleEl) {
+        if (total > 0) {
+          subtitleEl.textContent =
+            "Detta är ett grovt estimat på hur mycket dina samlade avdrag kan minska din beskattningsbara inkomst. Den faktiska effekten på skatten beror på hela din deklaration.";
+        } else if (count === 0) {
+          subtitleEl.textContent =
+            "Utifrån de här svaren hittar vi inga tydliga avdrag. Det kan ändå finnas andra situationer där avdrag är aktuella. Gå gärna vidare till våra guider.";
+        } else {
+          subtitleEl.textContent =
+            "Baserat på dina svar ser det ut som att de möjliga avdragen är relativt små eller inte över schablonnivån. Se våra guider för att gå igenom reglerna mer i detalj.";
+        }
+      }
+
+      if (topContainer) topContainer.innerHTML = "";
+      if (otherContainer) otherContainer.innerHTML = "";
+
+      if (results.length === 0) {
+        if (topContainer) {
+          const p = document.createElement("p");
+          p.className = "deduction-empty";
+          p.textContent =
+            "Vi hittar inga tydliga avdrag baserat på de här svaren.";
+          topContainer.appendChild(p);
+        }
+        return;
+      }
+
+      const sorted = [...results].sort(
+        (a, b) => (b.amount || 0) - (a.amount || 0)
+      );
+
+      const top = sorted.slice(0, 3);
+      const others = sorted.slice(3);
+
+      top.forEach((d) => {
+        if (topContainer) topContainer.appendChild(createDeductionCard(d));
+      });
+      others.forEach((d) => {
+        if (otherContainer) otherContainer.appendChild(createDeductionCard(d));
+      });
+    }
 
     function calculateAndShowResult() {
       const { total, items } = computeEstimate();
 
-      if (total > 0) {
-        resultTotalEl.textContent = formatCurrency(total);
-        document.getElementById("ak-result-sub").textContent =
-          "Detta är ett grovt estimat på hur mycket dina samlade avdrag kan minska din beskattningsbara inkomst. Den faktiska effekten på skatten beror på hela din deklaration.";
-      } else if (
-        state.travelType !== "none" ||
-        state.worksAway === "yes_cost" ||
-        state.worksAway === "yes_employer" ||
-        state.homeOffice === "yes"
-      ) {
-        resultTotalEl.textContent =
-          "Beloppet är för lågt för ett tydligt estimat";
-        document.getElementById("ak-result-sub").textContent =
-          "Baserat på dina svar ser det ut som att de möjliga avdragen är relativt små eller inte över schablonnivån. Se våra guider för att gå igenom reglerna mer i detalj.";
-      } else {
-        resultTotalEl.textContent = "Inga tydliga avdrag identifierade";
-        document.getElementById("ak-result-sub").textContent =
-          "Utifrån de här svaren hittar vi inga tydliga avdrag. Det kan ändå finnas andra situationer där avdrag är aktuella. Gå gärna vidare till våra guider.";
-      }
+      const results = items.map((item) => {
+        const meta = getDeductionMeta(item.label);
+        return {
+          name: item.label,
+          amount: item.value,
+          description: meta.description,
+          difficulty: meta.difficulty,
+          tags: meta.tags,
+          helpUrl: meta.helpUrl
+        };
+      });
+
+      state.deductionsCount = results.length;
+
+      renderResultsView(total, results);
+    }
+
 
       resultListEl.innerHTML = "";
       if (items.length > 0) {
@@ -1343,60 +1556,18 @@
       });
     }
 
-    if (resultHowToBtn) {
-      resultHowToBtn.addEventListener("click", function () {
+       if (showHowButton) {
+      showHowButton.addEventListener("click", function () {
         window.location.href = "/skatteavdrag/";
       });
     }
 
-    if (resultRestartBtn) {
-      resultRestartBtn.addEventListener("click", function () {
-        state.currentStep = 1;
-        state.travelType = null;
-        state.travelKm = null;
-        state.worksAway = null;
-        state.doubleHousingCost = null;
-        state.livingCostDays = null;
-        state.homeTravelPaid = null;
-        state.homeTravelCost = null;
-        state.homeOffice = null;
+    if (scrollToHowButton) {
+      scrollToHowButton.addEventListener("click", function () {
+        window.location.href = "/skatteavdrag/";
+      });
+    }
 
-        state.unionFeeMonthly = 0;
-        state.unemploymentFeeMonthly = 0;
-        state.annualInterestPaid = 0;
-        state.workToolsCost = 0;
-        state.homeEquipmentCost = 0;
-        state.businessTravelDays = 0;
-        state.unionFeeDeduction = 0;
-        state.unemploymentFeeDeduction = 0;
-        state.interestDeduction = 0;
-        state.workToolsDeduction = 0;
-        state.homeEquipmentDeduction = 0;
-        state.perDiemDeduction = 0;
-        state.totalEstimate = 0;
-
-        kmInput.value = "";
-        doubleHousingInput.value = "";
-        livingCostInput.value = "";
-        homeTravelInput.value = "";
-
-        if (unionFeeMonthlyInput) unionFeeMonthlyInput.value = "";
-        if (unemploymentFeeMonthlyInput) unemploymentFeeMonthlyInput.value = "";
-        if (annualInterestPaidInput) annualInterestPaidInput.value = "";
-        if (workToolsCostInput) workToolsCostInput.value = "";
-        if (homeEquipmentCostInput) homeEquipmentCostInput.value = "";
-        if (businessTravelDaysInput) businessTravelDaysInput.value = "";
-
-        clearKmError();
-        doubleHousingGroup.hidden = true;
-        livingCostGroup.hidden = true;
-        homeTravelGroup.hidden = true;
-
-        steps.forEach((stepEl) => {
-          stepEl.querySelectorAll(".ak-option").forEach((btn) => {
-            btn.classList.remove("ak-option-selected");
-          });
-        });
 
         setView("flow");
         updateButtons();
