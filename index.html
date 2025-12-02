@@ -2,9 +2,9 @@
 <html lang="sv">
 <head>
   <!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- GA4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LYDQZ362WC"></script>
@@ -15,13 +15,12 @@
     gtag('config', 'G-LYDQZ362WC');
   </script>
 
-
   <!-- Favicons -->
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
-<link rel="shortcut icon" href="/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
 
   <meta charset="UTF-8" />
   <title>Avdragsjakten – Räkna på dina skatteavdrag</title>
@@ -30,13 +29,11 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  
-    <header class="site-header">
+  <header class="site-header">
     <div class="container header-inner">
       <a href="/" class="header-logo">
         <img src="/assets/avdragsjakten/logo-primary-horiz.svg" alt="Avdragsjakten" />
       </a>
-      <!-- Enkel placeholder-nav om du vill bygga ut senare -->
       <!--
       <nav class="header-nav">
         <a href="/skatteavdrag.html">Skatteavdrag</a>
@@ -45,7 +42,7 @@
       -->
     </div>
   </header>
-  
+
   <header class="hero">
     <div class="container">
       <p class="beta-label">
@@ -59,1388 +56,1350 @@
     </div>
   </header>
 
- <main class="container">
-  <!-- Avdragskollen – ny motor -->
-  <div class="ak-main">
-    <section class="ak-shell" aria-label="Avdragskollen">
-      <!-- Start / hero -->
-      <div class="ak-hero" data-step="intro">
-        <div class="ak-badge">
-          <span class="ak-badge-dot"></span>
-          Avdragskollen · Beta
-        </div>
-        <h2 class="ak-hero-title">Ta reda på vilka avdrag du kan ha rätt till</h2>
-        <p class="ak-hero-sub">
-          Svara på några frågor om din vardag, så får du en uppskattning av vilka
-          <span class="ak-hero-highlight">skatteavdrag</span> du kan göra och ungefär hur mycket din skatt kan minska.
-          Verktyget bygger på offentliga regler men är inte personlig rådgivning.
-        </p>
-
-        <div class="ak-hero-meta">
-          <div class="ak-hero-meta-item">
-            Under 2 minuter
+  <main class="container">
+    <!-- Avdragskollen – ny motor -->
+    <div class="ak-main">
+      <section class="ak-shell" aria-label="Avdragskollen">
+        <!-- Start / hero -->
+        <div class="ak-hero" data-step="intro">
+          <div class="ak-badge">
+            <span class="ak-badge-dot"></span>
+            Avdragskollen · Beta
           </div>
-          <div class="ak-hero-meta-item">
-            <span class="ak-meta-dot"></span>
-            Ingen inloggning, ingen persondata
-          </div>
-          <div class="ak-hero-meta-item">
-            <span class="ak-meta-dot"></span>
-            Uppdaterat för aktuellt beskattningsår
-          </div>
-        </div>
-
-        <div class="ak-cta-row">
-          <button type="button" class="ak-btn ak-btn-primary" id="ak-start-btn">
-            Kom igång
-          </button>
-          <button type="button" class="ak-btn ak-btn-secondary" id="ak-read-more-btn">
-            <span>Läs mer om hur vi räknar</span>
-          </button>
-        </div>
-
-        <p class="ak-disclaimer">
-          Avdragsjakten drivs av SWe-handel AB. Verktyget är fristående från Skatteverket och
-          ersätter inte professionell rådgivning. Du ansvarar själv för din deklaration.
-        </p>
-
-        <div class="ak-divider"></div>
-      </div>
-
-      <!-- Steg-wrapper -->
-      <!-- Steg-wrapper -->
-      <div class="ak-step-shell" data-step="flow" hidden>
-        <div class="ak-progress" aria-hidden="true">
-          <div class="ak-progress-label" id="ak-progress-label">Steg 1 av 5</div>
-          <div class="ak-progress-bar">
-            <div class="ak-progress-bar-fill" id="ak-progress-bar"></div>
-          </div>
-        </div>
-
-        <!-- Steg 1: Resor till jobbet -->
-        <section data-step-index="1" aria-labelledby="ak-step1-title">
-          <h2 class="ak-step-title" id="ak-step1-title">Har du rest till jobbet eller uppdrag under året?</h2>
-          <p class="ak-step-sub">
-            Vi börjar med resor. Det kan handla om daglig pendling till och från arbetet.
+          <h2 class="ak-hero-title">Ta reda på vilka avdrag du kan ha rätt till</h2>
+          <p class="ak-hero-sub">
+            Svara på några frågor om din vardag, så får du en uppskattning av vilka
+            <span class="ak-hero-highlight">skatteavdrag</span> du kan göra och ungefär hur mycket din skatt kan minska.
+            Verktyget bygger på offentliga regler men är inte personlig rådgivning.
           </p>
 
-          <div class="ak-options" role="radiogroup" aria-label="Resor till och från jobbet">
-            <button type="button" class="ak-option" data-option="travel_car">
-              <div class="ak-option-label">
-                <span class="ak-option-title">Ja, mest med bil</span>
-                <span class="ak-option-meta">Till exempel daglig pendling till din arbetsplats.</span>
-              </div>
-              <span class="ak-option-pill">Vanlig grund för reseavdrag</span>
-            </button>
-
-            <button type="button" class="ak-option" data-option="travel_public">
-              <div class="ak-option-label">
-                <span class="ak-option-title">Ja, mest med kollektivtrafik</span>
-                <span class="ak-option-meta">Till exempel tåg, buss eller tunnelbana.</span>
-              </div>
-            </button>
-
-            <button type="button" class="ak-option" data-option="travel_none">
-              <div class="ak-option-label">
-                <span class="ak-option-title">Nej, inga regelbundna resor</span>
-                <span class="ak-option-meta">Till exempel om du arbetat hemifrån hela året.</span>
-              </div>
-            </button>
-          </div>
-        </section>
-
-        <!-- Steg 2: Körsträcka (endast relevant när bil) -->
-        <section data-step-index="2" aria-labelledby="ak-step2-title" hidden>
-          <h2 class="ak-step-title" id="ak-step2-title">Ungefär hur många mil körde du till och från jobbet?</h2>
-          <p class="ak-step-sub">
-            En grov uppskattning räcker. Vi använder en schablonbaserad beräkning.
-          </p>
-
-          <div class="ak-input-group">
-            <label for="ak-km-input" class="ak-input-label">Antal mil under året</label>
-            <div class="ak-input-help">
-              Exempel: 5 mil per dag, 220 dagar ≈ 1&nbsp;100 mil.
+          <div class="ak-hero-meta">
+            <div class="ak-hero-meta-item">
+              Under 2 minuter
             </div>
-            <input
-              id="ak-km-input"
-              class="ak-input"
-              type="number"
-              inputmode="decimal"
-              min="0"
-              step="1"
-              placeholder="Skriv ett ungefärligt antal mil"
-            />
-            <p class="ak-input-error-msg" id="ak-km-error" hidden>
-              Ange ett rimligt antal mil större än noll.
+            <div class="ak-hero-meta-item">
+              <span class="ak-meta-dot"></span>
+              Ingen inloggning, ingen persondata
+            </div>
+            <div class="ak-hero-meta-item">
+              <span class="ak-meta-dot"></span>
+              Uppdaterat för aktuellt beskattningsår
+            </div>
+          </div>
+
+          <div class="ak-cta-row">
+            <button type="button" class="ak-btn ak-btn-primary" id="ak-start-btn">
+              Kom igång
+            </button>
+            <button type="button" class="ak-btn ak-btn-secondary" id="ak-read-more-btn">
+              <span>Läs mer om hur vi räknar</span>
+            </button>
+          </div>
+
+          <p class="ak-disclaimer">
+            Avdragsjakten drivs av SWe-handel AB. Verktyget är fristående från Skatteverket och
+            ersätter inte professionell rådgivning. Du ansvarar själv för din deklaration.
+          </p>
+
+          <div class="ak-divider"></div>
+        </div>
+
+        <!-- Steg-wrapper -->
+        <div class="ak-step-shell" data-step="flow" hidden>
+          <div class="ak-progress" aria-hidden="true">
+            <div class="ak-progress-label" id="ak-progress-label">Steg 1 av 5</div>
+            <div class="ak-progress-bar">
+              <div class="ak-progress-bar-fill" id="ak-progress-bar"></div>
+            </div>
+          </div>
+
+          <!-- Steg 1: Resor till jobbet -->
+          <section data-step-index="1" aria-labelledby="ak-step1-title">
+            <h2 class="ak-step-title" id="ak-step1-title">Har du rest till jobbet eller uppdrag under året?</h2>
+            <p class="ak-step-sub">
+              Vi börjar med resor. Det kan handla om daglig pendling till och från arbetet.
             </p>
-          </div>
-        </section>
 
-        <!-- Steg 3: Jobb på annan ort / dubbel bosättning -->
-        <!-- Steg 3: Jobb på annan ort / dubbel bosättning + ökade levnadskostnader -->
-        <section data-step-index="3" aria-labelledby="ak-step3-title" hidden>
-          <h2 class="ak-step-title" id="ak-step3-title">Har du arbetat på en annan ort än där du bor?</h2>
-          <p class="ak-step-sub">
-            Till exempel om du haft tillfälligt arbete på annan ort och behövt bo där under en period.
-          </p>
+            <div class="ak-options" role="radiogroup" aria-label="Resor till och från jobbet">
+              <button type="button" class="ak-option" data-option="travel_car">
+                <div class="ak-option-label">
+                  <span class="ak-option-title">Ja, mest med bil</span>
+                  <span class="ak-option-meta">Till exempel daglig pendling till din arbetsplats.</span>
+                </div>
+                <span class="ak-option-pill">Vanlig grund för reseavdrag</span>
+              </button>
 
-          <div class="ak-options" role="radiogroup" aria-label="Jobb på annan ort">
-            <button type="button" class="ak-option" data-option="away_yes_cost">
-              <div class="ak-option-label">
-                <span class="ak-option-title">Ja, och jag har haft extra boendekostnader</span>
-                <span class="ak-option-meta">
-                  Till exempel hyra för en tillfällig bostad på arbetsorten som du själv betalat.
-                </span>
-              </div>
-            </button>
+              <button type="button" class="ak-option" data-option="travel_public">
+                <div class="ak-option-label">
+                  <span class="ak-option-title">Ja, mest med kollektivtrafik</span>
+                  <span class="ak-option-meta">Till exempel tåg, buss eller tunnelbana.</span>
+                </div>
+              </button>
 
-            <button type="button" class="ak-option" data-option="away_yes_employer">
-              <div class="ak-option-label">
-                <span class="ak-option-title">Ja, men arbetsgivaren stod för boendet</span>
-                <span class="ak-option-meta">
-                  Till exempel om arbetsgivaren ordnade och betalade bostad på arbetsorten.
-                </span>
-              </div>
-            </button>
-
-            <button type="button" class="ak-option" data-option="away_no">
-              <div class="ak-option-label">
-                <span class="ak-option-title">Nej, jag har inte arbetat på annan ort</span>
-                <span class="ak-option-meta">
-                  Till exempel om du arbetat på din vanliga hemort hela året.
-                </span>
-              </div>
-            </button>
-          </div>
-
-          <!-- Extra boendekostnader -->
-          <div class="ak-input-group" id="ak-doublehousing-group" hidden>
-            <label for="ak-doublehousing-cost" class="ak-input-label">
-              Ungefär hur mycket extra boendekostnad hade du under året? (kr)
-            </label>
-            <div class="ak-input-help">
-              Räkna ungefärlig årskostnad för den bostad du behövt på arbetsorten, utöver din vanliga bostad.
+              <button type="button" class="ak-option" data-option="travel_none">
+                <div class="ak-option-label">
+                  <span class="ak-option-title">Nej, inga regelbundna resor</span>
+                  <span class="ak-option-meta">Till exempel om du arbetat hemifrån hela året.</span>
+                </div>
+              </button>
             </div>
-            <input
-              id="ak-doublehousing-cost"
-              class="ak-input"
-              type="number"
-              inputmode="decimal"
-              min="0"
-              step="100"
-              placeholder="Till exempel 24&nbsp;000"
-            />
-          </div>
+          </section>
 
-          <!-- Ökade levnadskostnader (t.ex. mat och småutgifter) -->
-          <div class="ak-input-group" id="ak-livingcost-group" hidden>
-            <label for="ak-livingcost-days" class="ak-input-label">
-              Ungefär hur många hela dagar arbetade du på annan ort utan skattefritt traktamente?
-            </label>
-            <div class="ak-input-help">
-              En grov uppskattning räcker. Vi gör en försiktig schablonberäkning (cirka 200 kr per dag)
-              för ökade kostnader för mat och småutgifter.
-            </div>
-            <input
-              id="ak-livingcost-days"
-              class="ak-input"
-              type="number"
-              inputmode="decimal"
-              min="0"
-              max="365"
-              step="1"
-              placeholder="Till exempel 40"
-            />
-          </div>
-        </section>
+          <!-- Steg 2: Körsträcka (endast relevant när bil) -->
+          <section data-step-index="2" aria-labelledby="ak-step2-title" hidden>
+            <h2 class="ak-step-title" id="ak-step2-title">Ungefär hur många mil körde du till och från jobbet?</h2>
+            <p class="ak-step-sub">
+              En grov uppskattning räcker. Vi använder en schablonbaserad beräkning.
+            </p>
 
-
-        <!-- Steg 4: Hemresor vid jobb på annan ort -->
-        <section data-step-index="4" aria-labelledby="ak-step4-title" hidden>
-          <h2 class="ak-step-title" id="ak-step4-title">Har du själv betalat hemresor under tiden du arbetat på annan ort?</h2>
-          <p class="ak-step-sub">
-            Till exempel resor hem till familj eller bostad på din hemort under perioden med arbete på annan ort.
-          </p>
-
-          <div class="ak-options" role="radiogroup" aria-label="Hemresor">
-            <button type="button" class="ak-option" data-option="home_travel_yes">
-              <div class="ak-option-label">
-                <span class="ak-option-title">Ja, jag har betalat hemresor själv</span>
-                <span class="ak-option-meta">
-                  Till exempel tåg, buss eller bilresor hem under tiden du arbetade på annan ort.
-                </span>
+            <div class="ak-input-group">
+              <label for="ak-km-input" class="ak-input-label">Antal mil under året</label>
+              <div class="ak-input-help">
+                Exempel: 5 mil per dag, 220 dagar ≈ 1&nbsp;100 mil.
               </div>
-            </button>
-
-            <button type="button" class="ak-option" data-option="home_travel_no">
-              <div class="ak-option-label">
-                <span class="ak-option-title">Nej, jag har inte betalat hemresor själv</span>
-                <span class="ak-option-meta">
-                  Till exempel om arbetsgivaren stått för resorna eller om du inte rest hem.
-                </span>
-              </div>
-            </button>
-          </div>
-
-          <div class="ak-input-group" id="ak-hometravel-group" hidden>
-            <label for="ak-hometravel-cost" class="ak-input-label">
-              Ungefär hur mycket har hemresorna kostat totalt under året? (kr)
-            </label>
-            <div class="ak-input-help">
-              En grov uppskattning räcker. Till exempel summan av biljetter eller bränslekostnad för hemresorna.
+              <input
+                id="ak-km-input"
+                class="ak-input"
+                type="number"
+                inputmode="decimal"
+                min="0"
+                step="1"
+                placeholder="Skriv ett ungefärligt antal mil"
+              />
+              <p class="ak-input-error-msg" id="ak-km-error" hidden>
+                Ange ett rimligt antal mil större än noll.
+              </p>
             </div>
-            <input
-              id="ak-hometravel-cost"
-              class="ak-input"
-              type="number"
-              inputmode="decimal"
-              min="0"
-              step="100"
-              placeholder="Till exempel 8&nbsp;000"
-            />
-          </div>
-        </section>
+          </section>
 
-        <!-- Steg 5: Arbetsrum -->
-<!-- Steg 5: Arbetsrum + övriga avdrag -->
-<section data-step-index="5" aria-labelledby="ak-step5-title" hidden>
-  <h2 class="ak-step-title" id="ak-step5-title">Har du haft ett särskilt arbetsrum hemma?</h2>
-  <p class="ak-step-sub">
-    Till exempel ett rum som i huvudsak används för arbete och som inte samtidigt är vardagsrum eller sovrum.
-  </p>
+          <!-- Steg 3: Jobb på annan ort / dubbel bosättning -->
+          <section data-step-index="3" aria-labelledby="ak-step3-title" hidden>
+            <h2 class="ak-step-title" id="ak-step3-title">Har du arbetat på en annan ort än där du bor?</h2>
+            <p class="ak-step-sub">
+              Till exempel om du haft tillfälligt arbete på annan ort och behövt bo där under en period.
+            </p>
 
-  <div class="ak-options" role="radiogroup" aria-label="Arbetsrum hemma">
-    <button type="button" class="ak-option" data-option="homeoffice_yes">
-      <div class="ak-option-label">
-        <span class="ak-option-title">Ja, jag har haft ett särskilt arbetsrum</span>
-        <span class="ak-option-meta">
-          Till exempel ett separat rum i bostaden som används för arbete.
-        </span>
-      </div>
-    </button>
+            <div class="ak-options" role="radiogroup" aria-label="Jobb på annan ort">
+              <button type="button" class="ak-option" data-option="away_yes_cost">
+                <div class="ak-option-label">
+                  <span class="ak-option-title">Ja, och jag har haft extra boendekostnader</span>
+                  <span class="ak-option-meta">
+                    Till exempel hyra för en tillfällig bostad på arbetsorten som du själv betalat.
+                  </span>
+                </div>
+              </button>
 
-    <button type="button" class="ak-option" data-option="homeoffice_no">
-      <div class="ak-option-label">
-        <span class="ak-option-title">Nej, inget särskilt arbetsrum</span>
-        <span class="ak-option-meta">
-          Till exempel om du arbetar vid köksbordet eller i vardagsrummet.
-        </span>
-      </div>
-    </button>
-  </div>
+              <button type="button" class="ak-option" data-option="away_yes_employer">
+                <div class="ak-option-label">
+                  <span class="ak-option-title">Ja, men arbetsgivaren stod för boendet</span>
+                  <span class="ak-option-meta">
+                    Till exempel om arbetsgivaren ordnade och betalade bostad på arbetsorten.
+                  </span>
+                </div>
+              </button>
 
-  <!-- NYTT: Fackavgift -->
-<div class="ak-input-group">
-  <label for="ak-union-fee-monthly" class="ak-input-label">
-    Månadsavgift till facket (kr)
-  </label>
-  <div class="ak-input-help">
-    En uppskattning räcker. Vi beräknar preliminärt årsavdrag.
-  </div>
-  <input
-    id="ak-union-fee-monthly"
-    class="ak-input"
-    type="number"
-    inputmode="decimal"
-    min="0"
-    step="10"
-    placeholder="Till exempel 300"
-  />
-</div>
+              <button type="button" class="ak-option" data-option="away_no">
+                <div class="ak-option-label">
+                  <span class="ak-option-title">Nej, jag har inte arbetat på annan ort</span>
+                  <span class="ak-option-meta">
+                    Till exempel om du arbetat på din vanliga hemort hela året.
+                  </span>
+                </div>
+              </button>
+            </div>
 
-<!-- NYTT: A-kassa -->
-<div class="ak-input-group">
-  <label for="ak-unemployment-fee-monthly" class="ak-input-label">
-    Månadsavgift till a-kassa (kr)
-  </label>
-  <div class="ak-input-help">
-    En uppskattning räcker även här.
-  </div>
-  <input
-    id="ak-unemployment-fee-monthly"
-    class="ak-input"
-    type="number"
-    inputmode="decimal"
-    min="0"
-    step="10"
-    placeholder="Till exempel 150"
-  />
-</div>
+            <!-- Extra boendekostnader -->
+            <div class="ak-input-group" id="ak-doublehousing-group" hidden>
+              <label for="ak-doublehousing-cost" class="ak-input-label">
+                Ungefär hur mycket extra boendekostnad hade du under året? (kr)
+              </label>
+              <div class="ak-input-help">
+                Räkna ungefärlig årskostnad för den bostad du behövt på arbetsorten, utöver din vanliga bostad.
+              </div>
+              <input
+                id="ak-doublehousing-cost"
+                class="ak-input"
+                type="number"
+                inputmode="decimal"
+                min="0"
+                step="100"
+                placeholder="Till exempel 24&nbsp;000"
+              />
+            </div>
 
-  <!-- NY DEL: Övriga avdrag (fack, a-kassa, ränta, verktyg m.m.) -->
-  <div class="ak-divider" style="margin: 2rem 0 1.5rem;"></div>
+            <!-- Ökade levnadskostnader -->
+            <div class="ak-input-group" id="ak-livingcost-group" hidden>
+              <label for="ak-livingcost-days" class="ak-input-label">
+                Ungefär hur många hela dagar arbetade du på annan ort utan skattefritt traktamente?
+              </label>
+              <div class="ak-input-help">
+                En grov uppskattning räcker. Vi gör en försiktig schablonberäkning (cirka 200 kr per dag)
+                för ökade kostnader för mat och småutgifter.
+              </div>
+              <input
+                id="ak-livingcost-days"
+                class="ak-input"
+                type="number"
+                inputmode="decimal"
+                min="0"
+                max="365"
+                step="1"
+                placeholder="Till exempel 40"
+              />
+            </div>
+          </section>
 
-  <h3 class="ak-step-sub" style="margin-bottom: 1rem;">
-    Andra kostnader som ofta ger avdrag
-  </h3>
+          <!-- Steg 4: Hemresor vid jobb på annan ort -->
+          <section data-step-index="4" aria-labelledby="ak-step4-title" hidden>
+            <h2 class="ak-step-title" id="ak-step4-title">Har du själv betalat hemresor under tiden du arbetat på annan ort?</h2>
+            <p class="ak-step-sub">
+              Till exempel resor hem till familj eller bostad på din hemort under perioden med arbete på annan ort.
+            </p>
 
-  <div class="ak-input-group">
-    <label for="ak-union-fee-monthly" class="ak-input-label">
-      Fackavgift (kr per månad)
-    </label>
-    <div class="ak-input-help">
-      En uppskattning räcker. Vi räknar upp till årskostnad och gör ett preliminärt avdrag.
-      Kontrollera alltid med Skatteverket vad som gäller för ditt förbund.
-    </div>
-    <input
-      id="ak-union-fee-monthly"
-      class="ak-input"
-      type="number"
-      inputmode="decimal"
-      min="0"
-      step="50"
-      placeholder="Till exempel 300"
-    />
-  </div>
+            <div class="ak-options" role="radiogroup" aria-label="Hemresor">
+              <button type="button" class="ak-option" data-option="home_travel_yes">
+                <div class="ak-option-label">
+                  <span class="ak-option-title">Ja, jag har betalat hemresor själv</span>
+                  <span class="ak-option-meta">
+                    Till exempel tåg, buss eller bilresor hem under tiden du arbetade på annan ort.
+                  </span>
+                </div>
+              </button>
 
-  <div class="ak-input-group">
-    <label for="ak-unemployment-fee-monthly" class="ak-input-label">
-      A-kassa (kr per månad)
-    </label>
-    <div class="ak-input-help">
-      Till exempel Akademikernas a-kassa eller annan arbetslöshetskassa.
-    </div>
-    <input
-      id="ak-unemployment-fee-monthly"
-      class="ak-input"
-      type="number"
-      inputmode="decimal"
-      min="0"
-      step="50"
-      placeholder="Till exempel 150"
-    />
-  </div>
+              <button type="button" class="ak-option" data-option="home_travel_no">
+                <div class="ak-option-label">
+                  <span class="ak-option-title">Nej, jag har inte betalat hemresor själv</span>
+                  <span class="ak-option-meta">
+                    Till exempel om arbetsgivaren stått för resorna eller om du inte rest hem.
+                  </span>
+                </div>
+              </button>
+            </div>
 
-  <div class="ak-input-group">
-    <label for="ak-annual-interest-paid" class="ak-input-label">
-      Betald ränta på lån under året (kr)
-    </label>
-    <div class="ak-input-help">
-      Till exempel ränta på bolån, privatlån eller andra lån (inte amorteringar).
-    </div>
-    <input
-      id="ak-annual-interest-paid"
-      class="ak-input"
-      type="number"
-      inputmode="decimal"
-      min="0"
-      step="1000"
-      placeholder="Till exempel 45&nbsp;000"
-    />
-  </div>
+            <div class="ak-input-group" id="ak-hometravel-group" hidden>
+              <label for="ak-hometravel-cost" class="ak-input-label">
+                Ungefär hur mycket har hemresorna kostat totalt under året? (kr)
+              </label>
+              <div class="ak-input-help">
+                En grov uppskattning räcker. Till exempel summan av biljetter eller bränslekostnad för hemresorna.
+              </div>
+              <input
+                id="ak-hometravel-cost"
+                class="ak-input"
+                type="number"
+                inputmode="decimal"
+                min="0"
+                step="100"
+                placeholder="Till exempel 8&nbsp;000"
+              />
+            </div>
+          </section>
 
-  <div class="ak-input-group">
-    <label for="ak-worktools-cost" class="ak-input-label">
-      Verktyg och utrustning du själv köpt till jobbet (kr per år)
-    </label>
-    <div class="ak-input-help">
-      Till exempel verktyg, arbetskläder eller utrustning som du bekostat själv och använder i tjänsten.
-    </div>
-    <input
-      id="ak-worktools-cost"
-      class="ak-input"
-      type="number"
-      inputmode="decimal"
-      min="0"
-      step="500"
-      placeholder="Till exempel 4&nbsp;000"
-    />
-  </div>
+          <!-- Steg 5: Arbetsrum + övriga avdrag -->
+          <section data-step-index="5" aria-labelledby="ak-step5-title" hidden>
+            <h2 class="ak-step-title" id="ak-step5-title">Har du haft ett särskilt arbetsrum hemma?</h2>
+            <p class="ak-step-sub">
+              Till exempel ett rum som i huvudsak används för arbete och som inte samtidigt är vardagsrum eller sovrum.
+            </p>
 
-  <div class="ak-input-group">
-    <label for="ak-homeequipment-cost" class="ak-input-label">
-      Hemutrustning för arbete (skrivbord, kontorsstol, skärm m.m.) (kr per år)
-    </label>
-    <div class="ak-input-help">
-      Till exempel skrivbord, stol, skärm och annan utrustning du köpt för att kunna arbeta hemifrån.
-    </div>
-    <input
-      id="ak-homeequipment-cost"
-      class="ak-input"
-      type="number"
-      inputmode="decimal"
-      min="0"
-      step="500"
-      placeholder="Till exempel 6&nbsp;000"
-    />
-  </div>
+            <div class="ak-options" role="radiogroup" aria-label="Arbetsrum hemma">
+              <button type="button" class="ak-option" data-option="homeoffice_yes">
+                <div class="ak-option-label">
+                  <span class="ak-option-title">Ja, jag har haft ett särskilt arbetsrum</span>
+                  <span class="ak-option-meta">
+                    Till exempel ett separat rum i bostaden som används för arbete.
+                  </span>
+                </div>
+              </button>
 
-  <div class="ak-input-group">
-    <label for="ak-businesstravel-days" class="ak-input-label">
-      Antal dagar du rest i tjänsten med rätt till traktamente (heldagar inom Sverige)
-    </label>
-    <div class="ak-input-help">
-      En grov uppskattning räcker. Vi använder ett schablonbelopp per dag för att räkna ut ett möjligt avdrag.
-    </div>
-    <input
-      id="ak-businesstravel-days"
-      class="ak-input"
-      type="number"
-      inputmode="decimal"
-      min="0"
-      step="1"
-      placeholder="Till exempel 12"
-    />
-  </div>
-</section>
+              <button type="button" class="ak-option" data-option="homeoffice_no">
+                <div class="ak-option-label">
+                  <span class="ak-option-title">Nej, inget särskilt arbetsrum</span>
+                  <span class="ak-option-meta">
+                    Till exempel om du arbetar vid köksbordet eller i vardagsrummet.
+                  </span>
+                </div>
+              </button>
+            </div>
 
-      </div>
+            <!-- Fackavgift -->
+            <div class="ak-input-group">
+              <label for="ak-union-fee-monthly" class="ak-input-label">
+                Månadsavgift till facket (kr)
+              </label>
+              <div class="ak-input-help">
+                En uppskattning räcker. Vi beräknar preliminärt årsavdrag.
+              </div>
+              <input
+                id="ak-union-fee-monthly"
+                class="ak-input"
+                type="number"
+                inputmode="decimal"
+                min="0"
+                step="10"
+                placeholder="Till exempel 300"
+              />
+            </div>
 
+            <!-- A-kassa -->
+            <div class="ak-input-group">
+              <label for="ak-unemployment-fee-monthly" class="ak-input-label">
+                Månadsavgift till a-kassa (kr)
+              </label>
+              <div class="ak-input-help">
+                En uppskattning räcker även här.
+              </div>
+              <input
+                id="ak-unemployment-fee-monthly"
+                class="ak-input"
+                type="number"
+                inputmode="decimal"
+                min="0"
+                step="10"
+                placeholder="Till exempel 150"
+              />
+            </div>
 
-      <!-- Resultat-vy -->
-      <div data-step="result" hidden aria-live="polite">
-        <header class="ak-result-hero">
-          <div class="ak-result-label">Preliminär uppskattning</div>
-          <div class="ak-result-amount" id="ak-result-total">0 kr</div>
-          <p class="ak-result-sub" id="ak-result-sub">
-            Baserat på dina svar kan du eventuellt ha rätt till avdrag. Nedan ser du en grov uppskattning.
-          </p>
-        </header>
+            <!-- Expanderbar sektion: fler möjliga avdrag -->
+            <div class="ak-more-toggle" id="ak-more-toggle">
+              Visa fler möjliga avdrag ▼
+            </div>
 
-        <ul class="ak-result-list" id="ak-result-list">
-          <!-- Fylls i via JavaScript -->
-        </ul>
+            <div class="ak-more-wrapper" id="ak-more-wrapper" hidden>
+              <div class="ak-input-group">
+                <label for="ak-annual-interest-paid" class="ak-input-label">
+                  Betald ränta på lån under året (kr)
+                </label>
+                <div class="ak-input-help">
+                  Till exempel ränta på bolån, privatlån eller andra lån (inte amorteringar).
+                </div>
+                <input
+                  id="ak-annual-interest-paid"
+                  class="ak-input"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  step="1000"
+                  placeholder="Till exempel 45&nbsp;000"
+                />
+              </div>
 
-        <!-- CTA: Spara min rapport -->
-<div id="ak-save-report" class="ak-card" style="margin-top: 2rem; padding: 1.5rem; border: 1px solid #d0d0d0; border-radius: 12px;">
-  <h3 style="margin-top: 0;">Spara min rapport inför deklarationen</h3>
-  <p style="margin-bottom: 1rem;">
-    Vi skickar en påminnelse inför deklarationssäsongen och din personliga rapport med avdrag du kan ha rätt till.
-  </p>
+              <div class="ak-input-group">
+                <label for="ak-worktools-cost" class="ak-input-label">
+                  Verktyg och utrustning du själv köpt till jobbet (kr per år)
+                </label>
+                <div class="ak-input-help">
+                  Till exempel verktyg, arbetskläder eller utrustning som du bekostat själv och använder i tjänsten.
+                </div>
+                <input
+                  id="ak-worktools-cost"
+                  class="ak-input"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  step="500"
+                  placeholder="Till exempel 4&nbsp;000"
+                />
+              </div>
 
-  <form id="ak-email-form">
-    <div class="form-group" style="margin-bottom: 1rem;">
-      <label for="ak-email-input" class="ak-input-label">E-postadress</label>
-      <input type="email" id="ak-email-input" class="ak-input" placeholder="namn@exempel.se" required style="max-width: 320px;">
-    </div>
+              <div class="ak-input-group">
+                <label for="ak-homeequipment-cost" class="ak-input-label">
+                  Hemutrustning för arbete (skrivbord, kontorsstol, skärm m.m.) (kr per år)
+                </label>
+                <div class="ak-input-help">
+                  Till exempel skrivbord, stol, skärm och annan utrustning du köpt för att kunna arbeta hemifrån.
+                </div>
+                <input
+                  id="ak-homeequipment-cost"
+                  class="ak-input"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  step="500"
+                  placeholder="Till exempel 6&nbsp;000"
+                />
+              </div>
 
-    <button type="submit" class="button-primary">
-      Spara min rapport
-    </button>
-
-    <p id="ak-email-feedback" style="display:none; margin-top:0.75rem; font-size:0.9rem;"></p>
-  </form>
-</div>
-<p style="font-size: 0.8rem; color: #666; margin-top: 1rem;">
-  Vi sparar endast din e-post och en sammanställning av dina avdrag för att kunna hjälpa dig inför deklarationen.
-  Inga uppgifter delas med tredje part.
-</p>
-
-        <div class="ak-cta-row">
-          <button type="button" class="ak-btn ak-btn-primary" id="ak-result-howto-btn">
-            Visa hur jag gör avdragen i deklarationen
-          </button>
-          <button type="button" class="ak-btn ak-btn-secondary" id="ak-result-restart-btn">
-            <span>Börja om och ändra svar</span>
-          </button>
+              <div class="ak-input-group">
+                <label for="ak-businesstravel-days" class="ak-input-label">
+                  Antal tjänsteresdagar utan traktamente (heldagar inom Sverige)
+                </label>
+                <div class="ak-input-help">
+                  En grov uppskattning räcker. Vi använder ett schablonbelopp per dag för att räkna ut ett möjligt avdrag.
+                </div>
+                <input
+                  id="ak-businesstravel-days"
+                  class="ak-input"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  max="200"
+                  step="1"
+                  placeholder="Till exempel 12"
+                />
+              </div>
+            </div>
+          </section>
         </div>
 
-        <p class="ak-result-footer">
-          Beloppen är förenklade och avrundade. Den slutliga bedömningen görs alltid av Skatteverket och
-          bygger på fullständig information i din deklaration.
-        </p>
-      </div>
+        <!-- Resultat-vy -->
+        <div data-step="result" hidden aria-live="polite">
+          <header class="ak-result-hero">
+            <div class="ak-result-label">Preliminär uppskattning</div>
+            <div class="ak-result-amount" id="ak-result-total">0 kr</div>
+            <p class="ak-result-sub" id="ak-result-sub">
+              Baserat på dina svar kan du eventuellt ha rätt till avdrag. Nedan ser du en grov uppskattning.
+            </p>
+          </header>
 
-      <!-- Sticky navigation -->
-      <div class="ak-sticky-bar" aria-hidden="false">
-        <div class="ak-sticky-inner">
-          <div class="ak-sticky-text" id="ak-sticky-text">
-            Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.
+          <ul class="ak-result-list" id="ak-result-list">
+            <!-- Fylls i via JavaScript -->
+          </ul>
+
+          <!-- CTA: Spara min rapport -->
+          <div id="ak-save-report" class="ak-card" style="margin-top: 2rem; padding: 1.5rem; border: 1px solid #d0d0d0; border-radius: 12px;">
+            <h3 style="margin-top: 0;">Spara min rapport inför deklarationen</h3>
+            <p style="margin-bottom: 1rem;">
+              Vi skickar en påminnelse inför deklarationssäsongen och din personliga rapport med avdrag du kan ha rätt till.
+            </p>
+
+            <form id="ak-email-form">
+              <div class="form-group" style="margin-bottom: 1rem;">
+                <label for="ak-email-input" class="ak-input-label">E-postadress</label>
+                <input type="email" id="ak-email-input" class="ak-input" placeholder="namn@exempel.se" required style="max-width: 320px;">
+              </div>
+
+              <button type="submit" class="button-primary">
+                Spara min rapport
+              </button>
+
+              <p id="ak-email-feedback" style="display:none; margin-top:0.75rem; font-size:0.9rem;"></p>
+            </form>
           </div>
-          <div class="ak-sticky-actions">
-            <button type="button" class="ak-btn ak-btn-ghost" id="ak-back-btn" disabled>
-              Tillbaka
+          <p style="font-size: 0.8rem; color: #666; margin-top: 1rem;">
+            Vi sparar endast din e-post och en sammanställning av dina avdrag för att kunna hjälpa dig inför deklarationen.
+            Inga uppgifter delas med tredje part.
+          </p>
+
+          <div class="ak-cta-row">
+            <button type="button" class="ak-btn ak-btn-primary" id="ak-result-howto-btn">
+              Visa hur jag gör avdragen i deklarationen
             </button>
-            <button type="button" class="ak-btn ak-btn-primary" id="ak-next-btn" disabled>
-              Nästa
+            <button type="button" class="ak-btn ak-btn-secondary" id="ak-result-restart-btn">
+              <span>Börja om och ändra svar</span>
             </button>
+          </div>
+
+          <p class="ak-result-footer">
+            Beloppen är förenklade och avrundade. Den slutliga bedömningen görs alltid av Skatteverket och
+            bygger på fullständig information i din deklaration.
+          </p>
+        </div>
+
+        <!-- Sticky navigation -->
+        <div class="ak-sticky-bar" aria-hidden="false">
+          <div class="ak-sticky-inner">
+            <div class="ak-sticky-text" id="ak-sticky-text">
+              Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.
+            </div>
+            <div class="ak-sticky-actions">
+              <button type="button" class="ak-btn ak-btn-ghost" id="ak-back-btn" disabled>
+                Tillbaka
+              </button>
+              <button type="button" class="ak-btn ak-btn-primary" id="ak-next-btn" disabled>
+                Nästa
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+    </div>
 
-
+    <!-- Befintligt SEO-innehåll: Läs mer om avdrag -->
+    <section class="card">
+      <h2>Läs mer om olika avdrag</h2>
+      <ul class="link-list">
+        <li><a href="/skatteavdrag/resavdrag">Resavdrag – så funkar det</a></li>
+        <li><a href="/skatteavdrag/arbetsrum-avdrag">Avdrag för arbetsrum hemma</a></li>
+        <li><a href="/skatteavdrag/dubbel-bosattning">Avdrag för dubbel bosättning &amp; hemresor</a></li>
+      </ul>
     </section>
-  </div>
 
-  <!-- Befintligt SEO-innehåll: Läs mer om avdrag -->
-  <section class="card">
-    <h2>Läs mer om olika avdrag</h2>
-    <ul class="link-list">
-      <li><a href="/skatteavdrag/resavdrag">Resavdrag – så funkar det</a></li>
-      <li><a href="/skatteavdrag/arbetsrum-avdrag">Avdrag för arbetsrum hemma</a></li>
-      <li><a href="/skatteavdrag/dubbel-bosattning">Avdrag för dubbel bosättning &amp; hemresor</a></li>
-    </ul>
-  </section>
-
-  <!-- Befintlig e-postsektion -->
-  <section id="emailSection" class="card">
-    <h2>Vill du följa utvecklingen?</h2>
-    <p>
-      Vi kommer löpande lägga till fler avdrag och göra beräkningarna smartare. Lämna din e-post om du vill få uppdateringar inför deklarationssäsongen.
-    </p>
-    <form id="emailForm">
-      <div class="form-group">
-        <label for="emailInput">E-postadress</label>
-        <input type="email" id="emailInput" placeholder="namn@exempel.se" required />
-      </div>
-      <button type="submit" class="button-primary">Spara mig på listan</button>
-      <p id="emailFeedback" class="helper-text" style="display:none;"></p>
-    </form>
-  </section>
-</main>
-
-  
-
+    <!-- Befintlig e-postsektion -->
+    <section id="emailSection" class="card">
+      <h2>Vill du följa utvecklingen?</h2>
+      <p>
+        Vi kommer löpande lägga till fler avdrag och göra beräkningarna smartare. Lämna din e-post om du vill få uppdateringar inför deklarationssäsongen.
+      </p>
+      <form id="emailForm">
+        <div class="form-group">
+          <label for="emailInput">E-postadress</label>
+          <input type="email" id="emailInput" placeholder="namn@exempel.se" required />
+        </div>
+        <button type="submit" class="button-primary">Spara mig på listan</button>
+        <p id="emailFeedback" class="helper-text" style="display:none;"></p>
+      </form>
+    </section>
+  </main>
 
   <footer class="footer">
     <div class="container">
       <p>© <span id="year"></span> Avdragsjakten. Ingen data sparas i denna version – alla beräkningar görs i din webbläsare.</p>
     </div>
   </footer>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const introEl = document.querySelector('[data-step="intro"]');
-  const flowEl = document.querySelector('[data-step="flow"]');
-  const resultEl = document.querySelector('[data-step="result"]');
 
-  const startBtn = document.getElementById("ak-start-btn");
-  const readMoreBtn = document.getElementById("ak-read-more-btn");
-  const nextBtn = document.getElementById("ak-next-btn");
-  const backBtn = document.getElementById("ak-back-btn");
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const introEl = document.querySelector('[data-step="intro"]');
+    const flowEl = document.querySelector('[data-step="flow"]');
+    const resultEl = document.querySelector('[data-step="result"]');
 
-  const stickyText = document.getElementById("ak-sticky-text");
-  const progressLabel = document.getElementById("ak-progress-label");
-  const progressBarFill = document.getElementById("ak-progress-bar");
+    const startBtn = document.getElementById("ak-start-btn");
+    const readMoreBtn = document.getElementById("ak-read-more-btn");
+    const nextBtn = document.getElementById("ak-next-btn");
+    const backBtn = document.getElementById("ak-back-btn");
 
-  const kmInput = document.getElementById("ak-km-input");
-  const kmError = document.getElementById("ak-km-error");
+    const stickyText = document.getElementById("ak-sticky-text");
+    const progressLabel = document.getElementById("ak-progress-label");
+    const progressBarFill = document.getElementById("ak-progress-bar");
 
-  const doubleHousingGroup = document.getElementById("ak-doublehousing-group");
-  const doubleHousingInput = document.getElementById("ak-doublehousing-cost");
+    const kmInput = document.getElementById("ak-km-input");
+    const kmError = document.getElementById("ak-km-error");
 
-  const livingCostGroup = document.getElementById("ak-livingcost-group");
-  const livingCostInput = document.getElementById("ak-livingcost-days");
+    const doubleHousingGroup = document.getElementById("ak-doublehousing-group");
+    const doubleHousingInput = document.getElementById("ak-doublehousing-cost");
 
-  const homeTravelGroup = document.getElementById("ak-hometravel-group");
-  const homeTravelInput = document.getElementById("ak-hometravel-cost");
+    const livingCostGroup = document.getElementById("ak-livingcost-group");
+    const livingCostInput = document.getElementById("ak-livingcost-days");
 
-  // Extra inputs i steg 5 (om de finns i HTML)
-  const unionFeeMonthlyInput = document.getElementById("ak-union-fee-monthly");
-  const unemploymentFeeMonthlyInput = document.getElementById("ak-unemployment-fee-monthly");
-  const annualInterestPaidInput = document.getElementById("ak-annual-interest-paid");
-  const workToolsCostInput = document.getElementById("ak-worktools-cost");
-  const homeEquipmentCostInput = document.getElementById("ak-homeequipment-cost");
-  const businessTravelDaysInput = document.getElementById("ak-businesstravel-days");
+    const homeTravelGroup = document.getElementById("ak-hometravel-group");
+    const homeTravelInput = document.getElementById("ak-hometravel-cost");
 
-  const resultTotalEl = document.getElementById("ak-result-total");
-  const resultListEl = document.getElementById("ak-result-list");
-  const resultHowToBtn = document.getElementById("ak-result-howto-btn");
-  const resultRestartBtn = document.getElementById("ak-result-restart-btn");
+    // Extra inputs i steg 5
+    const unionFeeMonthlyInput = document.getElementById("ak-union-fee-monthly");
+    const unemploymentFeeMonthlyInput = document.getElementById("ak-unemployment-fee-monthly");
+    const annualInterestPaidInput = document.getElementById("ak-annual-interest-paid");
+    const workToolsCostInput = document.getElementById("ak-worktools-cost");
+    const homeEquipmentCostInput = document.getElementById("ak-homeequipment-cost");
+    const businessTravelDaysInput = document.getElementById("ak-businesstravel-days");
 
-  const stickyBar = document.querySelector(".ak-sticky-bar");
+    // Toggle för fler avdrag
+    const moreToggle = document.getElementById("ak-more-toggle");
+    const moreWrapper = document.getElementById("ak-more-wrapper");
 
-  const steps = Array.from(flowEl.querySelectorAll("[data-step-index]"));
-  const totalSteps = steps.length;
+    const resultTotalEl = document.getElementById("ak-result-total");
+    const resultListEl = document.getElementById("ak-result-list");
+    const resultHowToBtn = document.getElementById("ak-result-howto-btn");
+    const resultRestartBtn = document.getElementById("ak-result-restart-btn");
 
-  const state = {
-    currentStep: 1,
-    travelType: null,          // "car" | "public" | "none"
-    travelKm: null,
+    const stickyBar = document.querySelector(".ak-sticky-bar");
 
-    worksAway: null,           // "yes_cost" | "yes_employer" | "no"
-    doubleHousingCost: null,   // kr per år
+    const steps = Array.from(flowEl.querySelectorAll("[data-step-index]"));
+    const totalSteps = steps.length;
 
-    livingCostDays: null,      // antal dagar med ökade levnadskostnader
+    const state = {
+      currentStep: 1,
+      travelType: null,
+      travelKm: null,
 
-    homeTravelPaid: null,      // "yes" | "no"
-    homeTravelCost: null,      // kr per år
+      worksAway: null,
+      doubleHousingCost: null,
 
-    homeOffice: null,          // "yes" | "no"
+      livingCostDays: null,
 
-    // Nya fält – rådata
-    unionFeeMonthly: 0,
-    unemploymentFeeMonthly: 0,
-    annualInterestPaid: 0,
-    workToolsCost: 0,
-    homeEquipmentCost: 0,
-    businessTravelDays: 0,
+      homeTravelPaid: null,
+      homeTravelCost: null,
 
-    // Nya fält – beräknade avdrag
-    unionFeeDeduction: 0,
-    unemploymentFeeDeduction: 0,
-    interestDeduction: 0,
-    workToolsDeduction: 0,
-    homeEquipmentDeduction: 0,
-    perDiemDeduction: 0,
+      homeOffice: null,
 
-    // total uppskattning
-    totalEstimate: 0
-  };
+      // Nya fält – rådata
+      unionFeeMonthly: 0,
+      unemploymentFeeMonthly: 0,
+      annualInterestPaid: 0,
+      workToolsCost: 0,
+      homeEquipmentCost: 0,
+      businessTravelDays: 0,
 
-  function setView(view) {
-    introEl.hidden = view !== "intro";
-    flowEl.hidden = view !== "flow";
-    resultEl.hidden = view !== "result";
+      // Nya fält – beräknade avdrag
+      unionFeeDeduction: 0,
+      unemploymentFeeDeduction: 0,
+      interestDeduction: 0,
+      workToolsDeduction: 0,
+      homeEquipmentDeduction: 0,
+      perDiemDeduction: 0,
 
-    // Sticky-baren ska inte synas på introt (fix för mobilen)
-    if (stickyBar) {
-      stickyBar.hidden = (view === "intro");
-    }
+      totalEstimate: 0
+    };
 
-    if (view === "intro") {
-      nextBtn.disabled = true;
-      backBtn.disabled = true;
-      stickyText.textContent =
-        "Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.";
-    } else if (view === "flow") {
-      updateStepVisibility();
-      updateProgress();
-      updateButtons();
-    } else if (view === "result") {
-      nextBtn.disabled = true;
-      backBtn.disabled = false;
-      stickyText.textContent =
-        "Detta är en preliminär uppskattning. Läs alltid reglerna innan du deklarerar.";
-    }
-  }
+    function setView(view) {
+      introEl.hidden = view !== "intro";
+      flowEl.hidden = view !== "flow";
+      resultEl.hidden = view !== "result";
 
-  function updateStepVisibility() {
-    steps.forEach((stepEl) => {
-      const index = Number(stepEl.dataset.stepIndex);
-      stepEl.hidden = index !== state.currentStep;
-    });
-  }
+      if (stickyBar) {
+        stickyBar.hidden = (view === "intro");
+      }
 
-  function updateProgress() {
-    const clampedStep = Math.min(state.currentStep, totalSteps);
-    const pct = (clampedStep / totalSteps) * 100;
-    progressBarFill.style.width = pct + "%";
-    progressLabel.textContent = "Steg " + clampedStep + " av " + totalSteps;
-  }
-
-  // Hjälpfunktion: lägg till löpande besparing i sticky-texten
-  function decorateStickyText(baseText) {
-    const { total } = computeEstimate(); // använder nuvarande svar
-    if (total > 0) {
-      return (
-        baseText +
-        " Din preliminära besparing just nu: " +
-        formatCurrency(total) +
-        "."
-      );
-    }
-    return baseText;
-  }
-
-  function updateButtons() {
-    // Tillbaka-knappen
-    backBtn.disabled = state.currentStep <= 1 && introEl.hidden;
-
-    if (flowEl.hidden) {
-      nextBtn.disabled = true;
-      return;
-    }
-
-    const step = state.currentStep;
-    let baseSticky = "";
-
-    if (step === 1) {
-      nextBtn.disabled = !state.travelType;
-      baseSticky = "Börja med dina resor till och från arbetet.";
-    } else if (step === 2) {
-      const km = parseFloat((kmInput.value || "").replace(",", "."));
-      nextBtn.disabled = !(km > 0);
-      baseSticky =
-        "En uppskattning räcker. Du kan justera antalet mil vid behov.";
-    } else if (step === 3) {
-      if (!state.worksAway) {
+      if (view === "intro") {
         nextBtn.disabled = true;
-      } else if (state.worksAway === "yes_cost") {
-        nextBtn.disabled = !(state.doubleHousingCost && state.doubleHousingCost > 0);
+        backBtn.disabled = true;
+        stickyText.textContent =
+          "Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.";
+      } else if (view === "flow") {
+        updateStepVisibility();
+        updateProgress();
+        updateButtons();
+      } else if (view === "result") {
+        nextBtn.disabled = true;
+        backBtn.disabled = false;
+        stickyText.textContent =
+          "Detta är en preliminär uppskattning. Läs alltid reglerna innan du deklarerar.";
+      }
+    }
+
+    function updateStepVisibility() {
+      steps.forEach((stepEl) => {
+        const index = Number(stepEl.dataset.stepIndex);
+        stepEl.hidden = index !== state.currentStep;
+      });
+    }
+
+    function updateProgress() {
+      const clampedStep = Math.min(state.currentStep, totalSteps);
+      const pct = (clampedStep / totalSteps) * 100;
+      progressBarFill.style.width = pct + "%";
+      progressLabel.textContent = "Steg " + clampedStep + " av " + totalSteps;
+    }
+
+    function decorateStickyText(baseText) {
+      const { total } = computeEstimate();
+      if (total > 0) {
+        return (
+          baseText +
+          " Din preliminära besparing just nu: " +
+          formatCurrency(total) +
+          "."
+        );
+      }
+      return baseText;
+    }
+
+    function updateButtons() {
+      backBtn.disabled = state.currentStep <= 1 && introEl.hidden;
+
+      if (flowEl.hidden) {
+        nextBtn.disabled = true;
+        return;
+      }
+
+      const step = state.currentStep;
+      let baseSticky = "";
+
+      if (step === 1) {
+        nextBtn.disabled = !state.travelType;
+        baseSticky = "Börja med dina resor till och från arbetet.";
+      } else if (step === 2) {
+        const km = parseFloat((kmInput.value || "").replace(",", "."));
+        nextBtn.disabled = !(km > 0);
+        baseSticky =
+          "En uppskattning räcker. Du kan justera antalet mil vid behov.";
+      } else if (step === 3) {
+        if (!state.worksAway) {
+          nextBtn.disabled = true;
+        } else if (state.worksAway === "yes_cost") {
+          nextBtn.disabled = !(state.doubleHousingCost && state.doubleHousingCost > 0);
+        } else {
+          nextBtn.disabled = false;
+        }
+        baseSticky =
+          "Här tittar vi på om du haft extra boende och ökade kostnader vid jobb på annan ort.";
+      } else if (step === 4) {
+        if (!state.homeTravelPaid) {
+          nextBtn.disabled = true;
+        } else if (state.homeTravelPaid === "yes") {
+          nextBtn.disabled = !(state.homeTravelCost && state.homeTravelCost > 0);
+        } else {
+          nextBtn.disabled = false;
+        }
+        baseSticky =
+          "Om du själv betalat hemresor kan det ibland ge avdragsrätt.";
+      } else if (step === 5) {
+        nextBtn.disabled = !state.homeOffice;
+        baseSticky =
+          "Till sist tittar vi på om du haft ett särskilt arbetsrum hemma och andra vanliga avdragskostnader.";
       } else {
         nextBtn.disabled = false;
+        baseSticky =
+          "Fortsätt genom stegen för att få en samlad uppskattning av dina avdrag.";
       }
-      baseSticky =
-        "Här tittar vi på om du haft extra boende och ökade kostnader vid jobb på annan ort.";
-    } else if (step === 4) {
-      if (!state.homeTravelPaid) {
-        nextBtn.disabled = true;
-      } else if (state.homeTravelPaid === "yes") {
-        nextBtn.disabled = !(state.homeTravelCost && state.homeTravelCost > 0);
-      } else {
-        nextBtn.disabled = false;
-      }
-      baseSticky =
-        "Om du själv betalat hemresor kan det ibland ge avdragsrätt.";
-    } else if (step === 5) {
-      nextBtn.disabled = !state.homeOffice;
-      baseSticky =
-        "Till sist tittar vi på om du haft ett särskilt arbetsrum hemma och andra vanliga avdragskostnader.";
-    } else {
-      nextBtn.disabled = false;
-      baseSticky =
-        "Fortsätt genom stegen för att få en samlad uppskattning av dina avdrag.";
+
+      stickyText.textContent = decorateStickyText(baseSticky);
     }
 
-    // Lägg till löpande besparing i sticky-texten
-    stickyText.textContent = decorateStickyText(baseSticky);
-  }
+    function goToNextStep() {
+      if (state.currentStep >= totalSteps) {
+        calculateAndShowResult();
+        setView("result");
+        return;
+      }
 
-  function goToNextStep() {
-    if (state.currentStep >= totalSteps) {
-      calculateAndShowResult();
-      setView("result");
-      return;
-    }
-
-    if (state.currentStep === 1) {
-      if (state.travelType === "car") {
-        state.currentStep = 2;
-      } else {
+      if (state.currentStep === 1) {
+        if (state.travelType === "car") {
+          state.currentStep = 2;
+        } else {
+          state.currentStep = 3;
+        }
+      } else if (state.currentStep === 2) {
         state.currentStep = 3;
-      }
-    } else if (state.currentStep === 2) {
-      state.currentStep = 3;
-    } else if (state.currentStep === 3) {
-      if (state.worksAway === "no") {
+      } else if (state.currentStep === 3) {
+        if (state.worksAway === "no") {
+          state.currentStep = 5;
+        } else {
+          state.currentStep = 4;
+        }
+      } else if (state.currentStep === 4) {
         state.currentStep = 5;
       } else {
-        state.currentStep = 4;
+        state.currentStep = Math.min(state.currentStep + 1, totalSteps);
       }
-    } else if (state.currentStep === 4) {
-      state.currentStep = 5;
-    } else {
-      state.currentStep = Math.min(state.currentStep + 1, totalSteps);
-    }
 
-    setView("flow");
-  }
-
-  function goToPreviousStep() {
-    if (!resultEl.hidden) {
-      state.currentStep = totalSteps;
       setView("flow");
-      return;
     }
 
-    if (state.currentStep <= 1) {
-      setView("intro");
-      return;
-    }
+    function goToPreviousStep() {
+      if (!resultEl.hidden) {
+        state.currentStep = totalSteps;
+        setView("flow");
+        return;
+      }
 
-    if (state.currentStep === 5) {
-      if (state.worksAway === "no" || !state.worksAway) {
+      if (state.currentStep <= 1) {
+        setView("intro");
+        return;
+      }
+
+      if (state.currentStep === 5) {
+        if (state.worksAway === "no" || !state.worksAway) {
+          state.currentStep = 3;
+        } else {
+          state.currentStep = 4;
+        }
+      } else if (state.currentStep === 4) {
         state.currentStep = 3;
-      } else {
-        state.currentStep = 4;
-      }
-    } else if (state.currentStep === 4) {
-      state.currentStep = 3;
-    } else if (state.currentStep === 3) {
-      if (state.travelType === "car") {
-        state.currentStep = 2;
-      } else {
+      } else if (state.currentStep === 3) {
+        if (state.travelType === "car") {
+          state.currentStep = 2;
+        } else {
+          state.currentStep = 1;
+        }
+      } else if (state.currentStep === 2) {
         state.currentStep = 1;
+      } else {
+        state.currentStep = Math.max(state.currentStep - 1, 1);
       }
-    } else if (state.currentStep === 2) {
-      state.currentStep = 1;
-    } else {
-      state.currentStep = Math.max(state.currentStep - 1, 1);
+
+      setView("flow");
     }
 
-    setView("flow");
-  }
-
-  function clearKmError() {
-    kmError.hidden = true;
-    kmInput.classList.remove("ak-input-error");
-  }
-
-  function validateKmInput() {
-    const value = (kmInput.value || "").trim();
-    if (!value) {
-      kmError.hidden = false;
-      kmError.textContent = "Ange ett antal mil.";
-      kmInput.classList.add("ak-input-error");
-      return false;
+    function clearKmError() {
+      kmError.hidden = true;
+      kmInput.classList.remove("ak-input-error");
     }
-    const num = Number(value.replace(",", "."));
-    if (!(num > 0) || num > 20000) {
-      kmError.hidden = false;
-      kmError.textContent =
-        "Ange ett rimligt antal mil mellan 1 och 20 000.";
-      kmInput.classList.add("ak-input-error");
-      return false;
+
+    function validateKmInput() {
+      const value = (kmInput.value || "").trim();
+      if (!value) {
+        kmError.hidden = false;
+        kmError.textContent = "Ange ett antal mil.";
+        kmInput.classList.add("ak-input-error");
+        return false;
+      }
+      const num = Number(value.replace(",", "."));
+      if (!(num > 0) || num > 20000) {
+        kmError.hidden = false;
+        kmError.textContent =
+          "Ange ett rimligt antal mil mellan 1 och 20 000.";
+        kmInput.classList.add("ak-input-error");
+        return false;
+      }
+      clearKmError();
+      state.travelKm = num;
+      return true;
     }
-    clearKmError();
-    state.travelKm = num;
-    return true;
-  }
 
-  function parseNumberField(inputEl) {
-    const raw = (inputEl.value || "").trim();
-    if (!raw) return null;
-    const num = Number(raw.replace(",", "."));
-    if (!(num > 0)) return null;
-    return num;
-  }
+    function parseNumberField(inputEl) {
+      const raw = (inputEl.value || "").trim();
+      if (!raw) return null;
+      const num = Number(raw.replace(",", "."));
+      if (!(num > 0)) return null;
+      return num;
+    }
 
-  function formatCurrency(sek) {
-    return new Intl.NumberFormat("sv-SE", {
-      style: "currency",
-      currency: "SEK",
-      maximumFractionDigits: 0
-    }).format(sek);
-  }
+    function formatCurrency(sek) {
+      return new Intl.NumberFormat("sv-SE", {
+        style: "currency",
+        currency: "SEK",
+        maximumFractionDigits: 0
+      }).format(sek);
+    }
 
-  function computeEstimate() {
-    let total = 0;
-    const items = [];
+    function computeEstimate() {
+      let total = 0;
+      const items = [];
 
-    // Reseavdrag bil
-    if (state.travelType === "car" && state.travelKm && state.travelKm > 0) {
-      const brutto = state.travelKm * 25; // 25 kr/mil
-      const net = Math.max(0, brutto - 11000); // schablonavdrag 11 000 kr
-      if (net > 0) {
-        total += net;
+      // Reseavdrag bil
+      if (state.travelType === "car" && state.travelKm && state.travelKm > 0) {
+        const brutto = state.travelKm * 25;
+        const net = Math.max(0, brutto - 11000);
+        if (net > 0) {
+          total += net;
+          items.push({
+            label: "Resor till och från arbetet (bil)",
+            value: net
+          });
+        }
+      }
+
+      // Kollektivtrafik – schablon
+      if (state.travelType === "public") {
+        const approx = 4000;
+        total += approx;
         items.push({
-          label: "Resor till och från arbetet (bil)",
-          value: net
+          label: "Resor till och från arbetet (kollektivtrafik)",
+          value: approx
         });
       }
+
+      // Dubbel bosättning
+      if (
+        state.worksAway === "yes_cost" &&
+        state.doubleHousingCost &&
+        state.doubleHousingCost > 0
+      ) {
+        const approx = state.doubleHousingCost;
+        total += approx;
+        items.push({
+          label: "Extra boendekostnader vid arbete på annan ort",
+          value: approx
+        });
+      }
+
+      // Ökade levnadskostnader
+      if (state.livingCostDays && state.livingCostDays > 0) {
+        const days = Math.min(state.livingCostDays, 365);
+        const approx = days * 200;
+        total += approx;
+        items.push({
+          label: "Ökade levnadskostnader vid arbete på annan ort",
+          value: approx
+        });
+      }
+
+      // Hemresor
+      if (
+        state.homeTravelPaid === "yes" &&
+        state.homeTravelCost &&
+        state.homeTravelCost > 0
+      ) {
+        const approx = state.homeTravelCost;
+        total += approx;
+        items.push({
+          label: "Hemresor vid arbete på annan ort",
+          value: approx
+        });
+      }
+
+      // Arbetsrum – schablon
+      if (state.homeOffice === "yes") {
+        const approx = 2000;
+        total += approx;
+        items.push({
+          label: "Särskilt arbetsrum i bostaden",
+          value: approx
+        });
+      }
+
+      // 1) Fackavgift – 12 * månadsavgift
+      const unionMonthly = Number(state.unionFeeMonthly) || 0;
+      let unionYearly = 0;
+      if (unionMonthly > 0) {
+        unionYearly = unionMonthly * 12;
+        total += unionYearly;
+        items.push({
+          label: "Fackavgift (preliminär uppskattning)",
+          value: unionYearly
+        });
+      }
+      state.unionFeeDeduction = unionYearly;
+
+      // 2) A-kassa – 12 * månadsavgift
+      const unemploymentMonthly = Number(state.unemploymentFeeMonthly) || 0;
+      let unemploymentYearly = 0;
+      if (unemploymentMonthly > 0) {
+        unemploymentYearly = unemploymentMonthly * 12;
+        total += unemploymentYearly;
+        items.push({
+          label: "Avgift till a-kassa",
+          value: unemploymentYearly
+        });
+      }
+      state.unemploymentFeeDeduction = unemploymentYearly;
+
+      // 3) Ränta – 30 % upp till 100 000, 21 % över
+      const interest = Number(state.annualInterestPaid) || 0;
+      let interestDeduction = 0;
+      if (interest > 0) {
+        const upTo100k = Math.min(interest, 100000);
+        const above100k = Math.max(interest - 100000, 0);
+        interestDeduction = upTo100k * 0.30 + above100k * 0.21;
+        total += interestDeduction;
+        items.push({
+          label: "Ränteavdrag på lån",
+          value: interestDeduction
+        });
+      }
+      state.interestDeduction = interestDeduction;
+
+      // 4) Verktyg
+      const toolsCost = Number(state.workToolsCost) || 0;
+      let toolsDeduction = 0;
+      if (toolsCost > 0) {
+        toolsDeduction = toolsCost;
+        total += toolsDeduction;
+        items.push({
+          label: "Verktyg och utrustning för arbetet",
+          value: toolsDeduction
+        });
+      }
+      state.workToolsDeduction = toolsDeduction;
+
+      // 5) Hemutrustning
+      const homeEquipCost = Number(state.homeEquipmentCost) || 0;
+      let homeEquipDeduction = 0;
+      if (homeEquipCost > 0) {
+        homeEquipDeduction = homeEquipCost;
+        total += homeEquipDeduction;
+        items.push({
+          label: "Hemutrustning för arbete (skrivbord, stol m.m.)",
+          value: homeEquipDeduction
+        });
+      }
+      state.homeEquipmentDeduction = homeEquipDeduction;
+
+      // 6) Traktamente – schablon 260 kr/dag
+      const businessDays = Number(state.businessTravelDays) || 0;
+      let perDiem = 0;
+      if (businessDays > 0) {
+        const PER_DIEM_RATE = 260;
+        perDiem = businessDays * PER_DIEM_RATE;
+        total += perDiem;
+        items.push({
+          label: "Traktamente vid tjänsteresor (preliminärt)",
+          value: perDiem
+        });
+      }
+      state.perDiemDeduction = perDiem;
+
+      state.totalEstimate = total;
+
+      return { total, items };
     }
 
-    // Kollektivtrafik – förenklad schablon
-    if (state.travelType === "public") {
-      const approx = 4000;
-      total += approx;
-      items.push({
-        label: "Resor till och från arbetet (kollektivtrafik)",
-        value: approx
-      });
-    }
+    function calculateAndShowResult() {
+      const { total, items } = computeEstimate();
 
-    // Dubbel bosättning – förenklad
-    if (
-      state.worksAway === "yes_cost" &&
-      state.doubleHousingCost &&
-      state.doubleHousingCost > 0
-    ) {
-      const approx = state.doubleHousingCost;
-      total += approx;
-      items.push({
-        label: "Extra boendekostnader vid arbete på annan ort",
-        value: approx
-      });
-    }
+      if (total > 0) {
+        resultTotalEl.textContent = formatCurrency(total);
+        document.getElementById("ak-result-sub").textContent =
+          "Detta är ett grovt estimat på hur mycket dina samlade avdrag kan minska din beskattningsbara inkomst. Den faktiska effekten på skatten beror på hela din deklaration.";
+      } else if (
+        state.travelType !== "none" ||
+        state.worksAway === "yes_cost" ||
+        state.worksAway === "yes_employer" ||
+        state.homeOffice === "yes"
+      ) {
+        resultTotalEl.textContent =
+          "Beloppet är för lågt för ett tydligt estimat";
+        document.getElementById("ak-result-sub").textContent =
+          "Baserat på dina svar ser det ut som att de möjliga avdragen är relativt små eller inte över schablonnivån. Se våra guider för att gå igenom reglerna mer i detalj.";
+      } else {
+        resultTotalEl.textContent = "Inga tydliga avdrag identifierade";
+        document.getElementById("ak-result-sub").textContent =
+          "Utifrån de här svaren hittar vi inga tydliga avdrag. Det kan ändå finnas andra situationer där avdrag är aktuella. Gå gärna vidare till våra guider.";
+      }
 
-    // Ökade levnadskostnader – förenklad
-    if (state.livingCostDays && state.livingCostDays > 0) {
-      const days = Math.min(state.livingCostDays, 365);
-      const approx = days * 200;
-      total += approx;
-      items.push({
-        label: "Ökade levnadskostnader vid arbete på annan ort",
-        value: approx
-      });
-    }
-
-    // Hemresor – förenklad
-    if (
-      state.homeTravelPaid === "yes" &&
-      state.homeTravelCost &&
-      state.homeTravelCost > 0
-    ) {
-      const approx = state.homeTravelCost;
-      total += approx;
-      items.push({
-        label: "Hemresor vid arbete på annan ort",
-        value: approx
-      });
-    }
-
-    // Arbetsrum – förenklad schablon
-    if (state.homeOffice === "yes") {
-      const approx = 2000;
-      total += approx;
-      items.push({
-        label: "Särskilt arbetsrum i bostaden",
-        value: approx
-      });
-    }
-
-    // 1) Fackavgift – preliminärt (12 * månadsavgift)
-    const unionMonthly = Number(state.unionFeeMonthly) || 0;
-    let unionYearly = 0;
-    if (unionMonthly > 0) {
-      unionYearly = unionMonthly * 12;
-      total += unionYearly;
-      items.push({
-        label: "Fackavgift (preliminär uppskattning)",
-        value: unionYearly
-      });
-    }
-    state.unionFeeDeduction = unionYearly;
-
-    // 2) A-kassa – preliminärt (12 * månadsavgift)
-    const unemploymentMonthly = Number(state.unemploymentFeeMonthly) || 0;
-    let unemploymentYearly = 0;
-    if (unemploymentMonthly > 0) {
-      unemploymentYearly = unemploymentMonthly * 12;
-      total += unemploymentYearly;
-      items.push({
-        label: "Avgift till a-kassa",
-        value: unemploymentYearly
-      });
-    }
-    state.unemploymentFeeDeduction = unemploymentYearly;
-
-    // 3) Räntor – 30 % upp till 100 000 kr, 21 % över
-    const interest = Number(state.annualInterestPaid) || 0;
-    let interestDeduction = 0;
-    if (interest > 0) {
-      const upTo100k = Math.min(interest, 100000);
-      const above100k = Math.max(interest - 100000, 0);
-      interestDeduction = upTo100k * 0.30 + above100k * 0.21;
-      total += interestDeduction;
-      items.push({
-        label: "Ränteavdrag på lån",
-        value: interestDeduction
-      });
-    }
-    state.interestDeduction = interestDeduction;
-
-    // 4) Verktyg för jobbet – preliminärt 100% av kostnaden
-    const toolsCost = Number(state.workToolsCost) || 0;
-    let toolsDeduction = 0;
-    if (toolsCost > 0) {
-      toolsDeduction = toolsCost;
-      total += toolsDeduction;
-      items.push({
-        label: "Verktyg och utrustning för arbetet",
-        value: toolsDeduction
-      });
-    }
-    state.workToolsDeduction = toolsDeduction;
-
-    // 5) Hemutrustning – preliminärt 100%
-    const homeEquipCost = Number(state.homeEquipmentCost) || 0;
-    let homeEquipDeduction = 0;
-    if (homeEquipCost > 0) {
-      homeEquipDeduction = homeEquipCost;
-      total += homeEquipDeduction;
-      items.push({
-        label: "Hemutrustning för arbete (skrivbord, stol m.m.)",
-        value: homeEquipDeduction
-      });
-    }
-    state.homeEquipmentDeduction = homeEquipDeduction;
-
-    // 6) Traktamente – schablon 260 kr per dag
-    const businessDays = Number(state.businessTravelDays) || 0;
-    let perDiem = 0;
-    if (businessDays > 0) {
-      const PER_DIEM_RATE = 260;
-      perDiem = businessDays * PER_DIEM_RATE;
-      total += perDiem;
-      items.push({
-        label: "Traktamente vid tjänsteresor (preliminärt)",
-        value: perDiem
-      });
-    }
-    state.perDiemDeduction = perDiem;
-
-    state.totalEstimate = total;
-
-    return { total, items };
-  }
-
-  function calculateAndShowResult() {
-    const { total, items } = computeEstimate();
-
-    if (total > 0) {
-      resultTotalEl.textContent = formatCurrency(total);
-      document.getElementById("ak-result-sub").textContent =
-        "Detta är ett grovt estimat på hur mycket dina samlade avdrag kan minska din beskattningsbara inkomst. Den faktiska effekten på skatten beror på hela din deklaration.";
-    } else if (
-      state.travelType !== "none" ||
-      state.worksAway === "yes_cost" ||
-      state.worksAway === "yes_employer" ||
-      state.homeOffice === "yes"
-    ) {
-      resultTotalEl.textContent =
-        "Beloppet är för lågt för ett tydligt estimat";
-      document.getElementById("ak-result-sub").textContent =
-        "Baserat på dina svar ser det ut som att de möjliga avdragen är relativt små eller inte över schablonnivån. Se våra guider för att gå igenom reglerna mer i detalj.";
-    } else {
-      resultTotalEl.textContent = "Inga tydliga avdrag identifierade";
-      document.getElementById("ak-result-sub").textContent =
-        "Utifrån de här svaren hittar vi inga tydliga avdrag. Det kan ändå finnas andra situationer där avdrag är aktuella. Gå gärna vidare till våra guider.";
-    }
-
-    resultListEl.innerHTML = "";
-    if (items.length > 0) {
-      items.forEach((item) => {
+      resultListEl.innerHTML = "";
+      if (items.length > 0) {
+        items.forEach((item) => {
+          const li = document.createElement("li");
+          li.className = "ak-result-item";
+          const labelSpan = document.createElement("span");
+          labelSpan.className = "ak-result-item-label";
+          labelSpan.textContent = item.label;
+          const valueSpan = document.createElement("span");
+          valueSpan.className = "ak-result-item-value";
+          valueSpan.textContent = formatCurrency(item.value);
+          li.appendChild(labelSpan);
+          li.appendChild(valueSpan);
+          resultListEl.appendChild(li);
+        });
+      } else {
         const li = document.createElement("li");
         li.className = "ak-result-item";
         const labelSpan = document.createElement("span");
         labelSpan.className = "ak-result-item-label";
-        labelSpan.textContent = item.label;
-        const valueSpan = document.createElement("span");
-        valueSpan.className = "ak-result-item-value";
-        valueSpan.textContent = formatCurrency(item.value);
+        labelSpan.textContent =
+          "Vi hittar inga tydliga avdrag baserat på de här svaren.";
         li.appendChild(labelSpan);
-        li.appendChild(valueSpan);
         resultListEl.appendChild(li);
+      }
+    }
+
+    // Header-knappen "Börja räkna"
+    const headerStartBtn = document.getElementById("startBtn");
+    if (headerStartBtn) {
+      headerStartBtn.addEventListener("click", function () {
+        const shell = document.querySelector(".ak-shell");
+        if (shell) {
+          shell.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+        setView("flow");
+        updateButtons();
       });
-    } else {
-      const li = document.createElement("li");
-      li.className = "ak-result-item";
-      const labelSpan = document.createElement("span");
-      labelSpan.className = "ak-result-item-label";
-      labelSpan.textContent =
-        "Vi hittar inga tydliga avdrag baserat på de här svaren.";
-      li.appendChild(labelSpan);
-      resultListEl.appendChild(li);
     }
-  }
 
-  // Header-knappen "Börja räkna"
-  const headerStartBtn = document.getElementById("startBtn");
-  if (headerStartBtn) {
-    headerStartBtn.addEventListener("click", function () {
-      const shell = document.querySelector(".ak-shell");
-      if (shell) {
-        shell.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Start-knapp inne i verktyget
+    if (startBtn) {
+      startBtn.addEventListener("click", function () {
+        setView("flow");
+        updateButtons();
+      });
+    }
+
+    if (readMoreBtn) {
+      readMoreBtn.addEventListener("click", function () {
+        const disclaimer = document.querySelector(".ak-disclaimer");
+        if (disclaimer) {
+          disclaimer.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", function () {
+        if (state.currentStep === 2 && state.travelType === "car") {
+          const ok = validateKmInput();
+          if (!ok) return;
+        }
+        goToNextStep();
+        updateButtons();
+      });
+    }
+
+    if (backBtn) {
+      backBtn.addEventListener("click", function () {
+        goToPreviousStep();
+        updateButtons();
+      });
+    }
+
+    // Klick på alternativ
+    flowEl.addEventListener("click", function (event) {
+      const optionBtn = event.target.closest(".ak-option");
+      if (!optionBtn) return;
+
+      const section = optionBtn.closest("[data-step-index]");
+      if (!section) return;
+
+      const stepIndex = Number(section.dataset.stepIndex);
+      const optionValue = optionBtn.dataset.option;
+
+      section.querySelectorAll(".ak-option").forEach((btn) => {
+        btn.classList.toggle("ak-option-selected", btn === optionBtn);
+      });
+
+      if (stepIndex === 1) {
+        if (optionValue === "travel_car") state.travelType = "car";
+        else if (optionValue === "travel_public") state.travelType = "public";
+        else state.travelType = "none";
+      } else if (stepIndex === 3) {
+        if (optionValue === "away_yes_cost") {
+          state.worksAway = "yes_cost";
+          doubleHousingGroup.hidden = false;
+          livingCostGroup.hidden = false;
+        } else if (optionValue === "away_yes_employer") {
+          state.worksAway = "yes_employer";
+          doubleHousingGroup.hidden = true;
+          state.doubleHousingCost = null;
+          doubleHousingInput.value = "";
+          livingCostGroup.hidden = false;
+        } else {
+          state.worksAway = "no";
+          doubleHousingGroup.hidden = true;
+          state.doubleHousingCost = null;
+          doubleHousingInput.value = "";
+          livingCostGroup.hidden = true;
+          state.livingCostDays = null;
+          livingCostInput.value = "";
+        }
+      } else if (stepIndex === 4) {
+        if (optionValue === "home_travel_yes") {
+          state.homeTravelPaid = "yes";
+          homeTravelGroup.hidden = false;
+        } else {
+          state.homeTravelPaid = "no";
+          homeTravelGroup.hidden = true;
+          state.homeTravelCost = null;
+          homeTravelInput.value = "";
+        }
+      } else if (stepIndex === 5) {
+        state.homeOffice = optionValue === "homeoffice_yes" ? "yes" : "no";
       }
-      setView("flow");
+
       updateButtons();
     });
-  }
 
-  // Start-knapp inne i verktyget
-  if (startBtn) {
-    startBtn.addEventListener("click", function () {
-      setView("flow");
-      updateButtons();
-    });
-  }
-
-  if (readMoreBtn) {
-    readMoreBtn.addEventListener("click", function () {
-      const disclaimer = document.querySelector(".ak-disclaimer");
-      if (disclaimer) {
-        disclaimer.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
-  }
-
-  if (nextBtn) {
-    nextBtn.addEventListener("click", function () {
-      if (state.currentStep === 2 && state.travelType === "car") {
-        const ok = validateKmInput();
-        if (!ok) return;
-      }
-      goToNextStep();
-      updateButtons();
-    });
-  }
-
-  if (backBtn) {
-    backBtn.addEventListener("click", function () {
-      goToPreviousStep();
-      updateButtons();
-    });
-  }
-
-  // Klick på alternativ
-  flowEl.addEventListener("click", function (event) {
-    const optionBtn = event.target.closest(".ak-option");
-    if (!optionBtn) return;
-
-    const section = optionBtn.closest("[data-step-index]");
-    if (!section) return;
-
-    const stepIndex = Number(section.dataset.stepIndex);
-    const optionValue = optionBtn.dataset.option;
-
-    section.querySelectorAll(".ak-option").forEach((btn) => {
-      btn.classList.toggle("ak-option-selected", btn === optionBtn);
-    });
-
-    if (stepIndex === 1) {
-      if (optionValue === "travel_car") state.travelType = "car";
-      else if (optionValue === "travel_public") state.travelType = "public";
-      else state.travelType = "none";
-    } else if (stepIndex === 3) {
-      if (optionValue === "away_yes_cost") {
-        state.worksAway = "yes_cost";
-        doubleHousingGroup.hidden = false;
-        livingCostGroup.hidden = false;
-      } else if (optionValue === "away_yes_employer") {
-        state.worksAway = "yes_employer";
-        doubleHousingGroup.hidden = true;
-        state.doubleHousingCost = null;
-        doubleHousingInput.value = "";
-        livingCostGroup.hidden = false;
+    // Inputs
+    kmInput.addEventListener("input", function () {
+      clearKmError();
+      const value = kmInput.value.trim();
+      if (!value) {
+        state.travelKm = null;
       } else {
-        state.worksAway = "no";
-        doubleHousingGroup.hidden = true;
-        state.doubleHousingCost = null;
-        doubleHousingInput.value = "";
-        livingCostGroup.hidden = true;
-        state.livingCostDays = null;
-        livingCostInput.value = "";
+        const num = Number(value.replace(",", "."));
+        state.travelKm = num > 0 ? num : null;
       }
-    } else if (stepIndex === 4) {
-      if (optionValue === "home_travel_yes") {
-        state.homeTravelPaid = "yes";
-        homeTravelGroup.hidden = false;
+      updateButtons();
+    });
+
+    doubleHousingInput.addEventListener("input", function () {
+      state.doubleHousingCost = parseNumberField(doubleHousingInput);
+      updateButtons();
+    });
+
+    livingCostInput.addEventListener("input", function () {
+      const val = parseNumberField(livingCostInput);
+      if (val && val > 365) {
+        state.livingCostDays = 365;
+        livingCostInput.value = "365";
       } else {
-        state.homeTravelPaid = "no";
-        homeTravelGroup.hidden = true;
-        state.homeTravelCost = null;
-        homeTravelInput.value = "";
+        state.livingCostDays = val;
       }
-    } else if (stepIndex === 5) {
-      state.homeOffice = optionValue === "homeoffice_yes" ? "yes" : "no";
+      updateButtons();
+    });
+
+    homeTravelInput.addEventListener("input", function () {
+      state.homeTravelCost = parseNumberField(homeTravelInput);
+      updateButtons();
+    });
+
+    if (unionFeeMonthlyInput) {
+      unionFeeMonthlyInput.addEventListener("input", function () {
+        const val = parseNumberField(unionFeeMonthlyInput);
+        state.unionFeeMonthly = val || 0;
+        updateButtons();
+      });
     }
 
-    updateButtons();
-  });
-
-  // Inputs
-  kmInput.addEventListener("input", function () {
-    clearKmError();
-    const value = kmInput.value.trim();
-    if (!value) {
-      state.travelKm = null;
-    } else {
-      const num = Number(value.replace(",", "."));
-      state.travelKm = num > 0 ? num : null;
+    if (unemploymentFeeMonthlyInput) {
+      unemploymentFeeMonthlyInput.addEventListener("input", function () {
+        const val = parseNumberField(unemploymentFeeMonthlyInput);
+        state.unemploymentFeeMonthly = val || 0;
+        updateButtons();
+      });
     }
-    updateButtons();
-  });
 
-  doubleHousingInput.addEventListener("input", function () {
-    state.doubleHousingCost = parseNumberField(doubleHousingInput);
-    updateButtons();
-  });
-
-  livingCostInput.addEventListener("input", function () {
-    const val = parseNumberField(livingCostInput);
-    if (val && val > 365) {
-      state.livingCostDays = 365;
-      livingCostInput.value = "365";
-    } else {
-      state.livingCostDays = val;
+    if (annualInterestPaidInput) {
+      annualInterestPaidInput.addEventListener("input", function () {
+        const val = parseNumberField(annualInterestPaidInput);
+        state.annualInterestPaid = val || 0;
+        updateButtons();
+      });
     }
-    updateButtons();
-  });
 
-  homeTravelInput.addEventListener("input", function () {
-    state.homeTravelCost = parseNumberField(homeTravelInput);
-    updateButtons();
-  });
+    if (workToolsCostInput) {
+      workToolsCostInput.addEventListener("input", function () {
+        const val = parseNumberField(workToolsCostInput);
+        state.workToolsCost = val || 0;
+        updateButtons();
+      });
+    }
 
-  // Extra fält – bara om de finns i HTML
-  if (unionFeeMonthlyInput) {
-    unionFeeMonthlyInput.addEventListener("input", function () {
-      const val = parseNumberField(unionFeeMonthlyInput);
-      state.unionFeeMonthly = val || 0;
-      updateButtons();
-    });
-  }
+    if (homeEquipmentCostInput) {
+      homeEquipmentCostInput.addEventListener("input", function () {
+        const val = parseNumberField(homeEquipmentCostInput);
+        state.homeEquipmentCost = val || 0;
+        updateButtons();
+      });
+    }
 
-  if (unemploymentFeeMonthlyInput) {
-    unemploymentFeeMonthlyInput.addEventListener("input", function () {
-      const val = parseNumberField(unemploymentFeeMonthlyInput);
-      state.unemploymentFeeMonthly = val || 0;
-      updateButtons();
-    });
-  }
+    if (businessTravelDaysInput) {
+      businessTravelDaysInput.addEventListener("input", function () {
+        const val = parseNumberField(businessTravelDaysInput);
+        state.businessTravelDays = val || 0;
+        updateButtons();
+      });
+    }
 
-  if (annualInterestPaidInput) {
-    annualInterestPaidInput.addEventListener("input", function () {
-      const val = parseNumberField(annualInterestPaidInput);
-      state.annualInterestPaid = val || 0;
-      updateButtons();
-    });
-  }
+    // Toggle "Visa fler möjliga avdrag"
+    if (moreToggle && moreWrapper) {
+      moreToggle.addEventListener("click", function () {
+        const hidden = moreWrapper.hidden;
+        moreWrapper.hidden = !hidden;
+        moreToggle.textContent = hidden
+          ? "Dölj fler möjliga avdrag ▲"
+          : "Visa fler möjliga avdrag ▼";
+      });
+    }
 
-  if (workToolsCostInput) {
-    workToolsCostInput.addEventListener("input", function () {
-      const val = parseNumberField(workToolsCostInput);
-      state.workToolsCost = val || 0;
-      updateButtons();
-    });
-  }
+    // CTA: Spara rapport
+    const emailForm = document.getElementById("ak-email-form");
+    const emailInput = document.getElementById("ak-email-input");
+    const emailFeedback = document.getElementById("ak-email-feedback");
 
-  if (homeEquipmentCostInput) {
-    homeEquipmentCostInput.addEventListener("input", function () {
-      const val = parseNumberField(homeEquipmentCostInput);
-      state.homeEquipmentCost = val || 0;
-      updateButtons();
-    });
-  }
+    if (emailForm) {
+      emailForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
 
-  if (businessTravelDaysInput) {
-    businessTravelDaysInput.addEventListener("input", function () {
-      const val = parseNumberField(businessTravelDaysInput);
-      state.businessTravelDays = val || 0;
-      updateButtons();
-    });
-  }
+        const email = (emailInput.value || "").trim();
+        if (!email) return;
 
-  // --- CTA: Spara rapport via Brevo/Worker + GA4 --- //
-  const emailForm = document.getElementById("ak-email-form");
-  const emailInput = document.getElementById("ak-email-input");
-  const emailFeedback = document.getElementById("ak-email-feedback");
+        const submitButton = emailForm.querySelector("button[type='submit']");
+        submitButton.disabled = true;
+        emailFeedback.style.display = "block";
+        emailFeedback.style.color = "#555";
+        emailFeedback.textContent = "Sparar din e-post...";
 
-  if (emailForm) {
-    emailForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
+        try {
+          if (typeof gtag === "function") {
+            const totalEstimateNumber =
+              Number((resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")) || 0;
 
-      const email = (emailInput.value || "").trim();
-      if (!email) return;
+            gtag("event", "avdrag_signup", {
+              value: totalEstimateNumber,
+              currency: "SEK",
+              estimate_sek: totalEstimateNumber,
+              travel_type: state.travelType || "unknown",
+              works_away: state.worksAway || "unknown",
+              home_office: state.homeOffice || "unknown"
+            });
+          }
+        } catch (err) {
+          console.warn("GA4 tracking failed", err);
+        }
 
-      const submitButton = emailForm.querySelector("button[type='submit']");
-      submitButton.disabled = true;
-      emailFeedback.style.display = "block";
-      emailFeedback.style.color = "#555";
-      emailFeedback.textContent = "Sparar din e-post...";
-
-      try {
-        if (typeof gtag === "function") {
-          const totalEstimateNumber =
+        try {
+          const numericEstimate =
             Number((resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")) || 0;
 
-          gtag("event", "avdrag_signup", {
-            value: totalEstimateNumber,
-            currency: "SEK",
-            estimate_sek: totalEstimateNumber,
-            travel_type: state.travelType || "unknown",
-            works_away: state.worksAway || "unknown",
-            home_office: state.homeOffice || "unknown"
-          });
+          const res = await fetch(
+            "https://avdragsjakten-signup.simonwakeus.workers.dev/signup",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                email: email,
+                estimate: numericEstimate,
+
+                unionFeeMonthly: state.unionFeeMonthly || 0,
+                unemploymentFeeMonthly: state.unemploymentFeeMonthly || 0,
+                annualInterestPaid: state.annualInterestPaid || 0,
+                workToolsCost: state.workToolsCost || 0,
+                homeEquipmentCost: state.homeEquipmentCost || 0,
+                businessTravelDays: state.businessTravelDays || 0,
+
+                unionFeeDeduction: state.unionFeeDeduction || 0,
+                unemploymentFeeDeduction: state.unemploymentFeeDeduction || 0,
+                interestDeduction: state.interestDeduction || 0,
+                workToolsDeduction: state.workToolsDeduction || 0,
+                homeEquipmentDeduction: state.homeEquipmentDeduction || 0,
+                perDiemDeduction: state.perDiemDeduction || 0,
+
+                totalEstimate: state.totalEstimate || numericEstimate
+              })
+            }
+          );
+
+          if (!res.ok) throw new Error("Server error");
+
+          emailInput.disabled = true;
+          submitButton.disabled = true;
+          emailFeedback.style.color = "green";
+          emailFeedback.textContent =
+            "Tack! Vi hör av oss inför deklarationssäsongen.";
+        } catch (err) {
+          submitButton.disabled = false;
+          emailFeedback.style.color = "red";
+          emailFeedback.textContent =
+            "Ett fel uppstod när vi skulle spara din e-post. Försök igen om en stund.";
         }
-      } catch (err) {
-        console.warn("GA4 tracking failed", err);
-      }
-
-      try {
-        const numericEstimate =
-          Number((resultTotalEl?.textContent || "").replace(/[^0-9]/g, "")) || 0;
-
-        const res = await fetch(
-          "https://avdragsjakten-signup.simonwakeus.workers.dev/signup",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              email: email,
-              estimate: numericEstimate,
-
-              unionFeeMonthly: state.unionFeeMonthly || 0,
-              unemploymentFeeMonthly: state.unemploymentFeeMonthly || 0,
-              annualInterestPaid: state.annualInterestPaid || 0,
-              workToolsCost: state.workToolsCost || 0,
-              homeEquipmentCost: state.homeEquipmentCost || 0,
-              businessTravelDays: state.businessTravelDays || 0,
-
-              unionFeeDeduction: state.unionFeeDeduction || 0,
-              unemploymentFeeDeduction: state.unemploymentFeeDeduction || 0,
-              interestDeduction: state.interestDeduction || 0,
-              workToolsDeduction: state.workToolsDeduction || 0,
-              homeEquipmentDeduction: state.homeEquipmentDeduction || 0,
-              perDiemDeduction: state.perDiemDeduction || 0,
-
-              totalEstimate: state.totalEstimate || numericEstimate
-            })
-          }
-        );
-
-        if (!res.ok) throw new Error("Server error");
-
-        emailInput.disabled = true;
-        submitButton.disabled = true;
-        emailFeedback.style.color = "green";
-        emailFeedback.textContent =
-          "Tack! Vi hör av oss inför deklarationssäsongen.";
-      } catch (err) {
-        submitButton.disabled = false;
-        emailFeedback.style.color = "red";
-        emailFeedback.textContent =
-          "Ett fel uppstod när vi skulle spara din e-post. Försök igen om en stund.";
-      }
-    });
-  }
-
-  if (resultHowToBtn) {
-    resultHowToBtn.addEventListener("click", function () {
-      window.location.href = "/skatteavdrag/";
-    });
-  }
-
-  if (resultRestartBtn) {
-    resultRestartBtn.addEventListener("click", function () {
-      state.currentStep = 1;
-      state.travelType = null;
-      state.travelKm = null;
-      state.worksAway = null;
-      state.doubleHousingCost = null;
-      state.livingCostDays = null;
-      state.homeTravelPaid = null;
-      state.homeTravelCost = null;
-      state.homeOffice = null;
-
-      state.unionFeeMonthly = 0;
-      state.unemploymentFeeMonthly = 0;
-      state.annualInterestPaid = 0;
-      state.workToolsCost = 0;
-      state.homeEquipmentCost = 0;
-      state.businessTravelDays = 0;
-      state.unionFeeDeduction = 0;
-      state.unemploymentFeeDeduction = 0;
-      state.interestDeduction = 0;
-      state.workToolsDeduction = 0;
-      state.homeEquipmentDeduction = 0;
-      state.perDiemDeduction = 0;
-      state.totalEstimate = 0;
-
-      kmInput.value = "";
-      doubleHousingInput.value = "";
-      livingCostInput.value = "";
-      homeTravelInput.value = "";
-
-      if (unionFeeMonthlyInput) unionFeeMonthlyInput.value = "";
-      if (unemploymentFeeMonthlyInput) unemploymentFeeMonthlyInput.value = "";
-      if (annualInterestPaidInput) annualInterestPaidInput.value = "";
-      if (workToolsCostInput) workToolsCostInput.value = "";
-      if (homeEquipmentCostInput) homeEquipmentCostInput.value = "";
-      if (businessTravelDaysInput) businessTravelDaysInput.value = "";
-
-      clearKmError();
-      doubleHousingGroup.hidden = true;
-      livingCostGroup.hidden = true;
-      homeTravelGroup.hidden = true;
-
-      steps.forEach((stepEl) => {
-        stepEl.querySelectorAll(".ak-option").forEach((btn) => {
-          btn.classList.remove("ak-option-selected");
-        });
       });
+    }
 
-      setView("flow");
-      updateButtons();
-    });
-  }
+    if (resultHowToBtn) {
+      resultHowToBtn.addEventListener("click", function () {
+        window.location.href = "/skatteavdrag/";
+      });
+    }
 
-  setView("intro");
-});
-</script>
+    if (resultRestartBtn) {
+      resultRestartBtn.addEventListener("click", function () {
+        state.currentStep = 1;
+        state.travelType = null;
+        state.travelKm = null;
+        state.worksAway = null;
+        state.doubleHousingCost = null;
+        state.livingCostDays = null;
+        state.homeTravelPaid = null;
+        state.homeTravelCost = null;
+        state.homeOffice = null;
 
+        state.unionFeeMonthly = 0;
+        state.unemploymentFeeMonthly = 0;
+        state.annualInterestPaid = 0;
+        state.workToolsCost = 0;
+        state.homeEquipmentCost = 0;
+        state.businessTravelDays = 0;
+        state.unionFeeDeduction = 0;
+        state.unemploymentFeeDeduction = 0;
+        state.interestDeduction = 0;
+        state.workToolsDeduction = 0;
+        state.homeEquipmentDeduction = 0;
+        state.perDiemDeduction = 0;
+        state.totalEstimate = 0;
+
+        kmInput.value = "";
+        doubleHousingInput.value = "";
+        livingCostInput.value = "";
+        homeTravelInput.value = "";
+
+        if (unionFeeMonthlyInput) unionFeeMonthlyInput.value = "";
+        if (unemploymentFeeMonthlyInput) unemploymentFeeMonthlyInput.value = "";
+        if (annualInterestPaidInput) annualInterestPaidInput.value = "";
+        if (workToolsCostInput) workToolsCostInput.value = "";
+        if (homeEquipmentCostInput) homeEquipmentCostInput.value = "";
+        if (businessTravelDaysInput) businessTravelDaysInput.value = "";
+
+        clearKmError();
+        doubleHousingGroup.hidden = true;
+        livingCostGroup.hidden = true;
+        homeTravelGroup.hidden = true;
+
+        steps.forEach((stepEl) => {
+          stepEl.querySelectorAll(".ak-option").forEach((btn) => {
+            btn.classList.remove("ak-option-selected");
+          });
+        });
+
+        setView("flow");
+        updateButtons();
+      });
+    }
+
+    setView("intro");
+  });
+  </script>
 </body>
 </html>
