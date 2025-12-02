@@ -1,4 +1,9 @@
 :root {
+  html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
   --color-primary: #005078;
   --color-primary-hover: #003b58;
   --color-accent: #3bb273;
