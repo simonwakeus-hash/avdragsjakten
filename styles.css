@@ -76,10 +76,11 @@ a:hover {
 
 .container {
   width: 100%;
-  max-width: 720px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 16px;
 }
+
 
 .page-main {
   padding-bottom: 5.5rem; /* plats för sticky-bar på mobil */
@@ -89,25 +90,35 @@ a:hover {
 
 .hero {
   background: radial-gradient(circle at top left, #dbeafe, #e5e7eb);
-  padding: 2.5rem 0 2rem;
-  text-align: center;
-}
-
-.hero .container {
-  max-width: 720px;
+  padding: 40px 0 32px;
+  text-align: left;
 }
 
 .hero h1 {
-  font-size: clamp(2.1rem, 5vw, 2.6rem);
+  margin: 0 0 8px;
+  font-size: 2.2rem;
   letter-spacing: -0.03em;
-  margin-bottom: 0.5rem;
 }
 
 .hero-subtitle {
-  margin: 0 auto 1.25rem;
-  max-width: 32rem;
-  color: var(--color-text-muted);
+  margin: 0 0 20px;
+  color: var(--text-muted);
+  max-width: 36rem;
 }
+
+.hero .button-primary {
+  margin-top: 4px;
+}
+@media (min-width: 768px) {
+  .hero {
+    padding: 56px 0 40px;
+  }
+
+  .hero h1 {
+    font-size: 2.6rem;
+  }
+}
+
 
 .beta-label {
   font-size: 0.75rem;
@@ -452,7 +463,6 @@ a:hover {
 }
 
 /* Sticky bottom bar */
-
 .ak-sticky-bar {
   position: fixed;
   left: 0;
@@ -461,42 +471,31 @@ a:hover {
   z-index: 40;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
-  background: var(--color-bg);
+  background: var(--color-bg-elevated, #f5f5f7);
   box-shadow: 0 -4px 12px rgba(15, 23, 42, 0.08);
 }
 
 .ak-sticky-inner {
-  max-width: 720px;
+  max-width: 960px; /* align med .container */
   margin: 0 auto;
-  padding: 0.75rem 1rem 0;
+  padding-inline: 1rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.75rem;
-  border-top: 1px solid rgba(148, 163, 184, 0.5);
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .ak-sticky-text {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--color-text-muted);
-  flex: 1;
 }
 
 .ak-sticky-actions {
   display: flex;
+  justify-content: flex-end;
   gap: 0.5rem;
-  flex-shrink: 0;
 }
 
-.ak-btn-ghost {
-  background: transparent;
-  color: var(--color-text-muted);
-  font-weight: 500;
-  padding-inline: 0.4rem;
-}
-
-/* Desktop: sticky-bar blir “vanlig” rad */
-
+/* Desktop: inte fixed "flytande" utan mer integrerad */
 @media (min-width: 960px) {
   .ak-sticky-bar {
     position: static;
@@ -508,10 +507,12 @@ a:hover {
 
   .ak-sticky-inner {
     padding-inline: 0;
-    border-top: none;
-    margin-top: 0.5rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 }
+
 
 /* Result-vy */
 
