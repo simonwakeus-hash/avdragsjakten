@@ -677,25 +677,13 @@ document.addEventListener("DOMContentLoaded", function () {
       updateStepVisibility();
       updateProgress();
       updateButtons();
-    } else if (view === "result") {
-      nextBtn.disabled = true;
-      backBtn.disabled = false;
 
-      if (state.totalEstimate > 0) {
-        const countText =
-          state.deductionsCount && state.deductionsCount > 0
-            ? " · " + state.deductionsCount + " möjliga avdrag"
-            : "";
-        stickyText.textContent =
-          "Preliminär skattesänkning: " +
-          formatCurrency(state.totalEstimate) +
-          countText;
-      } else {
-        stickyText.textContent =
-          "Detta är en preliminär uppskattning. Läs alltid reglerna innan du deklarerar.";
-      }
-    }
-  }
+      } else if (view === "result") {
+  nextBtn.disabled = true;
+  backBtn.disabled = false;
+  stickyText.textContent = decorateStickyText();
+}
+
 
   function updateStepVisibility() {
     steps.forEach((stepEl) => {
@@ -711,70 +699,66 @@ document.addEventListener("DOMContentLoaded", function () {
     progressLabel.textContent = "Steg " + clampedStep + " av " + totalSteps;
   }
 
-  function decorateStickyText(baseText) {
-    const { total } = computeEstimate();
-    if (total > 0) {
-      return (
-        baseText +
-        " Din preliminära besparing just nu: " +
-        formatCurrency(total) +
-        "."
-      );
-    }
-    return baseText;
+function decorateStickyText() {
+  const { total } = computeEstimate();
+  if (total > 0) {
+    return "Besparing: " + formatCurrency(total);
+  }
+  return "Besparing: 0 kr";
+}
+
+
+ function updateButtons() {
+  // Back-knappen – bara aktiv när vi inte är på första steget
+  if (!resultEl.hidden) {
+    backBtn.disabled = false;
+  } else if (!introEl.hidden && state.currentStep === 1) {
+    backBtn.disabled = true;
+  } else {
+    backBtn.disabled = false;
   }
 
-  function updateButtons() {
-    backBtn.disabled = state.currentStep <= 1 && introEl.hidden;
+  // Om vi är i resultat-vy: lås "Nästa" och visa bara besparing
+  if (!resultEl.hidden) {
+    nextBtn.disabled = true;
+    stickyText.textContent = decorateStickyText();
+    return;
+  }
 
-    if (flowEl.hidden) {
+  // Vi är i frågeflödet
+  const step = state.currentStep;
+
+  if (step === 1) {
+    nextBtn.disabled = !state.travelType;
+  } else if (step === 2) {
+    const km = parseFloat((kmInput.value || "").replace(",", "."));
+    nextBtn.disabled = !(km > 0);
+  } else if (step === 3) {
+    if (!state.worksAway) {
       nextBtn.disabled = true;
-      return;
-    }
-
-    const step = state.currentStep;
-    let baseSticky = "";
-
-    if (step === 1) {
-      nextBtn.disabled = !state.travelType;
-      baseSticky = "Börja med dina resor till och från arbetet.";
-    } else if (step === 2) {
-      const km = parseFloat((kmInput.value || "").replace(",", "."));
-      nextBtn.disabled = !(km > 0);
-      baseSticky =
-        "En uppskattning räcker. Du kan justera antalet mil vid behov.";
-    } else if (step === 3) {
-      if (!state.worksAway) {
-        nextBtn.disabled = true;
-      } else if (state.worksAway === "yes_cost") {
-        nextBtn.disabled = !(state.doubleHousingCost && state.doubleHousingCost > 0);
-      } else {
-        nextBtn.disabled = false;
-      }
-      baseSticky =
-        "Här tittar vi på om du haft extra boende och ökade kostnader vid jobb på annan ort.";
-    } else if (step === 4) {
-      if (!state.homeTravelPaid) {
-        nextBtn.disabled = true;
-      } else if (state.homeTravelPaid === "yes") {
-        nextBtn.disabled = !(state.homeTravelCost && state.homeTravelCost > 0);
-      } else {
-        nextBtn.disabled = false;
-      }
-      baseSticky =
-        "Om du själv betalat hemresor kan det ibland ge avdragsrätt.";
-    } else if (step === 5) {
-      nextBtn.disabled = !state.homeOffice;
-      baseSticky =
-        "Till sist tittar vi på om du haft ett särskilt arbetsrum hemma och andra vanliga avdragskostnader.";
+    } else if (state.worksAway === "yes_cost") {
+      nextBtn.disabled = !(state.doubleHousingCost && state.doubleHousingCost > 0);
     } else {
       nextBtn.disabled = false;
-      baseSticky =
-        "Fortsätt genom stegen för att få en samlad uppskattning av dina avdrag.";
     }
-
-    stickyText.textContent = decorateStickyText(baseSticky);
+  } else if (step === 4) {
+    if (!state.homeTravelPaid) {
+      nextBtn.disabled = true;
+    } else if (state.homeTravelPaid === "yes") {
+      nextBtn.disabled = !(state.homeTravelCost && state.homeTravelCost > 0);
+    } else {
+      nextBtn.disabled = false;
+    }
+  } else if (step === 5) {
+    nextBtn.disabled = !state.homeOffice;
+  } else {
+    nextBtn.disabled = false;
   }
+
+  // Alltid kort sticky-text: "Besparing: X kr"
+  stickyText.textContent = decorateStickyText();
+}
+
 
   function goToNextStep() {
     if (state.currentStep >= totalSteps) {
