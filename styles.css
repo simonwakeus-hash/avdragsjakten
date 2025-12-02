@@ -777,4 +777,21 @@ hr {
   }
 }
 
+.ak-more-toggle {
+  font-size: 0.9rem;
+  color: var(--color-primary, #005078);
+  cursor: pointer;
+  margin: 1rem 0 0.5rem;
+}
+
+.ak-more-toggle:hover {
+  text-decoration: underline;
+}
+
+.ak-more-wrapper {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+}
+
   </style>
