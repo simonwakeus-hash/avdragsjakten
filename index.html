@@ -548,6 +548,32 @@
   </footer>
 
  <script>
+
+   // ... inne i document.addEventListener("DOMContentLoaded", function () { ... });
+
+const yearEl = document.getElementById("year");
+if (yearEl) {
+  yearEl.textContent = new Date().getFullYear();
+}
+
+const bottomEmailForm = document.getElementById("emailForm");
+const bottomEmailInput = document.getElementById("emailInput");
+const bottomEmailFeedback = document.getElementById("emailFeedback");
+
+if (bottomEmailForm && bottomEmailInput && bottomEmailFeedback) {
+  bottomEmailForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const email = (bottomEmailInput.value || "").trim();
+    if (!email) return;
+
+    bottomEmailFeedback.textContent =
+      "Tack! Vi har sparat din e-postadress inför kommande uppdateringar.";
+    bottomEmailFeedback.style.display = "block";
+    bottomEmailInput.value = "";
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const introEl = document.querySelector('[data-step="intro"]');
   const flowEl = document.querySelector('[data-step="flow"]');
