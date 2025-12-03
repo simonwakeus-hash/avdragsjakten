@@ -567,12 +567,13 @@
     </div>
   </footer>
 <script>
-  // ---- År i footern + enkla e-post-formuläret längst ned på sidan ----
+  // År i footern
   const yearEl = document.getElementById("year");
   if (yearEl) {
     yearEl.textContent = new Date().getFullYear();
   }
 
+  // Enkla nyhetsbrev-formuläret längst ned
   const bottomEmailForm = document.getElementById("emailForm");
   const bottomEmailInput = document.getElementById("emailInput");
   const bottomEmailFeedback = document.getElementById("emailFeedback");
@@ -591,12 +592,12 @@
     });
   }
 
-  // ---- Huvudlogik för Avdragskollen ----
   document.addEventListener("DOMContentLoaded", function () {
     const introEl = document.querySelector('[data-step="intro"]');
     const flowEl = document.querySelector('[data-step="flow"]');
     const resultEl = document.querySelector('[data-step="result"]');
 
+    // PDF.js init
     const pdfjsLib = window["pdfjs-dist/build/pdf"];
     if (pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
       pdfjsLib.GlobalWorkerOptions.workerSrc =
@@ -636,7 +637,7 @@
     const moreToggle = document.getElementById("ak-more-toggle");
     const moreWrapper = document.getElementById("ak-more-wrapper");
 
-    // Ny resultat-vy
+    // Resultat-vy
     const resultTotalEl = document.getElementById("resultsTotalAmount");
     const resultsSubtitleEl = document.getElementById("resultsSubtitle");
     const topDeductionsListEl = document.getElementById("topDeductionsList");
@@ -651,6 +652,7 @@
     const steps = Array.from(flowEl.querySelectorAll("[data-step-index]"));
     const totalSteps = steps.length;
 
+    // Deklarations-upload
     const deklarationFileInput = document.getElementById("deklaration-file");
     const deklarationStatus = document.getElementById("deklaration-status");
     const analyzeDeklarationBtn = document.getElementById("analyze-deklaration-btn");
@@ -690,11 +692,6 @@
         hasWorkRoomDeduction: false
       },
 
-      // Flaggar (redo för framtida logik)
-      hasExistingTravelDeduction: false,
-      hasExistingDoubleHousingDeduction: false,
-      hasExistingWorkRoomDeduction: false,
-
       // Beräknade avdrag
       unionFeeDeduction: 0,
       unemploymentFeeDeduction: 0,
@@ -704,10 +701,13 @@
       perDiemDeduction: 0,
 
       totalEstimate: 0,
-      deductionsCount: 0
+      deductionsCount: 0,
+
+      // Skattebesparing
+      taxSaving: 0,
+      marginalRate: 0
     };
 
-    // ---------- Vy-hantering ----------
     function setView(view) {
       introEl.hidden = view !== "intro";
       flowEl.hidden = view !== "flow";
@@ -747,15 +747,50 @@
       progressLabel.textContent = "Steg " + clampedStep + " av " + totalSteps;
     }
 
+    // --- Hjälpare för skatt ---
+    function getMarginalTaxRate() {
+      let annualSalary = null;
+
+      if (
+        state.deklarationParsed &&
+        typeof state.deklarationParsed.salary === "number" &&
+        state.deklarationParsed.salary > 0
+      ) {
+        annualSalary = state.deklarationParsed.salary;
+      }
+
+      // Grova marginalskatter (kommunal + ev statlig)
+      if (!annualSalary) {
+        return 0.30; // fallback
+      }
+
+      if (annualSalary < 400000) return 0.28;
+      if (annualSalary < 650000) return 0.30;
+      return 0.33;
+    }
+
+    function computeTaxSaving(total) {
+      const rate = getMarginalTaxRate();
+      state.marginalRate = rate;
+      const saving = Math.round(total * rate);
+      state.taxSaving = saving;
+      return saving;
+    }
+
     function decorateStickyText() {
       const { total } = computeEstimate();
+      const taxSaving = computeTaxSaving(total);
+
+      if (taxSaving > 0) {
+        return "Besparing: ca " + formatCurrency(taxSaving) + " lägre skatt";
+      }
       if (total > 0) {
-        return "Besparing: " + formatCurrency(total);
+        return "Besparing: " + formatCurrency(total) + " i avdrag";
       }
       return "Besparing: 0 kr";
     }
 
-    // ---------- PDF-hjälp: extrahera text ----------
+    // === PDF-hjälp: extrahera text och plocka ut nyckeltal ===
     async function extractTextFromPdf(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -787,56 +822,47 @@
       });
     }
 
-    // Plockar ut ett belopp baserat på regex
+    // Hjälpfunktion: plockar ut ett belopp baserat på regex
     function matchAmount(normalizedText, regex) {
       const m = normalizedText.match(regex);
       if (!m) return null;
-      const digits = m[1]
-        .replace(/\s+/g, "") // ta bort mellanslag
-        .replace(/\./g, ""); // ta bort punkt som tusentalsavskiljare
+      const digits = m[1].replace(/\s+/g, "").replace(/\./g, "");
       const num = Number(digits);
       return Number.isFinite(num) ? num : null;
     }
 
     // Parsar Inkomstdeklaration 1-text till ett litet JSON-objekt
-    // FAS 1: fokusera på stabila fält (kapital & avdrag), lön används ej i UI än.
     function parseDeklarationText(rawText) {
-      // Normalisera whitespace
       const text = rawText.replace(/\s+/g, " ");
 
-      // 1.1 Lön, förmåner ... (sparas men visas inte i UI just nu)
+      // 1.1 Lön, förmåner... – ta första beloppet efter texten och sanity-kolla
       let salary = matchAmount(
         text,
-        /1\.1\s+Lön, förmåner, sjukpenning m\.m\.[^\d-]*([-]?\d[\d ]{2,12})/
+        /1\.1\s+Lön, förmåner, sjukpenning m\.m\.[^\d]*([\d ]{3,12})/
       );
-      // Säkerhetsspärr: släng orimliga värden
       if (!(salary > 10000 && salary < 3000000)) {
         salary = null;
       }
 
-      // 7.1 Schablonintäkt ISK
       const iskSchablon = matchAmount(
         text,
-        /7\.1\s*Schablonintäkter[^\d-]*([-]?\d[\d ]{2,12})/
+        /7\.1\s*Schablonintäkter[^\d]*([\d ]{2,12})/
       );
 
-      // Överskott av kapital
       const capitalSurplus = matchAmount(
         text,
-        /Överskott av kapital[^\d-]*([-]?\d[\d ]{2,12})/
+        /Överskott av kapital[^\d]*([\d ]{2,12})/
       );
 
-      // Avdragsrutor – bara bools, vi bryr oss inte om exakta belopp här
-      const hasTravelDeduction =
-        /2\.1\s*Resor till och från arbetet[^\d-]*([-]?\d[\d ]{2,12})/.test(text);
-
-      const hasDoubleHousingDeduction =
-        /2\.3\s*Tillfälligt arbete, dubbel bosättning och hemresor[^\d-]*([-]?\d[\d ]{2,12})/.test(
-          text
-        );
-
-      const hasWorkRoomDeduction =
-        /2\.4\s*Övriga utgifter[^\d-]*([-]?\d[\d ]{2,12})/.test(text);
+      const hasTravelDeduction = /2\.1\s*Resor till och från arbetet[^\d]*([\d ]{2,12})/.test(
+        text
+      );
+      const hasDoubleHousingDeduction = /2\.3\s*Tillfälligt arbete, dubbel bosättning och hemresor[^\d]*([\d ]{2,12})/.test(
+        text
+      );
+      const hasWorkRoomDeduction = /2\.4\s*Övriga utgifter[^\d]*([\d ]{2,12})/.test(
+        text
+      );
 
       return {
         salary,
@@ -848,7 +874,6 @@
       };
     }
 
-    // ---------- Knappstatus ----------
     function updateButtons() {
       if (!resultEl.hidden) {
         backBtn.disabled = false;
@@ -1003,7 +1028,6 @@
       }).format(sek);
     }
 
-    // ---------- Beräkningar ----------
     function computeEstimate() {
       let total = 0;
       const items = [];
@@ -1021,7 +1045,7 @@
         }
       }
 
-      // Kollektivtrafik – schablon
+      // Reseavdrag kollektiv
       if (state.travelType === "public") {
         const approx = 4000;
         total += approx;
@@ -1080,7 +1104,7 @@
         });
       }
 
-      // Fackavgift – 12 * månadsavgift
+      // Fackavgift
       const unionMonthly = Number(state.unionFeeMonthly) || 0;
       let unionYearly = 0;
       if (unionMonthly > 0) {
@@ -1093,7 +1117,7 @@
       }
       state.unionFeeDeduction = unionYearly;
 
-      // A-kassa – 12 * månadsavgift
+      // A-kassa
       const unemploymentMonthly = Number(state.unemploymentFeeMonthly) || 0;
       let unemploymentYearly = 0;
       if (unemploymentMonthly > 0) {
@@ -1106,7 +1130,7 @@
       }
       state.unemploymentFeeDeduction = unemploymentYearly;
 
-      // Ränta – 30 % upp till 100 000, 21 % över
+      // Ränta
       const interest = Number(state.annualInterestPaid) || 0;
       let interestDeduction = 0;
       if (interest > 0) {
@@ -1147,7 +1171,7 @@
       }
       state.homeEquipmentDeduction = homeEquipDeduction;
 
-      // Tjänsteresor – schablon 260 kr/dag
+      // Tjänsteresor utan traktamente
       const businessDays = Number(state.businessTravelDays) || 0;
       let perDiem = 0;
       if (businessDays > 0) {
@@ -1166,7 +1190,6 @@
       return { total, items };
     }
 
-    // ---------- Metadata för avdragen ----------
     function getDeductionMeta(label) {
       const meta = {
         description: "Ett möjligt avdrag baserat på dina svar.",
@@ -1299,24 +1322,39 @@
     function renderResultsView(total, results) {
       const count = results.length;
 
+      const taxSaving = computeTaxSaving(total);
+      const totalStr = total > 0 ? formatCurrency(total) : "0 kr";
+      const taxStr = taxSaving > 0 ? formatCurrency(taxSaving) : null;
+
       if (resultTotalEl) {
-        resultTotalEl.textContent = total > 0 ? formatCurrency(total) : "0 kr";
+        if (taxStr) {
+          resultTotalEl.textContent =
+            totalStr + " i avdrag · ca " + taxStr + " lägre skatt";
+        } else {
+          resultTotalEl.textContent =
+            total > 0 ? totalStr + " i avdrag" : "0 kr";
+        }
       }
+
       if (summaryTotalAmountEl) {
-        summaryTotalAmountEl.textContent =
-          total > 0 ? formatCurrency(total) : "0 kr";
+        summaryTotalAmountEl.textContent = taxStr || totalStr;
       }
+
       if (summaryMetaEl) {
-        summaryMetaEl.textContent =
+        let metaText =
           count > 0
             ? count + " möjliga avdrag identifierade"
             : "Inga tydliga avdrag identifierade";
+        if (taxStr && count > 0) {
+          metaText += " · ca " + taxStr + " lägre skatt";
+        }
+        summaryMetaEl.textContent = metaText;
       }
 
       if (resultsSubtitleEl) {
         if (total > 0) {
           resultsSubtitleEl.textContent =
-            "Detta är ett grovt estimat på hur mycket dina samlade avdrag kan minska din beskattningsbara inkomst. Den faktiska effekten på skatten beror på hela din deklaration.";
+            "Detta är ett grovt estimat på hur mycket dina samlade avdrag kan minska din beskattningsbara inkomst. Den ungefärliga skattesänkningen bygger på en förenklad svensk marginalskatt.";
         } else if (count === 0) {
           resultsSubtitleEl.textContent =
             "Utifrån de här svaren hittar vi inga tydliga avdrag. Det kan ändå finnas andra situationer där avdrag är aktuella. Gå gärna vidare till våra guider.";
@@ -1348,10 +1386,12 @@
       const others = sorted.slice(3);
 
       top.forEach((d) => {
-        if (topDeductionsListEl) topDeductionsListEl.appendChild(createDeductionCard(d));
+        if (topDeductionsListEl)
+          topDeductionsListEl.appendChild(createDeductionCard(d));
       });
       others.forEach((d) => {
-        if (otherDeductionsListEl) otherDeductionsListEl.appendChild(createDeductionCard(d));
+        if (otherDeductionsListEl)
+          otherDeductionsListEl.appendChild(createDeductionCard(d));
       });
     }
 
@@ -1375,7 +1415,8 @@
       renderResultsView(total, results);
     }
 
-    // ---------- Event handlers ----------
+    // --- Event listeners ---
+
     const headerStartBtn = document.getElementById("startBtn");
     if (headerStartBtn) {
       headerStartBtn.addEventListener("click", function () {
@@ -1635,7 +1676,9 @@
                 homeEquipmentDeduction: state.homeEquipmentDeduction || 0,
                 perDiemDeduction: state.perDiemDeduction || 0,
 
-                totalEstimate: state.totalEstimate || numericEstimate
+                totalEstimate: state.totalEstimate || numericEstimate,
+                taxSaving: state.taxSaving || 0,
+                marginalRate: state.marginalRate || 0
               })
             }
           );
@@ -1656,7 +1699,6 @@
       });
     }
 
-    // "Visa hur du gör avdragen"
     if (showHowButton) {
       showHowButton.addEventListener("click", function () {
         window.location.href = "/skatteavdrag/";
@@ -1668,13 +1710,13 @@
       });
     }
 
-    // ---- Analys av deklarations-PDF (Fas 1 förbättrad) ----
+    // Deklarations-analys
     if (analyzeDeklarationBtn && deklarationFileInput && deklarationStatus) {
       analyzeDeklarationBtn.addEventListener("click", async function () {
         const file = deklarationFileInput.files[0];
         if (!file) {
           deklarationStatus.textContent = "Välj en PDF från Skatteverket först.";
-          deklarationStatus.style.color = "#b91c1c"; // röd
+          deklarationStatus.style.color = "#b91c1c";
           return;
         }
 
@@ -1689,59 +1731,48 @@
           state.deklarationRawText = rawText;
           state.deklarationParsed = parsed;
 
-          // Spara avdragsflaggor för kommande logik (Fas 3)
-          state.hasExistingTravelDeduction = !!parsed.hasTravelDeduction;
-          state.hasExistingDoubleHousingDeduction = !!parsed.hasDoubleHousingDeduction;
-          state.hasExistingWorkRoomDeduction = !!parsed.hasWorkRoomDeduction;
-
-          // Bygg en trygg, tydlig sammanfattning
           const summaryParts = [];
 
           if (parsed.capitalSurplus != null) {
             summaryParts.push(
-              "Vi hittade överskott av kapital ca " +
-                formatCurrency(parsed.capitalSurplus) +
-                "."
+              "överskott av kapital ca " + formatCurrency(parsed.capitalSurplus)
             );
           }
-
           if (parsed.iskSchablon != null) {
             summaryParts.push(
-              "Schablonintäkt ISK ca " + formatCurrency(parsed.iskSchablon) + "."
+              "schablonintäkt ISK ca " + formatCurrency(parsed.iskSchablon)
             );
           }
 
-          const existing = [];
+          const flags = [];
           if (parsed.hasTravelDeduction) {
-            existing.push("resor till och från arbetet");
-          }
-          if (parsed.hasDoubleHousingDeduction) {
-            existing.push("tillfälligt arbete/dubbel bosättning");
+            flags.push("resor till och från arbetet");
           }
           if (parsed.hasWorkRoomDeduction) {
-            existing.push("övriga utgifter (t.ex. arbetsrum)");
+            flags.push("övriga utgifter (t.ex. arbetsrum)");
           }
-
-          if (existing.length > 0) {
-            summaryParts.push(
-              "Vi ser att du redan har avdrag för " +
-                existing.join(", ") +
-                " i din deklaration."
-            );
+          if (parsed.hasDoubleHousingDeduction) {
+            flags.push("tillfälligt arbete / dubbel bosättning");
           }
 
           let summaryText = "Deklarationen är analyserad.";
           if (summaryParts.length > 0) {
-            summaryText += " " + summaryParts.join(" ");
+            summaryText += " Vi hittade " + summaryParts.join(", ") + ".";
+          }
+          if (flags.length > 0) {
+            summaryText +=
+              " Vi ser att du redan har avdrag för " +
+              flags.join(" och ") +
+              " i din deklaration.";
           }
 
           deklarationStatus.textContent = summaryText;
-          deklarationStatus.style.color = "#166534"; // grön
+          deklarationStatus.style.color = "#166534";
         } catch (err) {
           console.error(err);
           deklarationStatus.textContent =
             "Kunde inte läsa PDF:en just nu. Kontrollera att det är Inkomstdeklaration 1 från Skatteverket.";
-          deklarationStatus.style.color = "#b91c1c"; // röd
+          deklarationStatus.style.color = "#b91c1c";
         }
       });
     }
