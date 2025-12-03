@@ -567,7 +567,7 @@
     </div>
   </footer>
 <script>
-  // ---- Footer-år + enkla nyhetsbrevsformuläret längst ned ----
+  // ---- Footer-år + enkla e-post-formuläret längst ned på sidan ----
   const yearEl = document.getElementById("year");
   if (yearEl) {
     yearEl.textContent = new Date().getFullYear();
@@ -597,7 +597,7 @@
     const flowEl = document.querySelector('[data-step="flow"]');
     const resultEl = document.querySelector('[data-step="result"]');
 
-    // PDF.js worker
+    // PDF.js init
     const pdfjsLib = window["pdfjs-dist/build/pdf"];
     if (pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
       pdfjsLib.GlobalWorkerOptions.workerSrc =
@@ -637,7 +637,7 @@
     const moreToggle = document.getElementById("ak-more-toggle");
     const moreWrapper = document.getElementById("ak-more-wrapper");
 
-    // Ny resultat-vy
+    // Resultat-vy
     const resultTotalEl = document.getElementById("resultsTotalAmount");
     const resultsSubtitleEl = document.getElementById("resultsSubtitle");
     const topDeductionsListEl = document.getElementById("topDeductionsList");
@@ -652,6 +652,7 @@
     const steps = Array.from(flowEl.querySelectorAll("[data-step-index]"));
     const totalSteps = steps.length;
 
+    // Deklarations-upload
     const deklarationFileInput = document.getElementById("deklaration-file");
     const deklarationStatus = document.getElementById("deklaration-status");
     const analyzeDeklarationBtn = document.getElementById("analyze-deklaration-btn");
@@ -671,7 +672,7 @@
 
       homeOffice: null,
 
-      // Nya fält – rådata
+      // Rådata från steg 5
       unionFeeMonthly: 0,
       unemploymentFeeMonthly: 0,
       annualInterestPaid: 0,
@@ -703,7 +704,7 @@
       deductionsCount: 0
     };
 
-    // ---- Views ----
+    // ----- Vy-hantering -----
     function setView(view) {
       introEl.hidden = view !== "intro";
       flowEl.hidden = view !== "flow";
@@ -751,7 +752,7 @@
       return "Besparing: 0 kr";
     }
 
-    // ---- PDF-hjälp ----
+    // ----- PDF-hjälp -----
     async function extractTextFromPdf(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -783,25 +784,27 @@
       });
     }
 
-    // Plockar ut belopp med regex
+    // Plockar ut ett belopp baserat på regex
     function matchAmount(normalizedText, regex) {
       const m = normalizedText.match(regex);
       if (!m) return null;
+      // Ta bort mellanslag och punkter (tusentalsavgränsare)
       const digits = m[1].replace(/\s+/g, "").replace(/\./g, "");
       const num = Number(digits);
       return Number.isFinite(num) ? num : null;
     }
 
-    // Parsar Inkomstdeklaration 1
+    // Parsar Inkomstdeklaration 1-text till ett litet JSON-objekt
     function parseDeklarationText(rawText) {
+      // Ta bort överflödiga whitespace så vi kan matcha lättare
       const text = rawText.replace(/\s+/g, " ");
 
-      // 1.1 Lön, förmåner, sjukpenning m.m.
+      // 1.1 Lön, förmåner... – ta första beloppet efter texten och sanera
       let salary = matchAmount(
         text,
         /1\.1\s+Lön, förmåner, sjukpenning m\.m\.[^\d]*([\d ]{3,12})/
       );
-      // Rimlighetskoll
+      // Säkerhetsspärr: orimligt stora/små värden tas bort
       if (!(salary > 10000 && salary < 3000000)) {
         salary = null;
       }
@@ -836,7 +839,7 @@
       };
     }
 
-    // ---- Navigation + knappar ----
+    // ----- Navigation-knappar -----
     function updateButtons() {
       if (!resultEl.hidden) {
         backBtn.disabled = false;
@@ -949,7 +952,7 @@
       setView("flow");
     }
 
-    // ---- Validering + hjälp ----
+    // ----- Validering & helpers -----
     function clearKmError() {
       kmError.hidden = true;
       kmInput.classList.remove("ak-input-error");
@@ -992,7 +995,7 @@
       }).format(sek);
     }
 
-    // ---- Beräkningar ----
+    // ----- Beräkning av avdrag -----
     function computeEstimate() {
       let total = 0;
       const items = [];
@@ -1010,7 +1013,7 @@
         }
       }
 
-      // Kollektivtrafik – schablon
+      // Reseavdrag kollektivtrafik – schablon
       if (state.travelType === "public") {
         const approx = 4000;
         total += approx;
@@ -1059,7 +1062,7 @@
         });
       }
 
-      // Arbetsrum
+      // Arbetsrum – schablon
       if (state.homeOffice === "yes") {
         const approx = 2000;
         total += approx;
@@ -1069,7 +1072,7 @@
         });
       }
 
-      // Fackavgift
+      // Fackavgift – 12 * månadsavgift
       const unionMonthly = Number(state.unionFeeMonthly) || 0;
       let unionYearly = 0;
       if (unionMonthly > 0) {
@@ -1082,7 +1085,7 @@
       }
       state.unionFeeDeduction = unionYearly;
 
-      // A-kassa
+      // A-kassa – 12 * månadsavgift
       const unemploymentMonthly = Number(state.unemploymentFeeMonthly) || 0;
       let unemploymentYearly = 0;
       if (unemploymentMonthly > 0) {
@@ -1095,7 +1098,7 @@
       }
       state.unemploymentFeeDeduction = unemploymentYearly;
 
-      // Ränta
+      // Ränteavdrag – 30 % upp till 100 000, 21 % över
       const interest = Number(state.annualInterestPaid) || 0;
       let interestDeduction = 0;
       if (interest > 0) {
@@ -1136,7 +1139,7 @@
       }
       state.homeEquipmentDeduction = homeEquipDeduction;
 
-      // Tjänsteresor utan traktamente
+      // Tjänsteresor / traktamente – schablon 260 kr/dag
       const businessDays = Number(state.businessTravelDays) || 0;
       let perDiem = 0;
       if (businessDays > 0) {
@@ -1155,6 +1158,7 @@
       return { total, items };
     }
 
+    // ----- Meta-data för varje avdrag -----
     function getDeductionMeta(label) {
       const meta = {
         description: "Ett möjligt avdrag baserat på dina svar.",
@@ -1243,7 +1247,6 @@
       return meta;
     }
 
-    // ---- Resultatkort ----
     function createDeductionCard(deduction) {
       const article = document.createElement("article");
       article.className = "deduction-card";
@@ -1336,14 +1339,12 @@
       const others = sorted.slice(3);
 
       top.forEach((d) => {
-        if (topDeductionsListEl) {
+        if (topDeductionsListEl)
           topDeductionsListEl.appendChild(createDeductionCard(d));
-        }
       });
       others.forEach((d) => {
-        if (otherDeductionsListEl) {
+        if (otherDeductionsListEl)
           otherDeductionsListEl.appendChild(createDeductionCard(d));
-        }
       });
     }
 
@@ -1367,9 +1368,7 @@
       renderResultsView(total, results);
     }
 
-    // ---- Event-listeners ----
-
-    // Header-knapp högst upp
+    // ----- Eventlisteners för flödet -----
     const headerStartBtn = document.getElementById("startBtn");
     if (headerStartBtn) {
       headerStartBtn.addEventListener("click", function () {
@@ -1416,7 +1415,6 @@
       });
     }
 
-    // Klick på alternativ
     flowEl.addEventListener("click", function (event) {
       const optionBtn = event.target.closest(".ak-option");
       if (!optionBtn) return;
@@ -1472,7 +1470,6 @@
       updateButtons();
     });
 
-    // Input-lyssnare
     kmInput.addEventListener("input", function () {
       clearKmError();
       const value = kmInput.value.trim();
@@ -1554,7 +1551,6 @@
       });
     }
 
-    // Toggle "Visa fler möjliga avdrag"
     if (moreToggle && moreWrapper) {
       moreToggle.addEventListener("click", function () {
         const hidden = moreWrapper.hidden;
@@ -1565,7 +1561,7 @@
       });
     }
 
-    // CTA: spara rapport (Brevo/Worker)
+    // ----- CTA: Spara rapport (Brevo/Worker) -----
     const emailForm = document.getElementById("ak-email-form");
     const emailInput = document.getElementById("ak-email-input");
     const emailFeedback = document.getElementById("ak-email-feedback");
@@ -1653,7 +1649,7 @@
       });
     }
 
-    // Knapp "Visa hur du gör avdragen"
+    // Resultat-CTA
     if (showHowButton) {
       showHowButton.addEventListener("click", function () {
         window.location.href = "/skatteavdrag/";
@@ -1665,13 +1661,13 @@
       });
     }
 
-    // ---- Analysera deklarations-PDF ----
+    // ----- Analysera deklaration (PDF) -----
     if (analyzeDeklarationBtn && deklarationFileInput && deklarationStatus) {
       analyzeDeklarationBtn.addEventListener("click", async function () {
         const file = deklarationFileInput.files[0];
         if (!file) {
           deklarationStatus.textContent = "Välj en PDF från Skatteverket först.";
-          deklarationStatus.style.color = "#b91c1c";
+          deklarationStatus.style.color = "#b91c1c"; // röd
           return;
         }
 
@@ -1710,12 +1706,12 @@
           }
 
           deklarationStatus.textContent = summaryText;
-          deklarationStatus.style.color = "#166534";
+          deklarationStatus.style.color = "#166534"; // grön
         } catch (err) {
           console.error(err);
           deklarationStatus.textContent =
             "Kunde inte läsa PDF:en just nu. Kontrollera att det är Inkomstdeklaration 1 från Skatteverket.";
-          deklarationStatus.style.color = "#b91c1c";
+          deklarationStatus.style.color = "#b91c1c"; // röd
         }
       });
     }
@@ -1724,6 +1720,7 @@
     setView("intro");
   });
 </script>
+
 
 
 </body>
