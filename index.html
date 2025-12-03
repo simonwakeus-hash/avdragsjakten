@@ -794,50 +794,68 @@
       return Number.isFinite(num) ? num : null;
     }
 
-    // Parsar Inkomstdeklaration 1-text till ett litet JSON-objekt
-    function parseDeklarationText(rawText) {
-      // Ta bort överflödiga whitespace så vi kan matcha lättare
-      const text = rawText.replace(/\s+/g, " ");
+function parseDeklarationText(rawText) {
+  // Ta bort överflödiga whitespace så vi kan matcha lättare
+  const text = rawText.replace(/\s+/g, " ");
 
-      // 1.1 Lön, förmåner... – ta första beloppet efter texten och sanera
-      let salary = matchAmount(
-        text,
-        /1\.1\s+Lön, förmåner, sjukpenning m\.m\.[^\d]*([\d ]{3,12})/
-      );
-      // Säkerhetsspärr: orimligt stora/små värden tas bort
-      if (!(salary > 10000 && salary < 3000000)) {
-        salary = null;
+  // --- 1.1 Lön, förmåner, sjukpenning m.m. ---
+  // Vi testar flera varianter eftersom Skatteverkets PDF kan se lite olika ut
+  const salaryPatterns = [
+    /1\.1\s+Lön[^0-9]*?([\d .]{3,15})\s*kr?/i,
+    /Lön,\s*förmåner[^0-9]*?1\.1[^0-9]*?([\d .]{3,15})\s*kr?/i,
+    /1\.1[^0-9]*Lön[^0-9]*?([\d .]{3,15})\s*kr?/i
+  ];
+
+  let salary = null;
+  for (const p of salaryPatterns) {
+    const m = text.match(p);
+    if (m) {
+      const digits = m[1].replace(/\s+/g, "").replace(/\./g, "");
+      const num = Number(digits);
+      if (Number.isFinite(num)) {
+        salary = num;
+        break;
       }
-
-      const iskSchablon = matchAmount(
-        text,
-        /7\.1\s*Schablonintäkter[^\d]*([\d ]{2,12})/
-      );
-
-      const capitalSurplus = matchAmount(
-        text,
-        /Överskott av kapital[^\d]*([\d ]{2,12})/
-      );
-
-      const hasTravelDeduction = /2\.1\s*Resor till och från arbetet[^\d]*([\d ]{2,12})/.test(
-        text
-      );
-      const hasDoubleHousingDeduction = /2\.3\s*Tillfälligt arbete, dubbel bosättning och hemresor[^\d]*([\d ]{2,12})/.test(
-        text
-      );
-      const hasWorkRoomDeduction = /2\.4\s*Övriga utgifter[^\d]*([\d ]{2,12})/.test(
-        text
-      );
-
-      return {
-        salary,
-        iskSchablon,
-        capitalSurplus,
-        hasTravelDeduction,
-        hasDoubleHousingDeduction,
-        hasWorkRoomDeduction
-      };
     }
+  }
+
+  // Säkerhetsspärr: orimligt stora/små värden tas bort
+  if (!(salary > 10000 && salary < 3000000)) {
+    salary = null;
+  }
+
+  // 7.1 Schablonintäkter (ISK m.m.)
+  const iskSchablon = matchAmount(
+    text,
+    /7\.1\s*Schablonintäkter[^\d]*([\d ]{2,12})/
+  );
+
+  // Överskott av kapital
+  const capitalSurplus = matchAmount(
+    text,
+    /Överskott av kapital[^\d]*([\d ]{2,12})/
+  );
+
+  // Flaggor för redan gjorda avdrag
+  const hasTravelDeduction =
+    /2\.1\s*Resor till och från arbetet[^\d]*([\d ]{2,12})/.test(text);
+  const hasDoubleHousingDeduction =
+    /2\.3\s*Tillfälligt arbete, dubbel bosättning och hemresor[^\d]*([\d ]{2,12})/.test(
+      text
+    );
+  const hasWorkRoomDeduction =
+    /2\.4\s*Övriga utgifter[^\d]*([\d ]{2,12})/.test(text);
+
+  return {
+    salary,
+    iskSchablon,
+    capitalSurplus,
+    hasTravelDeduction,
+    hasDoubleHousingDeduction,
+    hasWorkRoomDeduction
+  };
+}
+
 
     // ----- Navigation-knappar -----
     function updateButtons() {
