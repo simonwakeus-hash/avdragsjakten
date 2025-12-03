@@ -680,6 +680,13 @@
     const deklarationStatus = document.getElementById("deklaration-status");
     const analyzeDeklarationBtn = document.getElementById("analyze-deklaration-btn");
 
+    // Modal-element
+    const howToModal = document.getElementById("howToModal");
+    const howToBody = document.getElementById("howToBody");
+    const howToCloseBtn = document.getElementById("howToCloseBtn");
+    const howToBackdrop = document.querySelector(".howto-backdrop");
+    const howToSkvBtn = document.getElementById("howToSkatteverketBtn");
+
     const state = {
       currentStep: 1,
       travelType: null,
@@ -728,7 +735,10 @@
 
       // Skattebesparing
       taxSaving: 0,
-      marginalRate: 0
+      marginalRate: 0,
+
+      // Senaste result-objekt (för modalen)
+      lastResults: []
     };
 
     function setView(view) {
@@ -1329,6 +1339,79 @@
       }
     }
 
+    // Bygg texten i "Hur du gör avdraget"-modallen utifrån största avdraget
+    function generateHowToContent(topDeduction) {
+      if (!topDeduction) {
+        return "<p>Vi kunde inte skapa en detaljerad guide just nu.</p>";
+      }
+
+      const route = getSkvRouteForName(topDeduction.name);
+      let html = `<h3>${topDeduction.name}</h3>`;
+
+      if (route) {
+        html += `<p>Detta avdrag brukar du fylla i i <strong>${route}</strong> hos Skatteverket.</p>`;
+      }
+
+      html += `
+        <h4>Preliminärt avdrag</h4>
+        <p>Vi uppskattar att du kan göra avdrag med cirka <strong>${formatCurrency(
+          topDeduction.amount
+        )}</strong>.</p>
+      `;
+
+      // Lite mer specifik copy per typ
+      switch (topDeduction.name) {
+        case "Hemresor vid arbete på annan ort":
+          html += `
+            <h4>Vad behöver du ha koll på?</h4>
+            <ul>
+              <li>Ungefär hur många hemresor du gjort under perioden.</li>
+              <li>Vilken sträcka du rest (t.ex. Göteborg–Stockholm).</li>
+              <li>Kvitton eller kontoutdrag för biljetter eller bränsle.</li>
+            </ul>
+          `;
+          break;
+
+        case "Ökade levnadskostnader vid arbete på annan ort":
+          html += `
+            <h4>Vad behöver du ha koll på?</h4>
+            <ul>
+              <li>Under vilken period du arbetade på annan ort.</li>
+              <li>Hur många dagar du varit borta utan skattefritt traktamente.</li>
+              <li>Eventuella extra kostnader för mat och småutgifter.</li>
+            </ul>
+          `;
+          break;
+
+        case "Fackavgift (preliminär uppskattning)":
+          html += `
+            <h4>Så gör du</h4>
+            <ul>
+              <li>Ta fram underlag från ditt fackförbund (årsbesked eller kontoutdrag).</li>
+              <li>Summera årets avgifter (vi har gjort en grov uppskattning åt dig).</li>
+              <li>Fyll i beloppet i rutan för övriga utgifter enligt Skatteverket.</li>
+            </ul>
+          `;
+          break;
+
+        default:
+          html += `
+            <h4>Så går du vidare</h4>
+            <p>Följ instruktionerna hos Skatteverket för denna ruta och använd vårt belopp som ett första riktmärke.</p>
+          `;
+          break;
+      }
+
+      html += `
+        <p class="howto-note">
+          Kom ihåg att detta är en förenklad uppskattning – Skatteverket gör alltid sin egen bedömning
+          baserat på dina faktiska uppgifter.
+        </p>
+      `;
+
+      return html;
+    }
+
     function createDeductionCard(deduction) {
       const article = document.createElement("article");
       article.className = "deduction-card";
@@ -1501,8 +1584,33 @@
       });
 
       state.deductionsCount = results.length;
+      state.lastResults = results; // spara för modallen
 
       renderResultsView(total, results);
+    }
+
+    // --- Modal-hjälpare ---
+    function openHowToModal() {
+      if (!howToModal || !howToBody || !state.lastResults.length) {
+        // fallback – gå till samlingssidan
+        window.location.href = "/skatteavdrag/";
+        return;
+      }
+
+      const sorted = [...state.lastResults].sort(
+        (a, b) => (b.amount || 0) - (a.amount || 0)
+      );
+      const top = sorted[0];
+
+      howToBody.innerHTML = generateHowToContent(top);
+      howToModal.hidden = false;
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeHowToModal() {
+      if (!howToModal) return;
+      howToModal.hidden = true;
+      document.body.style.overflow = "";
     }
 
     // --- Event listeners ---
@@ -1789,16 +1897,35 @@
       });
     }
 
+    // Visa "Hur du gör avdragen" – nu med modal
     if (showHowButton) {
       showHowButton.addEventListener("click", function () {
-        window.location.href = "/skatteavdrag/";
+        openHowToModal();
       });
     }
     if (scrollToHowButton) {
       scrollToHowButton.addEventListener("click", function () {
-        window.location.href = "/skatteavdrag/";
+        openHowToModal();
       });
     }
+
+    // Modal: stängknappar och ESC
+    if (howToCloseBtn) {
+      howToCloseBtn.addEventListener("click", closeHowToModal);
+    }
+    if (howToBackdrop) {
+      howToBackdrop.addEventListener("click", closeHowToModal);
+    }
+    if (howToSkvBtn) {
+      howToSkvBtn.addEventListener("click", function () {
+        window.open("https://www.skatteverket.se", "_blank");
+      });
+    }
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !howToModal.hidden) {
+        closeHowToModal();
+      }
+    });
 
     // Deklarations-analys
     if (analyzeDeklarationBtn && deklarationFileInput && deklarationStatus) {
@@ -1871,6 +1998,7 @@
     setView("intro");
   });
 </script>
+
 
 </body>
 </html>
