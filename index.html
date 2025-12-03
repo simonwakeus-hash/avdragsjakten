@@ -1603,13 +1603,24 @@
       const top = sorted[0];
 
       howToBody.innerHTML = generateHowToContent(top);
+
+      if (howToBackdrop) {
+        howToBackdrop.hidden = false;
+      }
       howToModal.hidden = false;
+      howToModal.classList.add("active");
       document.body.style.overflow = "hidden";
     }
 
     function closeHowToModal() {
       if (!howToModal) return;
+
+      howToModal.classList.remove("active");
       howToModal.hidden = true;
+
+      if (howToBackdrop) {
+        howToBackdrop.hidden = true;
+      }
       document.body.style.overflow = "";
     }
 
@@ -1922,7 +1933,7 @@
       });
     }
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && !howToModal.hidden) {
+      if (e.key === "Escape" && howToModal && !howToModal.hidden) {
         closeHowToModal();
       }
     });
@@ -1998,6 +2009,7 @@
     setView("intro");
   });
 </script>
+
 
 
 </body>
