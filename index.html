@@ -567,6 +567,28 @@
     </div>
   </footer>
 
+  
+<!-- === Modal: Så gör du avdraget === -->
+<div id="howToModal" class="howto-modal" hidden>
+  <div class="howto-backdrop"></div>
+
+  <div class="howto-content">
+    <button class="howto-close" id="howToCloseBtn">✕</button>
+
+    <h2 class="howto-title">Så gör du avdraget</h2>
+    <p class="howto-intro">Här är en personlig genomgång baserat på dina uppgifter:</p>
+
+    <!-- Här fylls dynamiskt innehåll på med JS -->
+    <div id="howToBody"></div>
+
+    <button class="howto-primary" id="howToSkatteverketBtn">
+      Gå till Skatteverket
+    </button>
+  </div>
+</div>
+
+
+  
 <script>
   // År i footern
   const yearEl = document.getElementById("year");
