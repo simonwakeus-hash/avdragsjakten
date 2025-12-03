@@ -566,6 +566,7 @@
       <p>© <span id="year"></span> Avdragsjakten. Ingen data sparas i denna version – alla beräkningar görs i din webbläsare.</p>
     </div>
   </footer>
+
 <script>
   // År i footern
   const yearEl = document.getElementById("year");
@@ -759,9 +760,8 @@
         annualSalary = state.deklarationParsed.salary;
       }
 
-      // Grova marginalskatter (kommunal + ev statlig)
       if (!annualSalary) {
-        return 0.30; // fallback
+        return 0.30; // fallback om vi inte vet lönen
       }
 
       if (annualSalary < 400000) return 0.28;
@@ -769,10 +769,15 @@
       return 0.33;
     }
 
-    function computeTaxSaving(total) {
+    function computeTaxSaving(totalDeduction) {
+      if (!totalDeduction || totalDeduction <= 0) {
+        state.taxSaving = 0;
+        state.marginalRate = 0;
+        return 0;
+      }
       const rate = getMarginalTaxRate();
       state.marginalRate = rate;
-      const saving = Math.round(total * rate);
+      const saving = Math.round(totalDeduction * rate);
       state.taxSaving = saving;
       return saving;
     }
@@ -835,7 +840,6 @@
     function parseDeklarationText(rawText) {
       const text = rawText.replace(/\s+/g, " ");
 
-      // 1.1 Lön, förmåner... – ta första beloppet efter texten och sanity-kolla
       let salary = matchAmount(
         text,
         /1\.1\s+Lön, förmåner, sjukpenning m\.m\.[^\d]*([\d ]{3,12})/
@@ -1303,19 +1307,44 @@
       }
     }
 
-    // Förenklad uppskattning av faktisk skattesänkning baserat på totalavdrag
-    function computeTaxSaving(totalDeduction) {
-      if (!totalDeduction || totalDeduction <= 0) return 0;
+    function createDeductionCard(deduction) {
+      const article = document.createElement("article");
+      article.className = "deduction-card";
 
-      // Grov modell: 30 % upp till 100 000 kr, 50 % över det
-      const baseRate = 0.30;
-      const highRate = 0.50;
-      const threshold = 100000;
+      const tagsHtml = (deduction.tags || [])
+        .map((t) => `<span class="deduction-tag">${t}</span>`)
+        .join("");
 
-      const upTo = Math.min(totalDeduction, threshold) * baseRate;
-      const above = Math.max(totalDeduction - threshold, 0) * highRate;
+      article.innerHTML = `
+        <header class="deduction-card-header">
+          <h4 class="deduction-title">${deduction.name}</h4>
+          <p class="deduction-amount">${formatCurrency(deduction.amount)}</p>
+        </header>
+        <p class="deduction-description">${deduction.description || ""}</p>
+        <div class="deduction-meta">
+          ${
+            deduction.difficulty
+              ? `<span class="deduction-tag deduction-tag-${deduction.difficulty}">
+                   ${
+                     deduction.difficulty === "easy"
+                       ? "Enkelt"
+                       : deduction.difficulty === "medium"
+                       ? "Tar lite tid"
+                       : "Mer avancerat"
+                   }
+                 </span>`
+              : ""
+          }
+          ${tagsHtml}
+        </div>
+        ${
+          deduction.helpUrl
+            ? `<a href="${deduction.helpUrl}" class="deduction-link">Hur gör jag avdraget?</a>`
+            : ""
+        }
+      `;
 
-      return Math.round(upTo + above);
+      return article;
     }
 
     function renderResultsView(total, results) {
@@ -1421,123 +1450,6 @@
       }
 
       // Rendera korten
-      const top = sorted.slice(0, 3);
-      const others = sorted.slice(3);
-
-      top.forEach((d) => {
-        if (topDeductionsListEl)
-          topDeductionsListEl.appendChild(createDeductionCard(d));
-      });
-      others.forEach((d) => {
-        if (otherDeductionsListEl)
-          otherDeductionsListEl.appendChild(createDeductionCard(d));
-      });
-    }
-
-
-    function createDeductionCard(deduction) {
-      const article = document.createElement("article");
-      article.className = "deduction-card";
-
-      const tagsHtml = (deduction.tags || [])
-        .map((t) => `<span class="deduction-tag">${t}</span>`)
-        .join("");
-
-      article.innerHTML = `
-        <header class="deduction-card-header">
-          <h4 class="deduction-title">${deduction.name}</h4>
-          <p class="deduction-amount">${formatCurrency(deduction.amount)}</p>
-        </header>
-        <p class="deduction-description">${deduction.description || ""}</p>
-        <div class="deduction-meta">
-          ${
-            deduction.difficulty
-              ? `<span class="deduction-tag deduction-tag-${deduction.difficulty}">
-                   ${
-                     deduction.difficulty === "easy"
-                       ? "Enkelt"
-                       : deduction.difficulty === "medium"
-                       ? "Tar lite tid"
-                       : "Mer avancerat"
-                   }
-                 </span>`
-              : ""
-          }
-          ${tagsHtml}
-        </div>
-        ${
-          deduction.helpUrl
-            ? `<a href="${deduction.helpUrl}" class="deduction-link">Hur gör jag avdraget?</a>`
-            : ""
-        }
-      `;
-
-      return article;
-    }
-
-    function renderResultsView(total, results) {
-      const count = results.length;
-
-      const taxSaving = computeTaxSaving(total);
-      const totalStr = total > 0 ? formatCurrency(total) : "0 kr";
-      const taxStr = taxSaving > 0 ? formatCurrency(taxSaving) : null;
-
-      if (resultTotalEl) {
-        if (taxStr) {
-          resultTotalEl.textContent =
-            totalStr + " i avdrag · ca " + taxStr + " lägre skatt";
-        } else {
-          resultTotalEl.textContent =
-            total > 0 ? totalStr + " i avdrag" : "0 kr";
-        }
-      }
-
-      if (summaryTotalAmountEl) {
-        summaryTotalAmountEl.textContent = taxStr || totalStr;
-      }
-
-      if (summaryMetaEl) {
-        let metaText =
-          count > 0
-            ? count + " möjliga avdrag identifierade"
-            : "Inga tydliga avdrag identifierade";
-        if (taxStr && count > 0) {
-          metaText += " · ca " + taxStr + " lägre skatt";
-        }
-        summaryMetaEl.textContent = metaText;
-      }
-
-      if (resultsSubtitleEl) {
-        if (total > 0) {
-          resultsSubtitleEl.textContent =
-            "Detta är ett grovt estimat på hur mycket dina samlade avdrag kan minska din beskattningsbara inkomst. Den ungefärliga skattesänkningen bygger på en förenklad svensk marginalskatt.";
-        } else if (count === 0) {
-          resultsSubtitleEl.textContent =
-            "Utifrån de här svaren hittar vi inga tydliga avdrag. Det kan ändå finnas andra situationer där avdrag är aktuella. Gå gärna vidare till våra guider.";
-        } else {
-          resultsSubtitleEl.textContent =
-            "Baserat på dina svar ser det ut som att de möjliga avdragen är relativt små eller inte över schablonnivån. Se våra guider för att gå igenom reglerna mer i detalj.";
-        }
-      }
-
-      if (topDeductionsListEl) topDeductionsListEl.innerHTML = "";
-      if (otherDeductionsListEl) otherDeductionsListEl.innerHTML = "";
-
-      if (results.length === 0) {
-        if (topDeductionsListEl) {
-          const p = document.createElement("p");
-          p.className = "deduction-empty";
-          p.textContent =
-            "Vi hittar inga tydliga avdrag baserat på de här svaren.";
-          topDeductionsListEl.appendChild(p);
-        }
-        return;
-      }
-
-      const sorted = [...results].sort(
-        (a, b) => (b.amount || 0) - (a.amount || 0)
-      );
-
       const top = sorted.slice(0, 3);
       const others = sorted.slice(3);
 
@@ -1937,9 +1849,6 @@
     setView("intro");
   });
 </script>
-
-
-
 
 </body>
 </html>
