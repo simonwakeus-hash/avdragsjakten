@@ -1458,6 +1458,14 @@
       const taxSaving = computeTaxSaving(total);
       const totalStr = total > 0 ? formatCurrency(total) : "0 kr";
       const taxStr = taxSaving > 0 ? formatCurrency(taxSaving) : null;
+  // Aktivera / avaktivera "Visa hur du gör avdragen"-knapparna
+  const hasResults = count > 0;
+  if (showHowButton) {
+    showHowButton.disabled = !hasResults;
+  }
+  if (scrollToHowButton) {
+    scrollToHowButton.disabled = !hasResults;
+  }
 
       // Huvud-siffror i headern
       if (resultTotalEl) {
