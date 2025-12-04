@@ -30,7 +30,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
 </head>
 <body>
-  <!-- Ny toppnavigering enligt skiss: logo + "Så funkar det" -->
+  <!-- Ny toppnavigering -->
   <header class="site-header">
     <div class="container site-header-inner">
       <div class="site-logo">
@@ -46,30 +46,7 @@
     <div class="ak-main">
       <section class="ak-shell" aria-label="Avdragskollen">
 
-        <!-- Deklarationsupload (valfri) -->
-        <section class="ak-upload card">
-          <h3>Ladda upp din deklaration (valfritt)</h3>
-          <p>
-            Ladda upp din <strong>Inkomstdeklaration 1 som PDF</strong> från Skatteverket
-            så försöker vi läsa av vissa belopp automatiskt.
-            Filen lämnar inte din webbläsare i denna version.
-          </p>
-          <input
-            type="file"
-            id="deklaration-file"
-            accept="application/pdf"
-          />
-          <button
-            type="button"
-            class="ak-btn ak-btn-secondary"
-            id="analyze-deklaration-btn"
-          >
-            Analysera deklaration
-          </button>
-          <p id="deklaration-status" class="ak-upload-status"></p>
-        </section>
-
-        <!-- Start / hero – ombyggd enligt skiss -->
+        <!-- HERO FÖRST – enligt skiss -->
         <div class="ak-hero" data-step="intro">
           <div class="ak-pill ak-pill-soft">Ingen inloggning krävs</div>
 
@@ -108,6 +85,7 @@
             Börja med deklaration
           </button>
 
+          <!-- Behåller disclaimer för SEO + "Läs mer"-scroll -->
           <p class="ak-disclaimer">
             Avdragsjakten drivs av SWe-handel AB. Verktyget är fristående från Skatteverket och
             ersätter inte professionell rådgivning. Du ansvarar själv för din deklaration.
@@ -115,6 +93,29 @@
 
           <div class="ak-divider"></div>
         </div>
+
+        <!-- Deklarationsupload (valfri) – ligger nu UNDER hero -->
+        <section class="ak-upload card">
+          <h3>Ladda upp din deklaration (valfritt)</h3>
+          <p>
+            Ladda upp din <strong>Inkomstdeklaration 1 som PDF</strong> från Skatteverket
+            så försöker vi läsa av vissa belopp automatiskt.
+            Filen lämnar inte din webbläsare i denna version.
+          </p>
+          <input
+            type="file"
+            id="deklaration-file"
+            accept="application/pdf"
+          />
+          <button
+            type="button"
+            class="ak-btn ak-btn-secondary"
+            id="analyze-deklaration-btn"
+          >
+            Analysera deklaration
+          </button>
+          <p id="deklaration-status" class="ak-upload-status"></p>
+        </section>
 
         <!-- Steg-wrapper -->
         <div class="ak-step-shell" data-step="flow" hidden>
@@ -125,7 +126,7 @@
             </div>
           </div>
 
-          <!-- Steg 1: Resor till jobbet (behåller logik, men designen följer nya stilen via CSS) -->
+          <!-- Steg 1: Resor till jobbet -->
           <section data-step-index="1" aria-labelledby="ak-step1-title">
             <h2 class="ak-step-title" id="ak-step1-title">Har du rest till jobbet eller uppdrag under året?</h2>
             <p class="ak-step-sub">
@@ -538,7 +539,7 @@
       </section>
     </div>
 
-    <!-- Så funkar det-kort (för nav-länken) -->
+    <!-- Så funkar det-kort för nav-länken -->
     <section id="how-it-works" class="card">
       <h2>Så funkar det</h2>
       <p>
@@ -599,8 +600,8 @@
     </div>
   </div>
 
-  
-<script>
+  <!-- JS – exakt samma logik som du hade -->
+  <script>
   // År i footern
   const yearEl = document.getElementById("year");
   if (yearEl) {
@@ -1469,14 +1470,15 @@
       const taxSaving = computeTaxSaving(total);
       const totalStr = total > 0 ? formatCurrency(total) : "0 kr";
       const taxStr = taxSaving > 0 ? formatCurrency(taxSaving) : null;
-  // Aktivera / avaktivera "Visa hur du gör avdragen"-knapparna
-  const hasResults = count > 0;
-  if (showHowButton) {
-    showHowButton.disabled = !hasResults;
-  }
-  if (scrollToHowButton) {
-    scrollToHowButton.disabled = !hasResults;
-  }
+
+      // Aktivera / avaktivera "Visa hur du gör avdragen"-knapparna
+      const hasResults = count > 0;
+      if (showHowButton) {
+        showHowButton.disabled = !hasResults;
+      }
+      if (scrollToHowButton) {
+        scrollToHowButton.disabled = !hasResults;
+      }
 
       // Huvud-siffror i headern
       if (resultTotalEl) {
@@ -2027,9 +2029,6 @@
     // Init
     setView("intro");
   });
-</script>
-
-
-
+  </script>
 </body>
 </html>
