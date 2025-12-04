@@ -30,94 +30,76 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
 </head>
 <body>
-  <!-- Ny toppnavigering -->
-  <header class="site-header">
-    <div class="container site-header-inner">
-      <div class="site-logo">
-        <span class="site-logo-icon" aria-hidden="true">📊</span>
-        <span class="site-logo-text">Avdragsjakten</span>
-      </div>
-      <a href="#how-it-works" class="site-header-link">Så funkar det</a>
-    </div>
-  </header>
 
   <main class="page-main">
-    <!-- Avdragskollen – ny motor -->
+    <!-- Avdragskollen – huvudkort -->
     <div class="ak-main">
       <section class="ak-shell" aria-label="Avdragskollen">
 
-        <!-- HERO FÖRST – enligt skiss -->
+        <!-- STARTSKÄRM / HERO (motsvarar din mockup) -->
         <div class="ak-hero" data-step="intro">
-          <div class="ak-pill ak-pill-soft">Ingen inloggning krävs</div>
+          <div class="ak-badge">Ingen inloggning krävs</div>
 
-          <h1 class="ak-hero-title">
+          <h2 class="ak-hero-title">
             Hitta avdrag i din deklaration – på några minuter
-          </h1>
+          </h2>
 
           <p class="ak-hero-sub">
             Ladda upp din deklaration eller svara på några frågor. Vi hjälper dig se vilka avdrag du kan ha rätt till.
           </p>
 
           <ul class="ak-checklist">
-            <li>Vi lagrar inte din deklaration permanent</li>
-            <li>Byggt för svenska regler och Skatteverket</li>
-            <li>Du kan ändra alla uppgifter i efterhand</li>
+            <li>
+              <span class="ak-check-icon" aria-hidden="true">✓</span>
+              <span>Vi lagrar inte din deklaration permanent</span>
+            </li>
+            <li>
+              <span class="ak-check-icon" aria-hidden="true">✓</span>
+              <span>Byggt för svenska regler och Skatteverket</span>
+            </li>
+            <li>
+              <span class="ak-check-icon" aria-hidden="true">✓</span>
+              <span>Du kan ändra alla uppgifter i efterhand</span>
+            </li>
           </ul>
 
-          <div class="ak-hero-divider"></div>
+          <div class="ak-divider"></div>
 
-          <div class="ak-trust-row">
-            <div class="ak-trust-item">
-              <span class="ak-trust-icon" aria-hidden="true">🔒</span>
-              <span class="ak-trust-label">Krypterad anslutning</span>
+          <div class="ak-feature-row" aria-hidden="true">
+            <div class="ak-feature-item">
+              <div class="ak-feature-icon">🔒</div>
+              <span>Krypterad<br>anslutning</span>
             </div>
-            <div class="ak-trust-item">
-              <span class="ak-trust-icon" aria-hidden="true">🧩</span>
-              <span class="ak-trust-label">Oberoende tjänst</span>
+            <div class="ak-feature-item">
+              <div class="ak-feature-icon">🧩</div>
+              <span>Oberoende<br>tjänst</span>
             </div>
-            <div class="ak-trust-item">
-              <span class="ak-trust-icon" aria-hidden="true">⏱️</span>
-              <span class="ak-trust-label">Resultat på några minuter</span>
+            <div class="ak-feature-item">
+              <div class="ak-feature-icon">📄</div>
+              <span>Resultat på<br>några minuter</span>
             </div>
           </div>
 
-          <button type="button" class="ak-btn ak-btn-primary ak-hero-cta" id="ak-start-btn">
-            Börja med deklaration
-          </button>
+          <div class="ak-hero-cta">
+            <button
+              type="button"
+              class="ak-btn ak-btn-primary ak-hero-cta-btn"
+              id="ak-start-btn"
+            >
+              Börja med deklaration
+            </button>
+          </div>
 
-          <!-- Behåller disclaimer för SEO + "Läs mer"-scroll -->
           <p class="ak-disclaimer">
-            Avdragsjakten drivs av SWe-handel AB. Verktyget är fristående från Skatteverket och
-            ersätter inte professionell rådgivning. Du ansvarar själv för din deklaration.
+            Avdragsjakten drivs av SWe-handel AB. Verktyget är fristående från
+            Skatteverket och ersätter inte professionell rådgivning. Du ansvarar
+            själv för din deklaration.
           </p>
 
-          <div class="ak-divider"></div>
+          <div class="ak-divider ak-divider-bottom"></div>
         </div>
 
-        <!-- Deklarationsupload (valfri) – ligger nu UNDER hero -->
-        <section class="ak-upload card">
-          <h3>Ladda upp din deklaration (valfritt)</h3>
-          <p>
-            Ladda upp din <strong>Inkomstdeklaration 1 som PDF</strong> från Skatteverket
-            så försöker vi läsa av vissa belopp automatiskt.
-            Filen lämnar inte din webbläsare i denna version.
-          </p>
-          <input
-            type="file"
-            id="deklaration-file"
-            accept="application/pdf"
-          />
-          <button
-            type="button"
-            class="ak-btn ak-btn-secondary"
-            id="analyze-deklaration-btn"
-          >
-            Analysera deklaration
-          </button>
-          <p id="deklaration-status" class="ak-upload-status"></p>
-        </section>
-
-        <!-- Steg-wrapper -->
+        <!-- STEG-FLÖDE (behåller din befintliga logik) -->
         <div class="ak-step-shell" data-step="flow" hidden>
           <div class="ak-progress" aria-hidden="true">
             <div class="ak-progress-label" id="ak-progress-label">Steg 1 av 5</div>
@@ -158,7 +140,7 @@
             </div>
           </section>
 
-          <!-- Steg 2: Körsträcka (endast relevant när bil) -->
+          <!-- Steg 2: Körsträcka (bil) -->
           <section data-step-index="2" aria-labelledby="ak-step2-title" hidden>
             <h2 class="ak-step-title" id="ak-step2-title">Ungefär hur många mil körde du till och från jobbet?</h2>
             <p class="ak-step-sub">
@@ -185,7 +167,7 @@
             </div>
           </section>
 
-          <!-- Steg 3: Jobb på annan ort / dubbel bosättning -->
+          <!-- Steg 3: Jobb på annan ort -->
           <section data-step-index="3" aria-labelledby="ak-step3-title" hidden>
             <h2 class="ak-step-title" id="ak-step3-title">Har du arbetat på en annan ort än där du bor?</h2>
             <p class="ak-step-sub">
@@ -262,7 +244,7 @@
             </div>
           </section>
 
-          <!-- Steg 4: Hemresor vid jobb på annan ort -->
+          <!-- Steg 4: Hemresor -->
           <section data-step-index="4" aria-labelledby="ak-step4-title" hidden>
             <h2 class="ak-step-title" id="ak-step4-title">Har du själv betalat hemresor under tiden du arbetat på annan ort?</h2>
             <p class="ak-step-sub">
@@ -455,7 +437,7 @@
           </section>
         </div>
 
-        <!-- Resultatvy -->
+        <!-- RESULTATVY -->
         <section
           id="results-view"
           class="results-view"
@@ -463,7 +445,6 @@
           hidden
           aria-live="polite"
         >
-          <!-- HEADER -->
           <header class="results-header">
             <p class="results-kicker">Resultat</p>
             <h2 class="results-title">Din preliminära skattesänkning</h2>
@@ -480,28 +461,19 @@
             </p>
           </header>
 
-          <!-- LAYOUT: MAIN + SIDOPANEL -->
           <div class="results-layout">
-            <!-- VÄNSTER KOLUMN -->
             <div class="results-main">
-              <!-- Största möjligheter -->
               <section class="results-section">
                 <h3 class="results-section-title">Största möjligheter</h3>
-                <div class="deduction-list" id="topDeductionsList">
-                  <!-- Fylls via JS -->
-                </div>
+                <div class="deduction-list" id="topDeductionsList"></div>
               </section>
 
-              <!-- Övriga möjliga avdrag -->
               <section class="results-section">
                 <h3 class="results-section-title">Övriga möjliga avdrag</h3>
-                <div class="deduction-list" id="otherDeductionsList">
-                  <!-- Fylls via JS -->
-                </div>
+                <div class="deduction-list" id="otherDeductionsList"></div>
               </section>
             </div>
 
-            <!-- HÖGER KOLUMN / SIDOPANEL -->
             <aside class="results-sidebar" aria-label="Sammanfattning">
               <div class="results-summary-card">
                 <h3 class="results-summary-title">Sammanfattning</h3>
@@ -539,16 +511,7 @@
       </section>
     </div>
 
-    <!-- Så funkar det-kort för nav-länken -->
-    <section id="how-it-works" class="card">
-      <h2>Så funkar det</h2>
-      <p>
-        Börja med att ladda upp din deklaration eller svara på några frågor om din situation.
-        Vi gör en förenklad uppskattning av möjliga avdrag och visar en sammanställning som du kan använda när du deklarerar hos Skatteverket.
-      </p>
-    </section>
-
-    <!-- Befintligt SEO-innehåll: Läs mer om avdrag -->
+    <!-- SEO-innehåll -->
     <section class="card">
       <h2>Läs mer om olika avdrag</h2>
       <ul class="link-list">
@@ -558,7 +521,7 @@
       </ul>
     </section>
 
-    <!-- Befintlig e-postsektion -->
+    <!-- E-postsektion -->
     <section id="emailSection" class="card">
       <h2>Vill du följa utvecklingen?</h2>
       <p>
@@ -581,7 +544,7 @@
     </div>
   </footer>
 
-  <!-- === Modal: Så gör du avdraget === -->
+  <!-- Modal: Så gör du avdraget -->
   <div id="howToModal" class="howto-modal" hidden>
     <div class="howto-backdrop"></div>
 
@@ -591,7 +554,6 @@
       <h2 class="howto-title">Så gör du avdraget</h2>
       <p class="howto-intro">Här är en personlig genomgång baserat på dina uppgifter:</p>
 
-      <!-- Här fylls dynamiskt innehåll på med JS -->
       <div id="howToBody"></div>
 
       <button class="howto-primary" id="howToSkatteverketBtn">
@@ -599,7 +561,6 @@
       </button>
     </div>
   </div>
-
   <!-- JS – exakt samma logik som du hade -->
   <script>
   // År i footern
