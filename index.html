@@ -30,13 +30,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
 </head>
 <body>
-  <header class="hero">
-    <div class="container">
-      <h1>Avdragsjakten</h1>
-      <p class="hero-subtitle">
-        Svara på några frågor om ditt jobb, din pendling och din boendesituation. Vi gör en förenklad uppskattning av vilka avdrag du kan ha rätt till.
-      </p>
-      <button id="startBtn" class="button-primary">Börja räkna</button>
+  <!-- Ny toppnavigering enligt skiss: logo + "Så funkar det" -->
+  <header class="site-header">
+    <div class="container site-header-inner">
+      <div class="site-logo">
+        <span class="site-logo-icon" aria-hidden="true">📊</span>
+        <span class="site-logo-text">Avdragsjakten</span>
+      </div>
+      <a href="#how-it-works" class="site-header-link">Så funkar det</a>
     </div>
   </header>
 
@@ -68,41 +69,44 @@
           <p id="deklaration-status" class="ak-upload-status"></p>
         </section>
 
-        <!-- Start / hero -->
+        <!-- Start / hero – ombyggd enligt skiss -->
         <div class="ak-hero" data-step="intro">
-          <div class="ak-badge">
-            <span class="ak-badge-dot"></span>
-            Avdragskollen · Beta
-          </div>
-          <h2 class="ak-hero-title">Ta reda på vilka avdrag du kan ha rätt till</h2>
+          <div class="ak-pill ak-pill-soft">Ingen inloggning krävs</div>
+
+          <h1 class="ak-hero-title">
+            Hitta avdrag i din deklaration – på några minuter
+          </h1>
+
           <p class="ak-hero-sub">
-            Svara på några frågor om din vardag, så får du en uppskattning av vilka
-            <span class="ak-hero-highlight">skatteavdrag</span> du kan göra och ungefär hur mycket din skatt kan minska.
-            Verktyget bygger på offentliga regler men är inte personlig rådgivning.
+            Ladda upp din deklaration eller svara på några frågor. Vi hjälper dig se vilka avdrag du kan ha rätt till.
           </p>
 
-          <div class="ak-hero-meta">
-            <div class="ak-hero-meta-item">
-              Under 2 minuter
+          <ul class="ak-checklist">
+            <li>Vi lagrar inte din deklaration permanent</li>
+            <li>Byggt för svenska regler och Skatteverket</li>
+            <li>Du kan ändra alla uppgifter i efterhand</li>
+          </ul>
+
+          <div class="ak-hero-divider"></div>
+
+          <div class="ak-trust-row">
+            <div class="ak-trust-item">
+              <span class="ak-trust-icon" aria-hidden="true">🔒</span>
+              <span class="ak-trust-label">Krypterad anslutning</span>
             </div>
-            <div class="ak-hero-meta-item">
-              <span class="ak-meta-dot"></span>
-              Ingen inloggning, ingen persondata
+            <div class="ak-trust-item">
+              <span class="ak-trust-icon" aria-hidden="true">🧩</span>
+              <span class="ak-trust-label">Oberoende tjänst</span>
             </div>
-            <div class="ak-hero-meta-item">
-              <span class="ak-meta-dot"></span>
-              Uppdaterat för aktuellt beskattningsår
+            <div class="ak-trust-item">
+              <span class="ak-trust-icon" aria-hidden="true">⏱️</span>
+              <span class="ak-trust-label">Resultat på några minuter</span>
             </div>
           </div>
 
-          <div class="ak-cta-row">
-            <button type="button" class="ak-btn ak-btn-primary" id="ak-start-btn">
-              Kom igång
-            </button>
-            <button type="button" class="ak-btn ak-btn-secondary" id="ak-read-more-btn">
-              <span>Läs mer om hur vi räknar</span>
-            </button>
-          </div>
+          <button type="button" class="ak-btn ak-btn-primary ak-hero-cta" id="ak-start-btn">
+            Börja med deklaration
+          </button>
 
           <p class="ak-disclaimer">
             Avdragsjakten drivs av SWe-handel AB. Verktyget är fristående från Skatteverket och
@@ -121,7 +125,7 @@
             </div>
           </div>
 
-          <!-- Steg 1: Resor till jobbet -->
+          <!-- Steg 1: Resor till jobbet (behåller logik, men designen följer nya stilen via CSS) -->
           <section data-step-index="1" aria-labelledby="ak-step1-title">
             <h2 class="ak-step-title" id="ak-step1-title">Har du rest till jobbet eller uppdrag under året?</h2>
             <p class="ak-step-sub">
@@ -534,6 +538,15 @@
       </section>
     </div>
 
+    <!-- Så funkar det-kort (för nav-länken) -->
+    <section id="how-it-works" class="card">
+      <h2>Så funkar det</h2>
+      <p>
+        Börja med att ladda upp din deklaration eller svara på några frågor om din situation.
+        Vi gör en förenklad uppskattning av möjliga avdrag och visar en sammanställning som du kan använda när du deklarerar hos Skatteverket.
+      </p>
+    </section>
+
     <!-- Befintligt SEO-innehåll: Läs mer om avdrag -->
     <section class="card">
       <h2>Läs mer om olika avdrag</h2>
@@ -567,26 +580,24 @@
     </div>
   </footer>
 
-  
-<!-- === Modal: Så gör du avdraget === -->
-<div id="howToModal" class="howto-modal" hidden>
-  <div class="howto-backdrop"></div>
+  <!-- === Modal: Så gör du avdraget === -->
+  <div id="howToModal" class="howto-modal" hidden>
+    <div class="howto-backdrop"></div>
 
-  <div class="howto-content">
-    <button class="howto-close" id="howToCloseBtn">✕</button>
+    <div class="howto-content">
+      <button class="howto-close" id="howToCloseBtn">✕</button>
 
-    <h2 class="howto-title">Så gör du avdraget</h2>
-    <p class="howto-intro">Här är en personlig genomgång baserat på dina uppgifter:</p>
+      <h2 class="howto-title">Så gör du avdraget</h2>
+      <p class="howto-intro">Här är en personlig genomgång baserat på dina uppgifter:</p>
 
-    <!-- Här fylls dynamiskt innehåll på med JS -->
-    <div id="howToBody"></div>
+      <!-- Här fylls dynamiskt innehåll på med JS -->
+      <div id="howToBody"></div>
 
-    <button class="howto-primary" id="howToSkatteverketBtn">
-      Gå till Skatteverket
-    </button>
+      <button class="howto-primary" id="howToSkatteverketBtn">
+        Gå till Skatteverket
+      </button>
+    </div>
   </div>
-</div>
-
 
   
 <script>
