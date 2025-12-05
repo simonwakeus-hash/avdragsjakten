@@ -36,7 +36,7 @@
     <div class="ak-main">
       <section class="ak-shell" aria-label="Avdragskollen">
 
-        <!-- STARTSKÄRM / HERO (motsvarar din mockup) -->
+        <!-- STARTSKÄRM / HERO -->
         <div class="ak-hero" data-step="intro">
           <div class="ak-badge">Ingen inloggning krävs</div>
 
@@ -99,7 +99,72 @@
           <div class="ak-divider ak-divider-bottom"></div>
         </div>
 
-        <!-- STEG-FLÖDE (behåller din befintliga logik) -->
+        <!-- NYTT STEG 2: HUR DEKLARERAR DU -->
+        <div class="ak-declare-method" data-step="declare" hidden>
+          <h2 class="ak-step-title">Hur deklarerar du?</h2>
+          <p class="ak-step-sub">
+            Välj ett av alternativen nedan för att fortsätta.
+          </p>
+
+          <div class="ak-options" role="radiogroup" aria-label="Hur deklarerar du?">
+            <button type="button" class="ak-option" id="ak-method-upload">
+              <div class="ak-option-label">
+                <span class="ak-option-title">Ladda upp din deklaration</span>
+                <span class="ak-option-meta">
+                  Filer från Skatteverket (SRU, PDF)
+                </span>
+              </div>
+            </button>
+
+            <button type="button" class="ak-option" id="ak-method-questions">
+              <div class="ak-option-label">
+                <span class="ak-option-title">Svara på frågor</span>
+                <span class="ak-option-meta">
+                  Tar 2–3 minuter och baserat på 2023
+                </span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Panel som visas när man väljer "Ladda upp" -->
+          <div class="ak-upload-panel" id="ak-upload-panel" hidden>
+            <div class="ak-input-group">
+              <label for="deklaration-file" class="ak-input-label">
+                Ladda upp din deklaration (PDF från Skatteverket)
+              </label>
+              <div class="ak-input-help">
+                Vi läser bara filen lokalt i din webbläsare och sparar inget.
+              </div>
+              <input
+                type="file"
+                id="deklaration-file"
+                accept=".pdf"
+              />
+            </div>
+
+            <button
+              type="button"
+              class="ak-btn ak-btn-primary"
+              id="analyze-deklaration-btn"
+            >
+              Analysera deklarationen
+            </button>
+
+            <p class="ak-input-help" id="deklaration-status"></p>
+
+            <button
+              type="button"
+              class="ak-btn ak-btn-ghost"
+              id="ak-go-to-questions-after-upload"
+            >
+              Fortsätt till frågorna
+            </button>
+          </div>
+
+          <p class="ak-step-indicator">1 av 3</p>
+        </div>
+
+        <!-- STEG-FLÖDE (frågor) -->
         <div class="ak-step-shell" data-step="flow" hidden>
           <div class="ak-progress" aria-hidden="true">
             <div class="ak-progress-label" id="ak-progress-label">Steg 1 av 5</div>
@@ -561,7 +626,8 @@
       </button>
     </div>
   </div>
-  <!-- JS – exakt samma logik som du hade -->
+
+  <!-- JS -->
   <script>
   // År i footern
   const yearEl = document.getElementById("year");
@@ -590,6 +656,7 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     const introEl = document.querySelector('[data-step="intro"]');
+    const declareEl = document.querySelector('[data-step="declare"]');
     const flowEl = document.querySelector('[data-step="flow"]');
     const resultEl = document.querySelector('[data-step="result"]');
 
@@ -648,10 +715,16 @@
     const steps = Array.from(flowEl.querySelectorAll("[data-step-index]"));
     const totalSteps = steps.length;
 
-    // Deklarations-upload
+    // Deklarations-upload (nu med HTML i steg 2)
     const deklarationFileInput = document.getElementById("deklaration-file");
     const deklarationStatus = document.getElementById("deklaration-status");
     const analyzeDeklarationBtn = document.getElementById("analyze-deklaration-btn");
+
+    // Välj hur man deklarerar
+    const methodUploadBtn = document.getElementById("ak-method-upload");
+    const methodQuestionsBtn = document.getElementById("ak-method-questions");
+    const uploadPanel = document.getElementById("ak-upload-panel");
+    const goToQuestionsAfterUploadBtn = document.getElementById("ak-go-to-questions-after-upload");
 
     // Modal-element
     const howToModal = document.getElementById("howToModal");
@@ -716,11 +789,13 @@
 
     function setView(view) {
       introEl.hidden = view !== "intro";
+      declareEl.hidden = view !== "declare";
       flowEl.hidden = view !== "flow";
       resultEl.hidden = view !== "result";
 
       if (stickyBar) {
-        stickyBar.hidden = view === "intro";
+        // Sticky-baren bara i frågeflöde/resultat
+        stickyBar.hidden = view === "intro" || view === "declare";
       }
 
       if (view === "intro") {
@@ -728,6 +803,11 @@
         backBtn.disabled = true;
         stickyText.textContent =
           "Svara på frågorna i lugn takt. Du kan justera dina svar längs vägen.";
+      } else if (view === "declare") {
+        nextBtn.disabled = true;
+        backBtn.disabled = false;
+        stickyText.textContent =
+          "Du kan ladda upp din deklaration eller hoppa direkt till frågorna.";
       } else if (view === "flow") {
         updateStepVisibility();
         updateProgress();
@@ -968,7 +1048,8 @@
       }
 
       if (state.currentStep <= 1) {
-        setView("intro");
+        // Tillbaka till "Hur deklarerar du?" istället för hela hjälten
+        setView("declare");
         return;
       }
 
@@ -1615,15 +1696,13 @@
         if (shell) {
           shell.scrollIntoView({ behavior: "smooth", block: "start" });
         }
-        setView("flow");
-        updateButtons();
+        setView("declare");
       });
     }
 
     if (startBtn) {
       startBtn.addEventListener("click", function () {
-        setView("flow");
-        updateButtons();
+        setView("declare");
       });
     }
 
@@ -1650,6 +1729,36 @@
     if (backBtn) {
       backBtn.addEventListener("click", function () {
         goToPreviousStep();
+        updateButtons();
+      });
+    }
+
+    // Välj hur du deklarerar
+    if (methodUploadBtn && uploadPanel) {
+      methodUploadBtn.addEventListener("click", function () {
+        uploadPanel.hidden = false;
+        methodUploadBtn.classList.add("ak-option-selected");
+        if (methodQuestionsBtn) {
+          methodQuestionsBtn.classList.remove("ak-option-selected");
+        }
+      });
+    }
+
+    if (methodQuestionsBtn) {
+      methodQuestionsBtn.addEventListener("click", function () {
+        // Direkt till frågeflödet
+        if (methodUploadBtn) {
+          methodUploadBtn.classList.remove("ak-option-selected");
+        }
+        methodQuestionsBtn.classList.add("ak-option-selected");
+        setView("flow");
+        updateButtons();
+      });
+    }
+
+    if (goToQuestionsAfterUploadBtn) {
+      goToQuestionsAfterUploadBtn.addEventListener("click", function () {
+        setView("flow");
         updateButtons();
       });
     }
