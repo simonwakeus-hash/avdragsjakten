@@ -141,6 +141,21 @@ a:hover {
   box-shadow: none;
 }
 
+/* Ghost-knapp (t.ex. "Fortsätt till frågorna") */
+
+.ak-btn-ghost {
+  background: transparent;
+  color: var(--color-primary);
+  box-shadow: none;
+  padding-inline: 0.4rem;
+}
+
+.ak-btn-ghost:hover:not(:disabled),
+.ak-btn-ghost:focus-visible:not(:disabled) {
+  background: rgba(0, 80, 120, 0.06);
+  box-shadow: none;
+}
+
 /* Avdragskollen – shell */
 
 .ak-main {
@@ -171,6 +186,10 @@ a:hover {
 }
 
 /* HERO – exakt enligt mockup */
+
+.ak-hero {
+  margin-bottom: 0.75rem;
+}
 
 .ak-badge {
   display: inline-flex;
@@ -242,7 +261,7 @@ a:hover {
   margin-top: 1.5rem;
 }
 
-/* Icon-raden under checklistan */
+/* Icon-raden under checklistan – centrerad */
 
 .ak-feature-row {
   display: flex;
@@ -251,12 +270,14 @@ a:hover {
   font-size: 0.8rem;
   color: var(--color-text-muted);
   margin-bottom: 1.5rem;
+  justify-content: center;
+  text-align: center;
 }
 
 .ak-feature-item {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.2rem;
 }
 
@@ -288,6 +309,28 @@ a:hover {
   color: var(--color-text-muted);
   line-height: 1.4;
   margin: 0;
+}
+
+/* STEG 2: Hur deklarerar du? */
+
+.ak-declare-method {
+  margin-top: 0.75rem;
+}
+
+.ak-step-indicator {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* Upload-panelen i steg 2 */
+
+.ak-upload-panel {
+  margin-top: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--color-border);
+  background: #f9fafb;
 }
 
 /* Steg-wrapper */
@@ -530,7 +573,7 @@ a:hover {
 }
 
 .results-subtitle {
-  margin: 0 0 1rem;
+  margin: 0 0 0.5rem;
   font-size: 0.95rem;
   color: #4b5563;
   max-width: 40rem;
@@ -540,6 +583,19 @@ a:hover {
   margin: 0.5rem 0 0;
   font-size: 0.8rem;
   color: #6b7280;
+}
+
+/* Nästa steg-lista under resultattexten */
+
+.results-nextsteps {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.results-nextsteps ul {
+  margin: 0.25rem 0 0;
+  padding-left: 1.1rem;
 }
 
 /* Layout – två kolumner på desktop */
@@ -802,6 +858,12 @@ a:hover {
 
 .howto-primary:hover {
   background: #004066;
+}
+
+.howto-note {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #4b5563;
 }
 
 /* SEO-kort & e-postkort */
