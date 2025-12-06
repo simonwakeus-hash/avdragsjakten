@@ -168,7 +168,7 @@
         <!-- STEG-FLÖDE (frågor) -->
         <div class="ak-step-shell" data-step="flow" hidden>
           <div class="ak-progress" aria-hidden="true">
-            <div class="ak-progress-label" id="ak-progress-label">Steg 1 av 5</div>
+            <div class="ak-progress-label" id="ak-progress-label">Steg 1 av 7</div>
             <div class="ak-progress-bar">
               <div class="ak-progress-bar-fill" id="ak-progress-bar"></div>
             </div>
@@ -268,11 +268,18 @@
                 </div>
               </button>
             </div>
+          </section>
 
-            <!-- Extra boendekostnader -->
-            <div class="ak-input-group" id="ak-doublehousing-group" hidden>
+          <!-- Steg 4: Extra boendekostnader -->
+          <section data-step-index="4" aria-labelledby="ak-step4-title" hidden>
+            <h2 class="ak-step-title" id="ak-step4-title">Ungefär hur mycket extra boendekostnad hade du under året? (kr)</h2>
+            <p class="ak-step-sub">
+              Räkna ungefärlig årskostnad för den bostad du behövt på arbetsorten, utöver din vanliga bostad.
+            </p>
+
+            <div class="ak-input-group" id="ak-doublehousing-group">
               <label for="ak-doublehousing-cost" class="ak-input-label">
-                Ungefär hur mycket extra boendekostnad hade du under året? (kr)
+                Extra boendekostnad under året (kr)
               </label>
               <div class="ak-input-help">
                 Räkna ungefärlig årskostnad för den bostad du behövt på arbetsorten, utöver din vanliga bostad.
@@ -287,15 +294,22 @@
                 placeholder="Till exempel 24&nbsp;000"
               />
             </div>
+          </section>
 
-            <!-- Ökade levnadskostnader -->
-            <div class="ak-input-group" id="ak-livingcost-group" hidden>
+          <!-- Steg 5: Dagar på annan ort utan traktamente -->
+          <section data-step-index="5" aria-labelledby="ak-step5-title" hidden>
+            <h2 class="ak-step-title" id="ak-step5-title">Ungefär hur många hela dagar arbetade du på annan ort utan skattefritt traktamente?</h2>
+            <p class="ak-step-sub">
+              En grov uppskattning räcker. Vi gör en försiktig schablonberäkning (cirka 200 kr per dag)
+              för ökade kostnader för mat och småutgifter.
+            </p>
+
+            <div class="ak-input-group" id="ak-livingcost-group">
               <label for="ak-livingcost-days" class="ak-input-label">
-                Ungefär hur många hela dagar arbetade du på annan ort utan skattefritt traktamente?
+                Antal hela dagar utan traktamente
               </label>
               <div class="ak-input-help">
-                En grov uppskattning räcker. Vi gör en försiktig schablonberäkning (cirka 200 kr per dag)
-                för ökade kostnader för mat och småutgifter.
+                Uppskatta ungefär hur många heldagar du varit på annan ort utan skattefritt traktamente.
               </div>
               <input
                 id="ak-livingcost-days"
@@ -310,9 +324,9 @@
             </div>
           </section>
 
-          <!-- Steg 4: Hemresor -->
-          <section data-step-index="4" aria-labelledby="ak-step4-title" hidden>
-            <h2 class="ak-step-title" id="ak-step4-title">Har du själv betalat hemresor under tiden du arbetat på annan ort?</h2>
+          <!-- Steg 6: Hemresor -->
+          <section data-step-index="6" aria-labelledby="ak-step6-title" hidden>
+            <h2 class="ak-step-title" id="ak-step6-title">Har du själv betalat hemresor under tiden du arbetat på annan ort?</h2>
             <p class="ak-step-sub">
               Till exempel resor hem till familj eller bostad på din hemort under perioden med arbete på annan ort.
             </p>
@@ -356,9 +370,9 @@
             </div>
           </section>
 
-          <!-- Steg 5: Arbetsrum -->
-          <section data-step-index="5" aria-labelledby="ak-step5-title" hidden>
-            <h2 class="ak-step-title" id="ak-step5-title">Har du haft ett särskilt arbetsrum hemma?</h2>
+          <!-- Steg 7: Arbetsrum + övriga avdrag -->
+          <section data-step-index="7" aria-labelledby="ak-step7-title" hidden>
+            <h2 class="ak-step-title" id="ak-step7-title">Har du haft ett särskilt arbetsrum hemma?</h2>
             <p class="ak-step-sub">
               Till exempel ett rum som i huvudsak används för arbete och som inte samtidigt är vardagsrum eller sovrum.
             </p>
@@ -382,14 +396,6 @@
                 </div>
               </button>
             </div>
-          </section>
-
-          <!-- Steg 6: Fackavgift & a-kassa -->
-          <section data-step-index="6" aria-labelledby="ak-step6-title" hidden>
-            <h2 class="ak-step-title" id="ak-step6-title">Betalar du fackavgift eller a-kassa?</h2>
-            <p class="ak-step-sub">
-              En uppskattning räcker. Vi räknar om till en preliminär årskostnad.
-            </p>
 
             <!-- Fackavgift -->
             <div class="ak-input-group">
@@ -428,21 +434,16 @@
                 placeholder="Till exempel 150"
               />
             </div>
-          </section>
 
-          <!-- Steg 7: Fler möjliga avdrag -->
-          <section data-step-index="7" aria-labelledby="ak-step7-title" hidden>
-            <h2 class="ak-step-title" id="ak-step7-title">Fler möjliga avdrag</h2>
-            <p class="ak-step-sub">
-              Valfritt steg. Fyll i om något av följande stämmer in på dig.
+            <!-- Övriga möjliga avdrag – nu alltid synliga -->
+            <h3 class="ak-step-title" style="font-size:1rem; margin-top:1.5rem;">
+              Fler möjliga avdrag (valfritt)
+            </h3>
+            <p class="ak-step-sub" style="margin-bottom:0.9rem;">
+              Fyll bara i om något av följande stämmer in på dig. Du kan gå vidare utan att fylla i något.
             </p>
 
-            <!-- Expanderbar sektion: fler möjliga avdrag -->
-            <div class="ak-more-toggle" id="ak-more-toggle">
-              Visa fler möjliga avdrag ▼
-            </div>
-
-            <div class="ak-more-wrapper" id="ak-more-wrapper" hidden>
+            <div class="ak-more-wrapper" id="ak-more-wrapper">
               <div class="ak-input-group">
                 <label for="ak-annual-interest-paid" class="ak-input-label">
                   Betald ränta på lån under året (kr)
@@ -705,7 +706,7 @@
     const homeTravelGroup = document.getElementById("ak-hometravel-group");
     const homeTravelInput = document.getElementById("ak-hometravel-cost");
 
-    // Extra inputs i steg 6–7
+    // Extra inputs i sista steget
     const unionFeeMonthlyInput = document.getElementById("ak-union-fee-monthly");
     const unemploymentFeeMonthlyInput = document.getElementById("ak-unemployment-fee-monthly");
     const annualInterestPaidInput = document.getElementById("ak-annual-interest-paid");
@@ -713,7 +714,7 @@
     const homeEquipmentCostInput = document.getElementById("ak-homeequipment-cost");
     const businessTravelDaysInput = document.getElementById("ak-businesstravel-days");
 
-    // Toggle för fler avdrag (steg 7)
+    // Expander (nu borttagen i HTML, men vi lämnar JS skyddat)
     const moreToggle = document.getElementById("ak-more-toggle");
     const moreWrapper = document.getElementById("ak-more-wrapper");
 
@@ -1009,14 +1010,12 @@
         const km = parseFloat(((kmInput && kmInput.value) || "").replace(",", "."));
         nextBtn.disabled = !(km > 0);
       } else if (step === 3) {
-        if (!state.worksAway) {
-          nextBtn.disabled = true;
-        } else if (state.worksAway === "yes_cost") {
-          nextBtn.disabled = !(state.doubleHousingCost && state.doubleHousingCost > 0);
-        } else {
-          nextBtn.disabled = false;
-        }
+        nextBtn.disabled = !state.worksAway;
       } else if (step === 4) {
+        nextBtn.disabled = !(state.doubleHousingCost && state.doubleHousingCost > 0);
+      } else if (step === 5) {
+        nextBtn.disabled = !(state.livingCostDays && state.livingCostDays > 0);
+      } else if (step === 6) {
         if (!state.homeTravelPaid) {
           nextBtn.disabled = true;
         } else if (state.homeTravelPaid === "yes") {
@@ -1024,10 +1023,9 @@
         } else {
           nextBtn.disabled = false;
         }
-      } else if (step === 5) {
+      } else if (step === 7) {
         nextBtn.disabled = !state.homeOffice;
       } else {
-        // Steg 6–7 har frivilliga fält, nästa är alltid möjligt
         nextBtn.disabled = false;
       }
 
@@ -1052,16 +1050,27 @@
       } else if (state.currentStep === 2) {
         state.currentStep = 3;
       } else if (state.currentStep === 3) {
-        if (state.worksAway === "no" || !state.worksAway) {
-          state.currentStep = 5;
-        } else {
+        if (!state.worksAway || state.worksAway === "no") {
+          // Ingen annan ort – hoppa direkt till sista steget (arbetsrum/övrigt)
+          state.currentStep = 7;
+        } else if (state.worksAway === "yes_cost") {
           state.currentStep = 4;
+        } else {
+          // yes_employer
+          state.currentStep = 5;
         }
       } else if (state.currentStep === 4) {
+        // Extra boendekostnad -> dagar utan traktamente
         state.currentStep = 5;
       } else if (state.currentStep === 5) {
-        state.currentStep = 6;
+        // Dagar utan traktamente -> hemresor om man jobbat på annan ort
+        if (!state.worksAway || state.worksAway === "no") {
+          state.currentStep = 7;
+        } else {
+          state.currentStep = 6;
+        }
       } else if (state.currentStep === 6) {
+        // Hemresor -> sista steget
         state.currentStep = 7;
       } else {
         state.currentStep = Math.min(state.currentStep + 1, totalSteps);
@@ -1090,14 +1099,19 @@
       }
 
       if (state.currentStep === 7) {
-        state.currentStep = 6;
+        // Från sista steget:
+        if (!state.worksAway || state.worksAway === "no") {
+          state.currentStep = 3;
+        } else {
+          state.currentStep = 6;
+        }
       } else if (state.currentStep === 6) {
         state.currentStep = 5;
       } else if (state.currentStep === 5) {
-        if (state.worksAway === "no" || !state.worksAway) {
-          state.currentStep = 3;
-        } else {
+        if (state.worksAway === "yes_cost") {
           state.currentStep = 4;
+        } else {
+          state.currentStep = 3;
         }
       } else if (state.currentStep === 4) {
         state.currentStep = 3;
@@ -2040,7 +2054,7 @@
             state.livingCostDays = null;
             if (livingCostInput) livingCostInput.value = "";
           }
-        } else if (stepIndex === 4) {
+        } else if (stepIndex === 6) {
           if (optionValue === "home_travel_yes") {
             state.homeTravelPaid = "yes";
             if (homeTravelGroup) homeTravelGroup.hidden = false;
@@ -2050,7 +2064,7 @@
             state.homeTravelCost = null;
             if (homeTravelInput) homeTravelInput.value = "";
           }
-        } else if (stepIndex === 5) {
+        } else if (stepIndex === 7) {
           state.homeOffice = optionValue === "homeoffice_yes" ? "yes" : "no";
         }
 
@@ -2058,27 +2072,24 @@
         updateButtons();
 
         // --- AUTO-NEXT LOGIK ---
-        // Vi auto-servar vidare på rena val-frågor
-        // (dvs där vi inte först måste fylla i ett belopp/dagar)
         let shouldAutoAdvance = false;
 
         if (stepIndex === 1) {
           // Alltid auto-next när man valt rese-typ
           shouldAutoAdvance = true;
         } else if (stepIndex === 3) {
-          // Om man INTE behöver fylla i extra boendekostnad
-          if (state.worksAway === "no" || state.worksAway === "yes_employer") {
+          // Alltid vidare efter val om annan ort
+          if (state.worksAway) {
             shouldAutoAdvance = true;
           }
-        } else if (stepIndex === 4) {
+        } else if (stepIndex === 6) {
           // Om man svarar "Nej" på hemresor (ingen extra input)
           if (state.homeTravelPaid === "no") {
             shouldAutoAdvance = true;
           }
-        } else if (stepIndex === 5) {
-          // Arbetsrum är en ren ja/nej-fråga – auto-next
-          shouldAutoAdvance = true;
         }
+        // Steg 7 auto-nextar vi INTE, eftersom man ofta vill fylla i
+        // fackavgift, a-kassa m.m. på samma skärm.
 
         if (shouldAutoAdvance) {
           setTimeout(() => {
