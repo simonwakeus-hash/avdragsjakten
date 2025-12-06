@@ -744,6 +744,7 @@
     const summaryMetaEl = document.getElementById("summaryMeta");
     const showHowButton = document.getElementById("showHowButton");
     const scrollToHowButton = document.getElementById("scrollToHowButton");
+    const resultsPayoffEl = document.getElementById("resultsPayoff");
 
     const stickyBar = document.querySelector(".ak-sticky-bar");
 
@@ -1544,119 +1545,141 @@
       return article;
     }
 
-    function renderResultsView(total, results) {
-      const count = results.length;
+function renderResultsView(total, results) {
+  const count = results.length;
 
-      const taxSaving = computeTaxSaving(total);
-      const totalStr = total > 0 ? formatCurrency(total) : "0 kr";
-      const taxStr = taxSaving > 0 ? formatCurrency(taxSaving) : null;
+  const taxSaving = computeTaxSaving(total);
+  const totalStr = total > 0 ? formatCurrency(total) : "0 kr";
+  const taxStr = taxSaving > 0 ? formatCurrency(taxSaving) : null;
 
-      const hasResults = count > 0;
-      if (showHowButton) showHowButton.disabled = !hasResults;
-      if (scrollToHowButton) scrollToHowButton.disabled = !hasResults;
+  const hasResults = count > 0;
 
-      if (resultTotalEl) {
-        if (taxStr) {
-          resultTotalEl.textContent =
-            totalStr + " i avdrag · ca " + taxStr + " lägre skatt";
-        } else {
-          resultTotalEl.textContent =
-            total > 0 ? totalStr + " i avdrag" : "0 kr";
-        }
-      }
+  // Aktivera / avaktivera knappar
+  if (showHowButton) {
+    showHowButton.disabled = !hasResults;
+  }
+  if (scrollToHowButton) {
+    scrollToHowButton.disabled = !hasResults;
+  }
 
-      if (summaryTotalAmountEl) {
-        summaryTotalAmountEl.textContent = taxStr || totalStr;
-      }
+  // Stora numret (gröna talet)
+  if (resultTotalEl) {
+    const bigLabel = taxStr || totalStr;
+    resultTotalEl.textContent = bigLabel;
+  }
 
-      if (summaryMetaEl) {
-        let metaText =
-          count > 0
-            ? count + " möjliga avdrag identifierade"
-            : "Inga tydliga avdrag identifierade";
-        if (taxStr && count > 0) {
-          metaText += " · ca " + taxStr + " lägre skatt";
-        }
-        summaryMetaEl.textContent = metaText;
-      }
+  // Sammanfattningskortet till höger
+  if (summaryTotalAmountEl) {
+    summaryTotalAmountEl.textContent = taxStr || totalStr;
+  }
 
-      if (resultsSubtitleEl) {
-        if (total > 0) {
-          resultsSubtitleEl.textContent =
-            "Detta är ett grovt estimat på hur mycket dina samlade avdrag kan minska din beskattningsbara inkomst. Den ungefärliga skattesänkningen bygger på en förenklad svensk marginalskatt.";
-        } else if (count === 0) {
-          resultsSubtitleEl.textContent =
-            "Utifrån de här svaren hittar vi inga tydliga avdrag. Det kan ändå finnas andra situationer där avdrag är aktuella. Gå gärna vidare till våra guider.";
-        } else {
-          resultsSubtitleEl.textContent =
-            "Baserat på dina svar ser det ut som att de möjliga avdragen är relativt små eller inte över schablonnivån. Se våra guider för att gå igenom reglerna mer i detalj.";
-        }
-      }
-
-      if (topDeductionsListEl) topDeductionsListEl.innerHTML = "";
-      if (otherDeductionsListEl) otherDeductionsListEl.innerHTML = "";
-
-      let nextStepsEl = document.getElementById("resultsNextSteps");
-      if (!nextStepsEl && resultsSubtitleEl) {
-        nextStepsEl = document.createElement("div");
-        nextStepsEl.id = "resultsNextSteps";
-        nextStepsEl.className = "results-nextsteps";
-        resultsSubtitleEl.insertAdjacentElement("afterend", nextStepsEl);
-      }
-
-      if (results.length === 0) {
-        if (topDeductionsListEl) {
-          const p = document.createElement("p");
-          p.className = "deduction-empty";
-          p.textContent =
-            "Vi hittar inga tydliga avdrag baserat på de här svaren.";
-          topDeductionsListEl.appendChild(p);
-        }
-        if (nextStepsEl) {
-          nextStepsEl.textContent = "";
-        }
-        return;
-      }
-
-      const sorted = [...results].sort(
-        (a, b) => (b.amount || 0) - (a.amount || 0)
-      );
-
-      if (nextStepsEl) {
-        const withRoute = sorted
-          .map((d) => ({
-            name: d.name,
-            route: getSkvRouteForName(d.name)
-          }))
-          .filter((d) => d.route)
-          .slice(0, 3);
-
-        if (withRoute.length === 0) {
-          nextStepsEl.textContent =
-            "Nästa steg: Logga in på Skatteverket och följ våra guider för att fylla i rätt rutor.";
-        } else {
-          const itemsHtml = withRoute
-            .map((d) => `<li>${d.route}</li>`)
-            .join("");
-          nextStepsEl.innerHTML =
-            '<strong>Nästa steg på Skatteverket:</strong><ul>' +
-            itemsHtml +
-            "</ul>";
-        }
-      }
-
-      const top = sorted.slice(0, 3);
-      const others = sorted.slice(3);
-
-      top.forEach((d) => {
-        if (topDeductionsListEl)
-          topDeductionsListEl.appendChild(createDeductionCard(d));
-      });
-      others.forEach((d) => {
-        if (otherDeductionsListEl)
-          otherDeductionsListEl.appendChild(createDeductionCard(d));
-      });
+  if (summaryMetaEl) {
+    let metaText =
+      count > 0
+        ? count + " möjliga avdrag identifierade"
+        : "Inga tydliga avdrag identifierade";
+    if (taxStr && count > 0) {
+      metaText += " · ca " + taxStr + " lägre skatt";
     }
+    summaryMetaEl.textContent = metaText;
+  }
+
+  // Förklarande text under rubriken
+  if (resultsSubtitleEl) {
+    if (total > 0) {
+      resultsSubtitleEl.textContent =
+        "Beräknat utifrån dina uppgifter och en förenklad svensk marginalskatt.";
+    } else if (count === 0) {
+      resultsSubtitleEl.textContent =
+        "Utifrån de här svaren hittar vi inga tydliga avdrag. Det kan ändå finnas andra situationer där avdrag är aktuella.";
+    } else {
+      resultsSubtitleEl.textContent =
+        "Baserat på dina svar ser det ut som att de möjliga avdragen är relativt små eller inte över schablonnivån.";
+    }
+  }
+
+  // Payoff-rad: "När du är klar – har du sparat ca ..."
+  if (resultsPayoffEl) {
+    if (taxStr) {
+      resultsPayoffEl.textContent =
+        "När du är klar – har du sparat ca " + taxStr + ".";
+    } else if (total > 0) {
+      resultsPayoffEl.textContent =
+        "När du är klar – har du gjort avdrag för ca " + totalStr + ".";
+    } else {
+      resultsPayoffEl.textContent =
+        "När du är klar – har du bättre koll på vilka avdrag som kan vara aktuella för dig.";
+    }
+  }
+
+  // Rensa listor
+  if (topDeductionsListEl) topDeductionsListEl.innerHTML = "";
+  if (otherDeductionsListEl) otherDeductionsListEl.innerHTML = "";
+
+  // Skapa/uppdatera "Nästa steg på Skatteverket" under resultattexten
+  let nextStepsEl = document.getElementById("resultsNextSteps");
+  if (!nextStepsEl && resultsSubtitleEl) {
+    nextStepsEl = document.createElement("div");
+    nextStepsEl.id = "resultsNextSteps";
+    nextStepsEl.className = "results-nextsteps";
+    resultsSubtitleEl.insertAdjacentElement("afterend", nextStepsEl);
+  }
+
+  if (results.length === 0) {
+    if (topDeductionsListEl) {
+      const p = document.createElement("p");
+      p.className = "deduction-empty";
+      p.textContent =
+        "Vi hittar inga tydliga avdrag baserat på de här svaren.";
+      topDeductionsListEl.appendChild(p);
+    }
+    if (nextStepsEl) {
+      nextStepsEl.textContent = "";
+    }
+    return;
+  }
+
+  const sorted = [...results].sort(
+    (a, b) => (b.amount || 0) - (a.amount || 0)
+  );
+
+  if (nextStepsEl) {
+    const withRoute = sorted
+      .map((d) => ({
+        name: d.name,
+        route: getSkvRouteForName(d.name)
+      }))
+      .filter((d) => d.route)
+      .slice(0, 3);
+
+    if (withRoute.length === 0) {
+      nextStepsEl.textContent =
+        "Nästa steg: Logga in på Skatteverket och följ våra guider för att fylla i rätt rutor.";
+    } else {
+      const itemsHtml = withRoute
+        .map((d) => `<li>${d.route}</li>`)
+        .join("");
+      nextStepsEl.innerHTML =
+        '<strong>Nästa steg på Skatteverket:</strong><ul>' +
+        itemsHtml +
+        "</ul>";
+    }
+  }
+
+  // Rendera korten
+  const top = sorted.slice(0, 3);
+  const others = sorted.slice(3);
+
+  top.forEach((d) => {
+    if (topDeductionsListEl)
+      topDeductionsListEl.appendChild(createDeductionCard(d));
+  });
+  others.forEach((d) => {
+    if (otherDeductionsListEl)
+      otherDeductionsListEl.appendChild(createDeductionCard(d));
+  });
+}
+
 
     function calculateAndShowResult() {
       const { total, items } = computeEstimate();
