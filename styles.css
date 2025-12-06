@@ -943,3 +943,7 @@ input[type="email"]:focus {
   color: var(--color-text-muted);
   text-align: center;
 }
+
+#deklaration-file {
+  display: none;
+}
