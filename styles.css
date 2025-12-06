@@ -554,9 +554,11 @@ select {
 
 /* Result-vy */
 
+/* Resultat – minimalistisk layout */
+
 .results-view {
-  margin-top: 2.5rem;
-  padding: 2rem 1.5rem;
+  margin-top: 2rem;
+  padding: 1.75rem 1.5rem 1.75rem;
   border-radius: 18px;
   background: #ffffff;
   border: 1px solid #e5e7eb;
@@ -566,44 +568,53 @@ select {
   margin-bottom: 1.75rem;
 }
 
-.results-kicker {
-  margin: 0 0 0.25rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #6b7280;
-}
-
 .results-title {
-  margin: 0 0 0.5rem;
-  font-size: 1.5rem;
+  margin: 0 0 0.75rem;
+  font-size: 1.4rem;
   font-weight: 600;
 }
 
+.results-number-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.results-equals {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #065f46;
+  line-height: 1.1;
+}
+
 .results-total-amount {
-  margin: 0 0 0.5rem;
-  font-size: 1.6rem;
+  margin: 0;
+  font-size: 1.9rem;
   font-weight: 700;
   color: #065f46;
 }
 
-.results-subtitle {
-  margin: 0 0 0.5rem;
+.results-tagline {
+  margin: 0.25rem 0 0.9rem;
   font-size: 0.95rem;
+  color: #047857;
+}
+
+.results-main-cta {
+  margin: 0 0 0.9rem;
+}
+
+.results-subtitle {
+  margin: 0 0 0.4rem;
+  font-size: 0.9rem;
   color: #4b5563;
   max-width: 40rem;
 }
 
-.results-disclaimer {
-  margin: 0.5rem 0 0;
-  font-size: 0.8rem;
-  color: #6b7280;
-}
-
-/* Nästa steg-lista under resultattexten */
-
+/* Nästa steg-text under resultatet (fylls av JS) */
 .results-nextsteps {
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.6rem;
   font-size: 0.85rem;
   color: #4b5563;
 }
@@ -613,31 +624,78 @@ select {
   padding-left: 1.1rem;
 }
 
-/* Layout – två kolumner på desktop */
-
-.results-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-  gap: 1.5rem;
-  align-items: flex-start;
+.results-disclaimer {
+  margin: 0.4rem 0 0;
+  font-size: 0.8rem;
+  color: #6b7280;
 }
 
-.results-main {
-  min-width: 0;
+/* Sektioner med avdragskort – fortfarande enkla kort men mindre bullriga */
+
+.results-section {
+  margin-bottom: 1.25rem;
 }
 
-.results-sidebar {
-  min-width: 0;
+.results-section-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
-/* Sammanfattningskort (höger kolumn) */
+.results-section-secondary {
+  margin-top: 0.75rem;
+}
 
-.results-summary-card {
-  border-radius: 16px;
+.deduction-card {
+  border-radius: 12px;
   border: 1px solid #e5e7eb;
-  padding: 1.25rem 1.5rem;
+  padding: 0.75rem 0.9rem;
   background: #f9fafb;
 }
+
+/* Sammanfattning i botten – kompakt, en kolumn */
+
+.results-summary-inline {
+  margin-top: 1.25rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.results-summary-label {
+  margin: 0 0 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.results-summary-amount {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #065f46;
+}
+
+.results-summary-meta {
+  margin: 0.1rem 0 0.75rem;
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.results-summary-cta {
+  padding-inline: 0.9rem;
+  font-size: 0.85rem;
+}
+
+/* På mobil – samma, men lite mer luft */
+@media (max-width: 768px) {
+  .results-view {
+    padding: 1.5rem 1.25rem 1.5rem;
+  }
+
+  .results-total-amount {
+    font-size: 1.7rem;
+  }
+}
+
 
 .results-summary-title {
   margin: 0 0 0.35rem;
