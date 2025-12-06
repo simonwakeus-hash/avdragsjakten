@@ -1975,10 +1975,11 @@
 
         updateButtons();
 
-        let shouldAutoAdvance = false;
-        if (stepIndex === 1 || stepIndex === 3 || stepIndex === 6) {
-          shouldAutoAdvance = true;
-        }
+let shouldAutoAdvance = false;
+if (stepIndex === 1 || stepIndex === 3 || stepIndex === 6 || stepIndex === 8) {
+  shouldAutoAdvance = true;
+}
+
 
         if (shouldAutoAdvance) {
           setTimeout(() => {
