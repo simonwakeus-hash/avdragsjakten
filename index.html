@@ -629,6 +629,7 @@
   </div>
 
   <!-- JS -->
+  <!-- JS -->
   <script>
   // År i footern
   const yearEl = document.getElementById("year");
@@ -636,7 +637,7 @@
     yearEl.textContent = new Date().getFullYear();
   }
 
-  // Enkla nyhetsbrev-formuläret längst ned
+  // Enkla nyhetsbrev-formuläret längst ned (separat, ej kopplat till motorn)
   const bottomEmailForm = document.getElementById("emailForm");
   const bottomEmailInput = document.getElementById("emailInput");
   const bottomEmailFeedback = document.getElementById("emailFeedback");
@@ -716,7 +717,7 @@
     const steps = Array.from(flowEl.querySelectorAll("[data-step-index]"));
     const totalSteps = steps.length;
 
-    // Deklarations-upload (nu med HTML i steg 2)
+    // Deklarations-upload
     const deklarationFileInput = document.getElementById("deklaration-file");
     const deklarationStatus = document.getElementById("deklaration-status");
     const analyzeDeklarationBtn = document.getElementById("analyze-deklaration-btn");
@@ -726,22 +727,6 @@
     const methodQuestionsBtn = document.getElementById("ak-method-questions");
     const uploadPanel = document.getElementById("ak-upload-panel");
     const goToQuestionsAfterUploadBtn = document.getElementById("ak-go-to-questions-after-upload");
-    // När man klickar på "Ladda upp din deklaration" → öppna filväljaren direkt
-if (methodUploadBtn && deklarationFileInput && uploadPanel) {
-  methodUploadBtn.addEventListener("click", function () {
-    // Visa upload-panelen och markera valet
-    uploadPanel.hidden = false;
-    methodUploadBtn.classList.add("ak-option-selected");
-
-    if (methodQuestionsBtn) {
-      methodQuestionsBtn.classList.remove("ak-option-selected");
-    }
-
-    // Vänta en tick så DOM hinner uppdateras
-    setTimeout(() => deklarationFileInput.click(), 10);
-  });
-}
-
 
     // Modal-element
     const howToModal = document.getElementById("howToModal");
@@ -1751,15 +1736,17 @@ if (methodUploadBtn && deklarationFileInput && uploadPanel) {
     }
 
     // Välj hur du deklarerar
-if (methodUploadBtn && uploadPanel) {
-  methodUploadBtn.addEventListener("click", function () {
-    uploadPanel.hidden = false;
-    methodUploadBtn.classList.add("ak-option-selected");
-    if (methodQuestionsBtn) {
-      methodQuestionsBtn.classList.remove("ak-option-selected");
+    if (methodUploadBtn && uploadPanel && deklarationFileInput) {
+      methodUploadBtn.addEventListener("click", function () {
+        uploadPanel.hidden = false;
+        methodUploadBtn.classList.add("ak-option-selected");
+        if (methodQuestionsBtn) {
+          methodQuestionsBtn.classList.remove("ak-option-selected");
+        }
+        // öppna filhanteraren direkt
+        setTimeout(() => deklarationFileInput.click(), 10);
+      });
     }
-  });
-}
 
     if (methodQuestionsBtn) {
       methodQuestionsBtn.addEventListener("click", function () {
@@ -2046,6 +2033,7 @@ if (methodUploadBtn && uploadPanel) {
       }
     });
 
+    // --- Deklarations-analys med loader + kort ---
     async function runDeklarationAnalysis(file) {
       if (!file) {
         deklarationStatus.textContent = "Välj en PDF från Skatteverket först.";
@@ -2110,7 +2098,7 @@ if (methodUploadBtn && uploadPanel) {
           flags.push("Tillfälligt arbete / dubbel bosättning");
         }
 
-        // --- HTML för kortet, inspirerat av din skiss ---
+        // --- HTML för kortet, inspirerat av skissen ---
         const rowsHtml = summaryRows.length
           ? summaryRows
               .map(
@@ -2186,101 +2174,13 @@ if (methodUploadBtn && uploadPanel) {
       }
     }
 
-
-      // Start: loader + disabled knapp
-      deklarationStatus.textContent = "Analyserar din deklaration...";
-      deklarationStatus.style.color = "#555";
-      deklarationStatus.classList.add("ak-status-loading");
-
-      if (analyzeDeklarationBtn) {
-        analyzeDeklarationBtn.disabled = true;
-        analyzeDeklarationBtn.textContent = "Analyserar...";
-      }
-
-      try {
-        const rawText = await extractTextFromPdf(file);
-        const parsed = parseDeklarationText(rawText);
-
-        state.deklarationAnalyzed = true;
-        state.deklarationRawText = rawText;
-        state.deklarationParsed = parsed;
-
-        const infoLines = [];
-
-        if (parsed.capitalSurplus != null) {
-          infoLines.push(
-            "Överskott av kapital: <strong>" +
-              formatCurrency(parsed.capitalSurplus) +
-              "</strong>"
-          );
-        }
-        if (parsed.iskSchablon != null) {
-          infoLines.push(
-            "Schablonintäkt ISK: <strong>" +
-              formatCurrency(parsed.iskSchablon) +
-              "</strong>"
-          );
-        }
-        if (
-          typeof parsed.salary === "number" &&
-          parsed.salary > 0
-        ) {
-          infoLines.push(
-            "Deklarerad lön/inkomst: <strong>" +
-              formatCurrency(parsed.salary) +
-              "</strong>"
-          );
-        }
-
-        const flags = [];
-        if (parsed.hasTravelDeduction) {
-          flags.push("resor till och från arbetet");
-        }
-        if (parsed.hasWorkRoomDeduction) {
-          flags.push("övriga utgifter (t.ex. arbetsrum)");
-        }
-        if (parsed.hasDoubleHousingDeduction) {
-          flags.push("tillfälligt arbete / dubbel bosättning");
-        }
-
-        let html = "<strong>Deklarationen är analyserad.</strong>";
-
-        if (infoLines.length > 0) {
-          html += "<br>" + infoLines.join("<br>");
-        }
-
-        if (flags.length > 0) {
-          html +=
-            "<br>Vi ser att du redan har avdrag för: <strong>" +
-            flags.join(", ") +
-            "</strong> i din deklaration.";
-        }
-
-        deklarationStatus.innerHTML = html;
-        deklarationStatus.style.color = "#166534";
-      } catch (err) {
-        console.error(err);
-        deklarationStatus.textContent =
-          "Kunde inte läsa PDF:en just nu. Kontrollera att det är Inkomstdeklaration 1 från Skatteverket.";
-        deklarationStatus.style.color = "#b91c1c";
-      } finally {
-        deklarationStatus.classList.remove("ak-status-loading");
-        if (analyzeDeklarationBtn) {
-          analyzeDeklarationBtn.disabled = false;
-          analyzeDeklarationBtn.textContent = "Analysera deklarationen";
-        }
-      }
-    }
-
-    // Deklarations-analys
+    // Deklarations-analys – klick + auto-start vid filval
     if (analyzeDeklarationBtn && deklarationFileInput && deklarationStatus) {
-      // Man kan fortfarande klicka på knappen om man vill köra om
       analyzeDeklarationBtn.addEventListener("click", function () {
         const file = deklarationFileInput.files[0];
         runDeklarationAnalysis(file);
       });
 
-      // Auto-start direkt när fil valts
       deklarationFileInput.addEventListener("change", function () {
         const file = deklarationFileInput.files[0];
         if (file) {
@@ -2289,10 +2189,10 @@ if (methodUploadBtn && uploadPanel) {
       });
     }
 
-
     // Init
     setView("intro");
   });
   </script>
+
 </body>
 </html>
