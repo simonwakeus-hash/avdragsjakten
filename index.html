@@ -2171,6 +2171,17 @@ if (uploadPanel) {
 if (goToQuestionsAfterUploadBtn) {
   goToQuestionsAfterUploadBtn.hidden = false;
 }
+// Visa knappen
+if (goToQuestionsAfterUploadBtn) {
+  goToQuestionsAfterUploadBtn.hidden = false;
+
+  // Fade-in animation
+  goToQuestionsAfterUploadBtn.style.opacity = "0";
+  goToQuestionsAfterUploadBtn.style.transition = "opacity .35s ease";
+  setTimeout(() => {
+      goToQuestionsAfterUploadBtn.style.opacity = "1";
+  }, 10); // liten delay så CSS hinner apply
+}
 
 // Scrolla användaren till resultatkortet
 deklarationStatus.scrollIntoView({ behavior: "smooth", block: "start" });
