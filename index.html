@@ -1835,6 +1835,41 @@
             </section>
           </div>
         `;
+        // Premium animation – fade bort steg 1 UI
+if (declareIntro) {
+    declareIntro.classList.add("ak-fade-out");
+    setTimeout(() => declareIntro.hidden = true, 350);
+}
+
+if (methodUploadBtn) {
+    methodUploadBtn.classList.add("ak-fade-out");
+    setTimeout(() => methodUploadBtn.hidden = true, 350);
+}
+
+if (methodQuestionsBtn) {
+    methodQuestionsBtn.classList.add("ak-fade-out");
+    setTimeout(() => methodQuestionsBtn.hidden = true, 350);
+}
+
+if (uploadPanel) {
+    uploadPanel.classList.add("ak-fade-out");
+    setTimeout(() => uploadPanel.hidden = true, 350);
+}
+
+// Fade-in analyskortet
+deklarationStatus.classList.add("ak-fade-in");
+
+// CTA – visa och animera upp
+if (goToQuestionsAfterUploadBtn) {
+    goToQuestionsAfterUploadBtn.hidden = false;
+    goToQuestionsAfterUploadBtn.classList.add("ak-cta-slide-in");
+}
+
+// Scrolla ned snyggt
+setTimeout(() => {
+    deklarationStatus.scrollIntoView({ behavior: "smooth", block: "start" });
+}, 200);
+
 // --- Efter att kortet renderats: dölj allt ovanför enligt skissen ---
 
 // Dölj sektionen "Hur deklarerar du?"
