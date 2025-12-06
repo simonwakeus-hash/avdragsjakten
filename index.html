@@ -2035,23 +2035,162 @@
     });
 
     // --- Deklarations-analys med loader + kort ---
-    async function runDeklarationAnalysis(file) {
-      if (!file) {
-        deklarationStatus.textContent = "Välj en PDF från Skatteverket först.";
-        deklarationStatus.style.color = "#b91c1c";
-        deklarationStatus.classList.remove("ak-status-loading");
-        return;
-      }
+// --- Deklarations-analys med loader + kort ---
+async function runDeklarationAnalysis(file) {
+  if (!file) {
+    deklarationStatus.textContent = "Välj en PDF från Skatteverket först.";
+    deklarationStatus.style.color = "#b91c1c";
+    deklarationStatus.classList.remove("ak-status-loading");
+    return;
+  }
 
-      // Loader på status-ytan
-      deklarationStatus.textContent = "Analyserar din deklaration...";
-      deklarationStatus.style.color = "#555";
-      deklarationStatus.classList.add("ak-status-loading");
+  // Loader på status-ytan
+  deklarationStatus.textContent = "Analyserar din deklaration...";
+  deklarationStatus.style.color = "#555";
+  deklarationStatus.classList.add("ak-status-loading");
 
-      if (analyzeDeklarationBtn) {
-        analyzeDeklarationBtn.disabled = true;
-        analyzeDeklarationBtn.textContent = "Analyserar...";
-      }
+  if (analyzeDeklarationBtn) {
+    analyzeDeklarationBtn.disabled = true;
+    analyzeDeklarationBtn.textContent = "Analyserar...";
+  }
+
+  try {
+    const rawText = await extractTextFromPdf(file);
+    const parsed = parseDeklarationText(rawText);
+
+    state.deklarationAnalyzed = true;
+    state.deklarationRawText = rawText;
+    state.deklarationParsed = parsed;
+
+    // --- Bygg data för kortet ---
+    const summaryRows = [];
+
+    if (typeof parsed.salary === "number" && parsed.salary > 0) {
+      summaryRows.push({
+        label: "Deklarerad lön/inkomst",
+        value: formatCurrency(parsed.salary)
+      });
+    }
+
+    if (parsed.capitalSurplus != null) {
+      summaryRows.push({
+        label: "Överskott av kapital",
+        value: formatCurrency(parsed.capitalSurplus)
+      });
+    }
+
+    if (parsed.iskSchablon != null) {
+      summaryRows.push({
+        label: "Schablonintäkt ISK",
+        value: formatCurrency(parsed.iskSchablon)
+      });
+    }
+
+    const flags = [];
+    if (parsed.hasTravelDeduction) {
+      flags.push("Resor till och från arbetet");
+    }
+    if (parsed.hasWorkRoomDeduction) {
+      flags.push("Övriga utgifter (t.ex. arbetsrum)");
+    }
+    if (parsed.hasDoubleHousingDeduction) {
+      flags.push("Tillfälligt arbete / dubbel bosättning");
+    }
+
+    // --- HTML för kortet, inspirerat av skissen ---
+    const rowsHtml = summaryRows.length
+      ? summaryRows
+          .map(
+            (row) => `
+          <div class="ak-deklaration-row">
+            <span class="ak-deklaration-row-label">${row.label}:</span>
+            <span class="ak-deklaration-row-value">${row.value}</span>
+          </div>
+        `
+          )
+          .join("")
+      : `<p class="ak-deklaration-muted">
+           Vi kunde inte läsa ut några belopp automatiskt. Du kan ändå gå vidare till frågorna.
+         </p>`;
+
+    const avdragHtml = flags.length
+      ? `<ul class="ak-deklaration-list">
+           ${flags.map((f) => `<li>${f}</li>`).join("")}
+         </ul>`
+      : `<p class="ak-deklaration-muted">
+           Vi ser inga tydliga redan registrerade avdrag i din deklaration.
+         </p>`;
+
+    deklarationStatus.classList.remove("ak-status-loading");
+    deklarationStatus.style.color = "#111827";
+
+    deklarationStatus.innerHTML = `
+      <div class="ak-deklaration-card">
+        <div class="ak-deklaration-header">
+          <p class="ak-deklaration-step">Steg 1 av 3</p>
+          <p class="ak-deklaration-step-sub">Analys av deklaration</p>
+
+          <div class="ak-deklaration-title-row">
+            <span class="ak-deklaration-icon">✓</span>
+            <h3 class="ak-deklaration-main-title">Deklaration analyserad</h3>
+          </div>
+        </div>
+
+        <hr class="ak-deklaration-divider">
+
+        <section>
+          <h4 class="ak-deklaration-section-title">Sammanfattning av din deklaration</h4>
+          <div class="ak-deklaration-rows">
+            ${rowsHtml}
+          </div>
+        </section>
+
+        <hr class="ak-deklaration-divider">
+
+        <section>
+          <div class="ak-deklaration-avdrag-title-row">
+            <span class="ak-deklaration-icon">✓</span>
+            <h4 class="ak-deklaration-section-title">Redan registrerade avdrag</h4>
+          </div>
+          ${avdragHtml}
+          <p class="ak-deklaration-muted">
+            Dessa uppgifter finns redan med i din deklaration. Vi tar hänsyn till detta i din analys.
+          </p>
+        </section>
+      </div>
+    `;
+
+    // Göm valen + analysera-knappen (men behåll kortet)
+    if (methodUploadBtn) methodUploadBtn.style.display = "none";
+    if (methodQuestionsBtn) methodQuestionsBtn.style.display = "none";
+    if (analyzeDeklarationBtn) analyzeDeklarationBtn.style.display = "none";
+
+    // Visa knappen för att gå vidare
+    if (goToQuestionsAfterUploadBtn) {
+      goToQuestionsAfterUploadBtn.hidden = false;
+      goToQuestionsAfterUploadBtn.style.opacity = "0";
+      goToQuestionsAfterUploadBtn.style.transition = "opacity .35s ease";
+      setTimeout(() => {
+        goToQuestionsAfterUploadBtn.style.opacity = "1";
+      }, 10);
+    }
+
+    // Scrolla användaren till resultatkortet
+    deklarationStatus.scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (err) {
+    console.error(err);
+    deklarationStatus.classList.remove("ak-status-loading");
+    deklarationStatus.textContent =
+      "Kunde inte läsa PDF:en just nu. Kontrollera att det är Inkomstdeklaration 1 från Skatteverket.";
+    deklarationStatus.style.color = "#b91c1c";
+  } finally {
+    if (analyzeDeklarationBtn) {
+      analyzeDeklarationBtn.disabled = false;
+      analyzeDeklarationBtn.textContent = "Analysera deklarationen";
+    }
+  }
+}
+
 
       try {
         const rawText = await extractTextFromPdf(file);
