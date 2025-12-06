@@ -533,59 +533,71 @@
         </div>
 
         <!-- RESULTATVY -->
-        <section
-          id="results-view"
-          class="results-view"
-          data-step="result"
-          hidden
-          aria-live="polite"
-        >
-          <header class="results-header">
-            <p class="results-kicker">Resultat</p>
-            <h2 class="results-title">Din preliminära skattesänkning</h2>
-            <p class="results-total-amount" id="resultsTotalAmount">0 kr</p>
-            <p class="results-subtitle" id="resultsSubtitle">
-              Baserat på dina svar verkar du kunna göra följande avdrag i din deklaration.
-            </p>
-            <button type="button" class="btn btn-primary" id="showHowButton">
-              Visa hur du gör avdragen steg för steg
-            </button>
-            <p class="results-disclaimer">
-              Observera: Detta är en förenklad preliminär uppskattning.
-              Skatteverkets slutliga beslut kan skilja sig.
-            </p>
-          </header>
+<section
+  id="results-view"
+  class="results-view"
+  data-step="result"
+  hidden
+  aria-live="polite"
+>
+  <header class="results-header">
+    <p class="results-kicker">Resultat</p>
+    <h2 class="results-title">Du kan sänka din skatt med:</h2>
 
-          <div class="results-layout">
-            <div class="results-main">
-              <section class="results-section">
-                <h3 class="results-section-title">Största möjligheter</h3>
-                <div class="deduction-list" id="topDeductionsList"></div>
-              </section>
+    <div class="results-hero">
+      <span class="results-equals">=</span>
+      <p class="results-total-amount" id="resultsTotalAmount">0 kr</p>
+    </div>
+    <p class="results-tagline">lägre skatt</p>
 
-              <section class="results-section">
-                <h3 class="results-section-title">Övriga möjliga avdrag</h3>
-                <div class="deduction-list" id="otherDeductionsList"></div>
-              </section>
-            </div>
+    <p class="results-subtitle" id="resultsSubtitle">
+      Beräknat utifrån dina uppgifter och svensk marginalskatt.
+    </p>
 
-            <aside class="results-sidebar" aria-label="Sammanfattning">
-              <div class="results-summary-card">
-                <h3 class="results-summary-title">Sammanfattning</h3>
-                <p class="results-summary-amount" id="summaryTotalAmount">0 kr</p>
-                <p class="results-summary-meta" id="summaryMeta">
-                  0 möjliga avdrag identifierade
-                </p>
-                <p class="results-summary-text">
-                  Du får även en sammanfattning skickad till din e-post om du angav den i föregående steg.
-                </p>
-                <button type="button" class="btn btn-secondary" id="scrollToHowButton">
-                  Visa hur du gör avdragen
-                </button>
-              </div>
-            </aside>
-          </div>
-        </section>
+    <button type="button" class="btn btn-primary" id="showHowButton">
+      Följ steg-för-steg
+    </button>
+
+    <p class="results-payoff" id="resultsPayoff">
+      När du är klar – har du sparat ca 0 kr.
+    </p>
+
+    <p class="results-disclaimer">
+      Skatteverkets slutliga beslut kan skilja sig.
+    </p>
+  </header>
+
+  <div class="results-layout">
+    <div class="results-main">
+      <section class="results-section">
+        <h3 class="results-section-title">Största möjligheter</h3>
+        <div class="deduction-list" id="topDeductionsList"></div>
+      </section>
+
+      <section class="results-section">
+        <h3 class="results-section-title">Övriga möjliga avdrag</h3>
+        <div class="deduction-list" id="otherDeductionsList"></div>
+      </section>
+    </div>
+
+    <aside class="results-sidebar" aria-label="Sammanfattning">
+      <div class="results-summary-card">
+        <h3 class="results-summary-title">Sammanfattning</h3>
+        <p class="results-summary-amount" id="summaryTotalAmount">0 kr</p>
+        <p class="results-summary-meta" id="summaryMeta">
+          0 möjliga avdrag identifierade
+        </p>
+        <p class="results-summary-text">
+          Du får även en sammanfattning skickad till din e-post om du angav den i föregående steg.
+        </p>
+        <button type="button" class="btn btn-secondary" id="scrollToHowButton">
+          Visa hur du gör avdragen
+        </button>
+      </div>
+    </aside>
+  </div>
+</section>
+
 
         <!-- Sticky navigation -->
         <div class="ak-sticky-bar" aria-hidden="false">
