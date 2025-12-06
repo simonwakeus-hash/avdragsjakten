@@ -1240,4 +1240,39 @@ input[type="email"]:focus {
     to   { opacity: 1; transform: translateY(0); }
 }
 
+/* === Resultatsida: stor siffra i fokus === */
+
+.results-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin: 0.2rem 0 0.25rem;
+}
+
+.results-equals {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #065f46; /* samma gröna ton som beloppet */
+  line-height: 1;
+}
+
+.results-total-amount {
+  margin: 0;
+  font-size: 2.4rem;        /* större än tidigare */
+  font-weight: 700;
+  color: #065f46;
+}
+
+.results-tagline {
+  margin: 0 0 0.6rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #059669;
+}
+
+/* Lite luft runt CTA på resultatsidan */
+.results-header .btn-primary {
+  margin-top: 0.75rem;
+}
+
 
