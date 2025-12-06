@@ -168,7 +168,7 @@
         <!-- STEG-FLÖDE (frågor) -->
         <div class="ak-step-shell" data-step="flow" hidden>
           <div class="ak-progress" aria-hidden="true">
-            <div class="ak-progress-label" id="ak-progress-label">Steg 1 av 5</div>
+            <div class="ak-progress-label" id="ak-progress-label">Steg 1 av 8</div>
             <div class="ak-progress-bar">
               <div class="ak-progress-bar-fill" id="ak-progress-bar"></div>
             </div>
@@ -233,7 +233,7 @@
             </div>
           </section>
 
-          <!-- Steg 3: Jobb på annan ort -->
+          <!-- Steg 3: Jobb på annan ort (valfråga) -->
           <section data-step-index="3" aria-labelledby="ak-step3-title" hidden>
             <h2 class="ak-step-title" id="ak-step3-title">Har du arbetat på en annan ort än där du bor?</h2>
             <p class="ak-step-sub">
@@ -268,14 +268,23 @@
                 </div>
               </button>
             </div>
+          </section>
 
-            <!-- Extra boendekostnader -->
-            <div class="ak-input-group" id="ak-doublehousing-group" hidden>
+          <!-- Steg 4: Extra boendekostnader (nytt kort) -->
+          <section data-step-index="4" aria-labelledby="ak-step4-title" hidden>
+            <h2 class="ak-step-title" id="ak-step4-title">
+              Ungefär hur mycket extra boendekostnad hade du under året?
+            </h2>
+            <p class="ak-step-sub">
+              Räkna ungefärlig årskostnad för den bostad du behövt på arbetsorten, utöver din vanliga bostad.
+            </p>
+
+            <div class="ak-input-group" id="ak-doublehousing-group">
               <label for="ak-doublehousing-cost" class="ak-input-label">
-                Ungefär hur mycket extra boendekostnad hade du under året? (kr)
+                Extra boendekostnad under året (kr)
               </label>
               <div class="ak-input-help">
-                Räkna ungefärlig årskostnad för den bostad du behövt på arbetsorten, utöver din vanliga bostad.
+                Till exempel hyra för lägenhet eller rum på arbetsorten som du själv betalat.
               </div>
               <input
                 id="ak-doublehousing-cost"
@@ -287,15 +296,24 @@
                 placeholder="Till exempel 24&nbsp;000"
               />
             </div>
+          </section>
 
-            <!-- Ökade levnadskostnader -->
-            <div class="ak-input-group" id="ak-livingcost-group" hidden>
+          <!-- Steg 5: Ökade levnadskostnader (nytt kort) -->
+          <section data-step-index="5" aria-labelledby="ak-step5-title" hidden>
+            <h2 class="ak-step-title" id="ak-step5-title">
+              Ungefär hur många hela dagar arbetade du på annan ort utan skattefritt traktamente?
+            </h2>
+            <p class="ak-step-sub">
+              En grov uppskattning räcker. Vi gör en försiktig schablonberäkning
+              för ökade kostnader för mat och småutgifter.
+            </p>
+
+            <div class="ak-input-group" id="ak-livingcost-group">
               <label for="ak-livingcost-days" class="ak-input-label">
-                Ungefär hur många hela dagar arbetade du på annan ort utan skattefritt traktamente?
+                Antal hela dagar utan traktamente
               </label>
               <div class="ak-input-help">
-                En grov uppskattning räcker. Vi gör en försiktig schablonberäkning (cirka 200 kr per dag)
-                för ökade kostnader för mat och småutgifter.
+                Till exempel antal dagar du bodde på arbetsorten utan att få skattefritt traktamente.
               </div>
               <input
                 id="ak-livingcost-days"
@@ -310,9 +328,9 @@
             </div>
           </section>
 
-          <!-- Steg 4: Hemresor -->
-          <section data-step-index="4" aria-labelledby="ak-step4-title" hidden>
-            <h2 class="ak-step-title" id="ak-step4-title">Har du själv betalat hemresor under tiden du arbetat på annan ort?</h2>
+          <!-- Steg 6: Hemresor (valfråga) -->
+          <section data-step-index="6" aria-labelledby="ak-step6-title" hidden>
+            <h2 class="ak-step-title" id="ak-step6-title">Har du själv betalat hemresor under tiden du arbetat på annan ort?</h2>
             <p class="ak-step-sub">
               Till exempel resor hem till familj eller bostad på din hemort under perioden med arbete på annan ort.
             </p>
@@ -336,13 +354,23 @@
                 </div>
               </button>
             </div>
+          </section>
 
-            <div class="ak-input-group" id="ak-hometravel-group" hidden>
+          <!-- Steg 7: Hemresornas kostnad (nytt kort) -->
+          <section data-step-index="7" aria-labelledby="ak-step7-title" hidden>
+            <h2 class="ak-step-title" id="ak-step7-title">
+              Ungefär hur mycket har hemresorna kostat totalt under året?
+            </h2>
+            <p class="ak-step-sub">
+              En grov uppskattning räcker. Till exempel summan av biljetter eller bränslekostnad för hemresorna.
+            </p>
+
+            <div class="ak-input-group" id="ak-hometravel-group">
               <label for="ak-hometravel-cost" class="ak-input-label">
-                Ungefär hur mycket har hemresorna kostat totalt under året? (kr)
+                Totalkostnad för hemresorna (kr)
               </label>
               <div class="ak-input-help">
-                En grov uppskattning räcker. Till exempel summan av biljetter eller bränslekostnad för hemresorna.
+                Räkna gärna ihop biljetter, bränslekostnader eller andra utgifter för hemresorna.
               </div>
               <input
                 id="ak-hometravel-cost"
@@ -356,9 +384,9 @@
             </div>
           </section>
 
-          <!-- Steg 5: Arbetsrum + övriga avdrag -->
-          <section data-step-index="5" aria-labelledby="ak-step5-title" hidden>
-            <h2 class="ak-step-title" id="ak-step5-title">Har du haft ett särskilt arbetsrum hemma?</h2>
+          <!-- Steg 8: Arbetsrum + övriga avdrag -->
+          <section data-step-index="8" aria-labelledby="ak-step8-title" hidden>
+            <h2 class="ak-step-title" id="ak-step8-title">Har du haft ett särskilt arbetsrum hemma?</h2>
             <p class="ak-step-sub">
               Till exempel ett rum som i huvudsak används för arbete och som inte samtidigt är vardagsrum eller sovrum.
             </p>
@@ -689,7 +717,7 @@
     const homeTravelGroup = document.getElementById("ak-hometravel-group");
     const homeTravelInput = document.getElementById("ak-hometravel-cost");
 
-    // Extra inputs i steg 5
+    // Extra inputs i steg 8
     const unionFeeMonthlyInput = document.getElementById("ak-union-fee-monthly");
     const unemploymentFeeMonthlyInput = document.getElementById("ak-unemployment-fee-monthly");
     const annualInterestPaidInput = document.getElementById("ak-annual-interest-paid");
@@ -993,22 +1021,24 @@
         const km = parseFloat(((kmInput && kmInput.value) || "").replace(",", "."));
         nextBtn.disabled = !(km > 0);
       } else if (step === 3) {
-        if (!state.worksAway) {
-          nextBtn.disabled = true;
-        } else if (state.worksAway === "yes_cost") {
+        nextBtn.disabled = !state.worksAway;
+      } else if (step === 4) {
+        if (state.worksAway === "yes_cost") {
           nextBtn.disabled = !(state.doubleHousingCost && state.doubleHousingCost > 0);
         } else {
           nextBtn.disabled = false;
         }
-      } else if (step === 4) {
-        if (!state.homeTravelPaid) {
-          nextBtn.disabled = true;
-        } else if (state.homeTravelPaid === "yes") {
+      } else if (step === 5) {
+        nextBtn.disabled = false;
+      } else if (step === 6) {
+        nextBtn.disabled = !state.homeTravelPaid;
+      } else if (step === 7) {
+        if (state.homeTravelPaid === "yes") {
           nextBtn.disabled = !(state.homeTravelCost && state.homeTravelCost > 0);
         } else {
           nextBtn.disabled = false;
         }
-      } else if (step === 5) {
+      } else if (step === 8) {
         nextBtn.disabled = !state.homeOffice;
       } else {
         nextBtn.disabled = false;
@@ -1026,24 +1056,40 @@
         return;
       }
 
-      if (state.currentStep === 1) {
+      const current = state.currentStep;
+
+      if (current === 1) {
         if (state.travelType === "car") {
           state.currentStep = 2;
         } else {
           state.currentStep = 3;
         }
-      } else if (state.currentStep === 2) {
+      } else if (current === 2) {
         state.currentStep = 3;
-      } else if (state.currentStep === 3) {
-        if (state.worksAway === "no") {
+      } else if (current === 3) {
+        if (state.worksAway === "yes_cost") {
+          state.currentStep = 4;
+        } else if (state.worksAway === "yes_employer") {
           state.currentStep = 5;
         } else {
-          state.currentStep = 4;
+          // Ingen jobb på annan ort -> hoppa direkt till arbetsrum (steg 8)
+          state.currentStep = 8;
         }
-      } else if (state.currentStep === 4) {
+      } else if (current === 4) {
         state.currentStep = 5;
+      } else if (current === 5) {
+        // Från levnadskostnader vidare till hemresor
+        state.currentStep = 6;
+      } else if (current === 6) {
+        if (state.homeTravelPaid === "yes") {
+          state.currentStep = 7;
+        } else {
+          state.currentStep = 8;
+        }
+      } else if (current === 7) {
+        state.currentStep = 8;
       } else {
-        state.currentStep = Math.min(state.currentStep + 1, totalSteps);
+        state.currentStep = Math.min(current + 1, totalSteps);
       }
 
       setView("flow");
@@ -1068,24 +1114,38 @@
         return;
       }
 
-      if (state.currentStep === 5) {
-        if (state.worksAway === "no" || !state.worksAway) {
-          state.currentStep = 3;
-        } else {
-          state.currentStep = 4;
-        }
-      } else if (state.currentStep === 4) {
-        state.currentStep = 3;
-      } else if (state.currentStep === 3) {
+      const current = state.currentStep;
+
+      if (current === 2) {
+        state.currentStep = 1;
+      } else if (current === 3) {
         if (state.travelType === "car") {
           state.currentStep = 2;
         } else {
           state.currentStep = 1;
         }
-      } else if (state.currentStep === 2) {
-        state.currentStep = 1;
+      } else if (current === 4) {
+        state.currentStep = 3;
+      } else if (current === 5) {
+        if (state.worksAway === "yes_cost") {
+          state.currentStep = 4;
+        } else {
+          state.currentStep = 3;
+        }
+      } else if (current === 6) {
+        state.currentStep = 5;
+      } else if (current === 7) {
+        state.currentStep = 6;
+      } else if (current === 8) {
+        if (state.homeTravelPaid === "yes") {
+          state.currentStep = 7;
+        } else if (state.worksAway && state.worksAway !== "no") {
+          state.currentStep = 6;
+        } else {
+          state.currentStep = 3;
+        }
       } else {
-        state.currentStep = Math.max(state.currentStep - 1, 1);
+        state.currentStep = Math.max(current - 1, 1);
       }
 
       setView("flow");
@@ -1502,6 +1562,7 @@
           ${
             deduction.difficulty
               ? `<span class="deduction-tag deduction-tag-${deduction.difficulty}">
+
                    ${
                      deduction.difficulty === "easy"
                        ? "Enkelt"
@@ -1615,6 +1676,7 @@
       if (nextStepsEl) {
         const withRoute = sorted
           .map((d) => ({
+
             name: d.name,
             route: getSkvRouteForName(d.name)
           }))
@@ -1974,95 +2036,68 @@
       });
     }
 
-if (flowEl) {
-  flowEl.addEventListener("click", function (event) {
-    const optionBtn = event.target.closest(".ak-option");
-    if (!optionBtn) return;
+    // Klick på alternativ-knappar i flödet (auto-next på rena valfrågor)
+    if (flowEl) {
+      flowEl.addEventListener("click", function (event) {
+        const optionBtn = event.target.closest(".ak-option");
+        if (!optionBtn) return;
 
-    const section = optionBtn.closest("[data-step-index]");
-    if (!section) return;
+        const section = optionBtn.closest("[data-step-index]");
+        if (!section) return;
 
-    const stepIndex = Number(section.dataset.stepIndex);
-    const optionValue = optionBtn.dataset.option;
+        const stepIndex = Number(section.dataset.stepIndex);
+        const optionValue = optionBtn.dataset.option;
 
-    // Markera vald knapp
-    section.querySelectorAll(".ak-option").forEach((btn) => {
-      btn.classList.toggle("ak-option-selected", btn === optionBtn);
-    });
+        // Markera vald knapp visuellt
+        section.querySelectorAll(".ak-option").forEach((btn) => {
+          btn.classList.toggle("ak-option-selected", btn === optionBtn);
+        });
 
-    // Spara state beroende på steg
-    if (stepIndex === 1) {
-      if (optionValue === "travel_car") state.travelType = "car";
-      else if (optionValue === "travel_public") state.travelType = "public";
-      else state.travelType = "none";
-    } else if (stepIndex === 3) {
-      if (optionValue === "away_yes_cost") {
-        state.worksAway = "yes_cost";
-        if (doubleHousingGroup) doubleHousingGroup.hidden = false;
-        if (livingCostGroup) livingCostGroup.hidden = false;
-      } else if (optionValue === "away_yes_employer") {
-        state.worksAway = "yes_employer";
-        if (doubleHousingGroup) doubleHousingGroup.hidden = true;
-        state.doubleHousingCost = null;
-        if (doubleHousingInput) doubleHousingInput.value = "";
-        if (livingCostGroup) livingCostGroup.hidden = false;
-      } else {
-        state.worksAway = "no";
-        if (doubleHousingGroup) doubleHousingGroup.hidden = true;
-        state.doubleHousingCost = null;
-        if (doubleHousingInput) doubleHousingInput.value = "";
-        if (livingCostGroup) livingCostGroup.hidden = true;
-        state.livingCostDays = null;
-        if (livingCostInput) livingCostInput.value = "";
-      }
-    } else if (stepIndex === 4) {
-      if (optionValue === "home_travel_yes") {
-        state.homeTravelPaid = "yes";
-        if (homeTravelGroup) homeTravelGroup.hidden = false;
-      } else {
-        state.homeTravelPaid = "no";
-        if (homeTravelGroup) homeTravelGroup.hidden = true;
-        state.homeTravelCost = null;
-        if (homeTravelInput) homeTravelInput.value = "";
-      }
-    } else if (stepIndex === 5) {
-      state.homeOffice = optionValue === "homeoffice_yes" ? "yes" : "no";
-    }
+        // Spara state beroende på steg
+        if (stepIndex === 1) {
+          if (optionValue === "travel_car") state.travelType = "car";
+          else if (optionValue === "travel_public") state.travelType = "public";
+          else state.travelType = "none";
+        } else if (stepIndex === 3) {
+          if (optionValue === "away_yes_cost") {
+            state.worksAway = "yes_cost";
+          } else if (optionValue === "away_yes_employer") {
+            state.worksAway = "yes_employer";
+          } else {
+            state.worksAway = "no";
+          }
+        } else if (stepIndex === 6) {
+          if (optionValue === "home_travel_yes") {
+            state.homeTravelPaid = "yes";
+          } else {
+            state.homeTravelPaid = "no";
+            state.homeTravelCost = null;
+            if (homeTravelInput) homeTravelInput.value = "";
+          }
+        } else if (stepIndex === 8) {
+          state.homeOffice = optionValue === "homeoffice_yes" ? "yes" : "no";
+        }
 
-    // Uppdatera knappar + sticky-text
-    updateButtons();
-
-    // --- AUTO-NEXT LOGIK ---
-    // Vi auto-servar vidare på rena val-frågor
-    // (dvs där vi inte först måste fylla i ett belopp/dagar)
-    let shouldAutoAdvance = false;
-
-    if (stepIndex === 1) {
-      // Alltid auto-next när man valt rese-typ
-      shouldAutoAdvance = true;
-    } else if (stepIndex === 3) {
-      // Om man INTE behöver fylla i extra boendekostnad
-      if (state.worksAway === "no" || state.worksAway === "yes_employer") {
-        shouldAutoAdvance = true;
-      }
-    } else if (stepIndex === 4) {
-      // Om man svarar "Nej" på hemresor (ingen extra input)
-      if (state.homeTravelPaid === "no") {
-        shouldAutoAdvance = true;
-      }
-    }
-    // Steg 5 auto-nextar vi INTE, eftersom man ofta vill fylla i
-    // fackavgift, a-kassa m.m. på samma skärm.
-
-    if (shouldAutoAdvance) {
-      setTimeout(() => {
-        goToNextStep();
+        // Uppdatera knappar + sticky-text
         updateButtons();
-      }, 160); // liten delay så man hinner se klick-feedback
-    }
-  });
-}
 
+        // --- AUTO-NEXT LOGIK ---
+        let shouldAutoAdvance = false;
+
+        // Alltid auto-next på rena valfrågor utan input på samma kort
+        if (stepIndex === 1 || stepIndex === 3 || stepIndex === 6) {
+          shouldAutoAdvance = true;
+        }
+        // Steg 8 auto-nextar vi inte, eftersom man ofta fyller i fler belopp på samma kort.
+
+        if (shouldAutoAdvance) {
+          setTimeout(() => {
+            goToNextStep();
+            updateButtons();
+          }, 160); // liten delay så man hinner se klick-feedback
+        }
+      });
+    }
 
     if (kmInput) {
       kmInput.addEventListener("input", function () {
