@@ -1835,6 +1835,36 @@
             </section>
           </div>
         `;
+// --- Efter att kortet renderats: dölj allt ovanför enligt skissen ---
+
+// Dölj sektionen "Hur deklarerar du?"
+const declareIntro = document.querySelector('[data-step="declare"]');
+if (declareIntro) {
+    declareIntro.hidden = true;
+}
+
+// Dölj metod-knapparna (ladda upp / svara på frågor)
+if (methodUploadBtn) methodUploadBtn.hidden = true;
+if (methodQuestionsBtn) methodQuestionsBtn.hidden = true;
+
+// Dölj hela uppladdningspanelen
+if (uploadPanel) uploadPanel.hidden = true;
+
+// Dölj "Analysera deklarationen"-knappen
+if (analyzeDeklarationBtn) analyzeDeklarationBtn.hidden = true;
+
+// Visa CTA för att gå vidare
+if (goToQuestionsAfterUploadBtn) {
+    goToQuestionsAfterUploadBtn.hidden = false;
+    goToQuestionsAfterUploadBtn.style.opacity = "0";
+    goToQuestionsAfterUploadBtn.style.transition = "opacity .35s ease";
+    setTimeout(() => {
+        goToQuestionsAfterUploadBtn.style.opacity = "1";
+    }, 10);
+}
+
+// Scrolla ned till resultatet
+deklarationStatus.scrollIntoView({ behavior: "smooth", block: "start" });
 
         // Dölj hela "hur deklarerar du"-blocket (upload + val) enligt skissen
         if (declareEl) {
