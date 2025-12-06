@@ -2045,6 +2045,99 @@ if (methodUploadBtn && uploadPanel) {
       }
     });
 
+        async function runDeklarationAnalysis(file) {
+      if (!file) {
+        deklarationStatus.textContent = "Välj en PDF från Skatteverket först.";
+        deklarationStatus.style.color = "#b91c1c";
+        deklarationStatus.classList.remove("ak-status-loading");
+        return;
+      }
+
+      // Start: loader + disabled knapp
+      deklarationStatus.textContent = "Analyserar din deklaration...";
+      deklarationStatus.style.color = "#555";
+      deklarationStatus.classList.add("ak-status-loading");
+
+      if (analyzeDeklarationBtn) {
+        analyzeDeklarationBtn.disabled = true;
+        analyzeDeklarationBtn.textContent = "Analyserar...";
+      }
+
+      try {
+        const rawText = await extractTextFromPdf(file);
+        const parsed = parseDeklarationText(rawText);
+
+        state.deklarationAnalyzed = true;
+        state.deklarationRawText = rawText;
+        state.deklarationParsed = parsed;
+
+        const infoLines = [];
+
+        if (parsed.capitalSurplus != null) {
+          infoLines.push(
+            "Överskott av kapital: <strong>" +
+              formatCurrency(parsed.capitalSurplus) +
+              "</strong>"
+          );
+        }
+        if (parsed.iskSchablon != null) {
+          infoLines.push(
+            "Schablonintäkt ISK: <strong>" +
+              formatCurrency(parsed.iskSchablon) +
+              "</strong>"
+          );
+        }
+        if (
+          typeof parsed.salary === "number" &&
+          parsed.salary > 0
+        ) {
+          infoLines.push(
+            "Deklarerad lön/inkomst: <strong>" +
+              formatCurrency(parsed.salary) +
+              "</strong>"
+          );
+        }
+
+        const flags = [];
+        if (parsed.hasTravelDeduction) {
+          flags.push("resor till och från arbetet");
+        }
+        if (parsed.hasWorkRoomDeduction) {
+          flags.push("övriga utgifter (t.ex. arbetsrum)");
+        }
+        if (parsed.hasDoubleHousingDeduction) {
+          flags.push("tillfälligt arbete / dubbel bosättning");
+        }
+
+        let html = "<strong>Deklarationen är analyserad.</strong>";
+
+        if (infoLines.length > 0) {
+          html += "<br>" + infoLines.join("<br>");
+        }
+
+        if (flags.length > 0) {
+          html +=
+            "<br>Vi ser att du redan har avdrag för: <strong>" +
+            flags.join(", ") +
+            "</strong> i din deklaration.";
+        }
+
+        deklarationStatus.innerHTML = html;
+        deklarationStatus.style.color = "#166534";
+      } catch (err) {
+        console.error(err);
+        deklarationStatus.textContent =
+          "Kunde inte läsa PDF:en just nu. Kontrollera att det är Inkomstdeklaration 1 från Skatteverket.";
+        deklarationStatus.style.color = "#b91c1c";
+      } finally {
+        deklarationStatus.classList.remove("ak-status-loading");
+        if (analyzeDeklarationBtn) {
+          analyzeDeklarationBtn.disabled = false;
+          analyzeDeklarationBtn.textContent = "Analysera deklarationen";
+        }
+      }
+    }
+
     // Deklarations-analys
     if (analyzeDeklarationBtn && deklarationFileInput && deklarationStatus) {
       analyzeDeklarationBtn.addEventListener("click", async function () {
