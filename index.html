@@ -99,7 +99,7 @@
           <div class="ak-divider ak-divider-bottom"></div>
         </div>
 
-        <!-- STEG 2: HUR DEKLARERAR DU -->
+        <!-- STEG: HUR DEKLARERAR DU -->
         <div class="ak-declare-method" data-step="declare" hidden>
           <h2 class="ak-step-title">Hur deklarerar du?</h2>
           <p class="ak-step-sub">
@@ -149,7 +149,7 @@
               Analysera deklarationen
             </button>
 
-            <!-- Här ritar vi hela status-kortet efter analys -->
+            <!-- Sammanfattningskort efter analys -->
             <div class="ak-deklaration-status" id="deklaration-status"></div>
 
             <button
@@ -168,7 +168,7 @@
         <!-- STEG-FLÖDE (frågor) -->
         <div class="ak-step-shell" data-step="flow" hidden>
           <div class="ak-progress" aria-hidden="true">
-            <div class="ak-progress-label" id="ak-progress-label">Steg 1 av 8</div>
+            <div class="ak-progress-label" id="ak-progress-label">Steg 1 av 9</div>
             <div class="ak-progress-bar">
               <div class="ak-progress-bar-fill" id="ak-progress-bar"></div>
             </div>
@@ -270,7 +270,7 @@
             </div>
           </section>
 
-          <!-- Steg 4: Extra boendekostnad (endast input) -->
+          <!-- Steg 4: Extra boendekostnad -->
           <section data-step-index="4" aria-labelledby="ak-step4-title" hidden>
             <h2 class="ak-step-title" id="ak-step4-title">Ungefär hur mycket extra boendekostnad hade du under året? (kr)</h2>
             <p class="ak-step-sub">
@@ -296,7 +296,7 @@
             </div>
           </section>
 
-          <!-- Steg 5: Dagar utan traktamente (endast input) -->
+          <!-- Steg 5: Dagar utan traktamente -->
           <section data-step-index="5" aria-labelledby="ak-step5-title" hidden>
             <h2 class="ak-step-title" id="ak-step5-title">Ungefär hur många hela dagar arbetade du på annan ort utan skattefritt traktamente?</h2>
             <p class="ak-step-sub">
@@ -324,7 +324,7 @@
             </div>
           </section>
 
-          <!-- Steg 6: Hemresor – ja/nej (val) -->
+          <!-- Steg 6: Hemresor – ja/nej -->
           <section data-step-index="6" aria-labelledby="ak-step6-title" hidden>
             <h2 class="ak-step-title" id="ak-step6-title">Har du själv betalat hemresor under tiden du arbetat på annan ort?</h2>
             <p class="ak-step-sub">
@@ -352,7 +352,7 @@
             </div>
           </section>
 
-          <!-- Steg 7: Hemresor – belopp (endast input, om Ja) -->
+          <!-- Steg 7: Hemresor – belopp -->
           <section data-step-index="7" aria-labelledby="ak-step7-title" hidden>
             <h2 class="ak-step-title" id="ak-step7-title">Ungefär hur mycket har hemresorna kostat totalt under året? (kr)</h2>
             <p class="ak-step-sub">
@@ -378,20 +378,19 @@
             </div>
           </section>
 
-          <!-- Steg 8: Arbetsrum + återkommande avgifter + fler avdrag -->
+          <!-- Steg 8: Arbetsrum (eget kort) -->
           <section data-step-index="8" aria-labelledby="ak-step8-title" hidden>
-            <h2 class="ak-step-title" id="ak-step8-title">Arbetsrum, fackavgift och fler möjliga avdrag</h2>
+            <h2 class="ak-step-title" id="ak-step8-title">Har du haft ett särskilt arbetsrum hemma?</h2>
             <p class="ak-step-sub">
-              Det här steget är valfritt. Fyll bara i det som stämmer in på dig.
+              Här avser vi ett separat rum i bostaden som i huvudsak används för arbete.
             </p>
 
-            <!-- Arbetsrum -->
             <div class="ak-options" role="radiogroup" aria-label="Arbetsrum hemma">
               <button type="button" class="ak-option" data-option="homeoffice_yes">
                 <div class="ak-option-label">
-                  <span class="ak-option-title">Ja, jag har haft ett särskilt arbetsrum hemma</span>
+                  <span class="ak-option-title">Ja, jag har haft ett särskilt arbetsrum</span>
                   <span class="ak-option-meta">
-                    Till exempel ett separat rum i bostaden som i huvudsak används för arbete.
+                    Till exempel ett separat rum som huvudsakligen används för arbete.
                   </span>
                 </div>
               </button>
@@ -405,6 +404,14 @@
                 </div>
               </button>
             </div>
+          </section>
+
+          <!-- Steg 9: Fack, a-kassa och fler avdrag (valfritt) -->
+          <section data-step-index="9" aria-labelledby="ak-step9-title" hidden>
+            <h2 class="ak-step-title" id="ak-step9-title">Fack, a-kassa och fler möjliga avdrag</h2>
+            <p class="ak-step-sub">
+              Det här steget är valfritt. Fyll i det som stämmer in på dig eller klicka <strong>Nästa</strong> för att gå vidare direkt.
+            </p>
 
             <!-- Fackavgift -->
             <div class="ak-input-group">
@@ -444,7 +451,7 @@
               />
             </div>
 
-            <!-- Fler avdrag – alltid synliga nu -->
+            <!-- Fler avdrag – alltid synliga -->
             <h3 class="ak-step-title" style="font-size:1rem;margin-top:1.2rem;">Fler möjliga avdrag (frivilligt)</h3>
             <p class="ak-step-sub" style="margin-bottom:0.75rem;">
               Fyll gärna i om något av detta stämmer in på dig. Lämna tomt om det inte är aktuellt.
@@ -658,7 +665,7 @@
     yearEl.textContent = new Date().getFullYear();
   }
 
-  // Enkla nyhetsbrev-formuläret längst ned (separat, ej kopplat till motorn)
+  // Nyhetsbrev längst ned (separat)
   const bottomEmailForm = document.getElementById("emailForm");
   const bottomEmailInput = document.getElementById("emailInput");
   const bottomEmailFeedback = document.getElementById("emailFeedback");
@@ -683,7 +690,6 @@
     const flowEl = document.querySelector('[data-step="flow"]');
     const resultEl = document.querySelector('[data-step="result"]');
 
-    // PDF.js init
     const pdfjsLib = window["pdfjs-dist/build/pdf"];
     if (pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
       pdfjsLib.GlobalWorkerOptions.workerSrc =
@@ -702,16 +708,11 @@
     const kmInput = document.getElementById("ak-km-input");
     const kmError = document.getElementById("ak-km-error");
 
-    const doubleHousingGroup = document.getElementById("ak-doublehousing-group");
     const doubleHousingInput = document.getElementById("ak-doublehousing-cost");
-
-    const livingCostGroup = document.getElementById("ak-livingcost-group");
     const livingCostInput = document.getElementById("ak-livingcost-days");
-
-    const homeTravelGroup = document.getElementById("ak-hometravel-group");
     const homeTravelInput = document.getElementById("ak-hometravel-cost");
 
-    // Extra inputs i sista steget
+    // extra inputs steg 9
     const unionFeeMonthlyInput = document.getElementById("ak-union-fee-monthly");
     const unemploymentFeeMonthlyInput = document.getElementById("ak-unemployment-fee-monthly");
     const annualInterestPaidInput = document.getElementById("ak-annual-interest-paid");
@@ -719,10 +720,10 @@
     const homeEquipmentCostInput = document.getElementById("ak-homeequipment-cost");
     const businessTravelDaysInput = document.getElementById("ak-businesstravel-days");
 
-    const moreToggle = document.getElementById("ak-more-toggle"); // finns ej längre men lämnas orörd
+    const moreToggle = document.getElementById("ak-more-toggle"); // ev. null
     const moreWrapper = document.getElementById("ak-more-wrapper");
 
-    // Resultat-vy
+    // Result-vy
     const resultTotalEl = document.getElementById("resultsTotalAmount");
     const resultsSubtitleEl = document.getElementById("resultsSubtitle");
     const topDeductionsListEl = document.getElementById("topDeductionsList");
@@ -742,7 +743,6 @@
     const deklarationStatus = document.getElementById("deklaration-status");
     const analyzeDeklarationBtn = document.getElementById("analyze-deklaration-btn");
 
-    // Välj hur man deklarerar
     const methodUploadBtn = document.getElementById("ak-method-upload");
     const methodQuestionsBtn = document.getElementById("ak-method-questions");
     const uploadPanel = document.getElementById("ak-upload-panel");
@@ -762,7 +762,6 @@
 
       worksAway: null,
       doubleHousingCost: null,
-
       livingCostDays: null,
 
       homeTravelPaid: null,
@@ -770,7 +769,6 @@
 
       homeOffice: null,
 
-      // Rådata
       unionFeeMonthly: 0,
       unemploymentFeeMonthly: 0,
       annualInterestPaid: 0,
@@ -778,7 +776,6 @@
       homeEquipmentCost: 0,
       businessTravelDays: 0,
 
-      // Data från deklarations-PDF
       deklarationAnalyzed: false,
       deklarationRawText: "",
       deklarationParsed: {
@@ -790,7 +787,6 @@
         hasWorkRoomDeduction: false
       },
 
-      // Beräknade avdrag
       unionFeeDeduction: 0,
       unemploymentFeeDeduction: 0,
       interestDeduction: 0,
@@ -801,11 +797,9 @@
       totalEstimate: 0,
       deductionsCount: 0,
 
-      // Skattebesparing
       taxSaving: 0,
       marginalRate: 0,
 
-      // Senaste result-objekt (för modallen)
       lastResults: []
     };
 
@@ -816,7 +810,6 @@
       if (resultEl) resultEl.hidden = view !== "result";
 
       if (stickyBar) {
-        // Sticky-baren bara i frågeflöde/resultat
         stickyBar.hidden = view === "intro" || view === "declare";
       }
 
@@ -859,7 +852,6 @@
       progressLabel.textContent = "Steg " + clampedStep + " av " + totalSteps;
     }
 
-    // --- Hjälpare för skatt ---
     function getMarginalTaxRate() {
       let annualSalary = null;
 
@@ -872,7 +864,7 @@
       }
 
       if (!annualSalary) {
-        return 0.30; // fallback om vi inte vet lönen
+        return 0.30;
       }
 
       if (annualSalary < 400000) return 0.28;
@@ -906,19 +898,17 @@
       return "Besparing: 0 kr";
     }
 
-    // === PDF-hjälp: extrahera text och plocka ut nyckeltal ===
+    // PDF-hjälp
     async function extractTextFromPdf(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = async (e) => {
           try {
             const pdfData = new Uint8Array(e.target.result);
-
             const loadingTask = pdfjsLib.getDocument({ data: pdfData });
             const pdf = await loadingTask.promise;
 
             let allText = "";
-
             for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
               const page = await pdf.getPage(pageNum);
               const textContent = await page.getTextContent();
@@ -927,7 +917,6 @@
                 .join(" ");
               allText += " " + pageText;
             }
-
             resolve(allText);
           } catch (err) {
             reject(err);
@@ -961,7 +950,6 @@
         text,
         /7\.1\s*Schablonintäkter[^\d]*([\d ]{2,12})/
       );
-
       const capitalSurplus = matchAmount(
         text,
         /Överskott av kapital[^\d]*([\d ]{2,12})/
@@ -1024,16 +1012,15 @@
           nextBtn.disabled = false;
         }
       } else if (step === 5) {
-        // Dagar utan traktamente är frivilligt – man får gå vidare utan värde
-        nextBtn.disabled = false;
+        nextBtn.disabled = false; // frivilligt
       } else if (step === 6) {
         nextBtn.disabled = !state.homeTravelPaid;
       } else if (step === 7) {
-        // Endast när man svarat Ja på hemresor hamnar man här
         nextBtn.disabled = !(state.homeTravelCost && state.homeTravelCost > 0);
       } else if (step === 8) {
-        // Enda obligatoriska här är arbetsrums-valet
-        nextBtn.disabled = !state.homeOffice;
+        nextBtn.disabled = !state.homeOffice; // kräver val Ja/Nej
+      } else if (step === 9) {
+        nextBtn.disabled = false; // helt frivilligt
       } else {
         nextBtn.disabled = false;
       }
@@ -1044,7 +1031,6 @@
     function goToNextStep() {
       if (!steps.length) return;
 
-      // Om vi står på sista "fråge-steget" -> gå direkt till resultat
       if (state.currentStep >= totalSteps) {
         calculateAndShowResult();
         setView("result");
@@ -1080,6 +1066,8 @@
       } else if (state.currentStep === 7) {
         state.currentStep = 8;
       } else if (state.currentStep === 8) {
+        state.currentStep = 9;
+      } else if (state.currentStep === 9) {
         calculateAndShowResult();
         setView("result");
         return;
@@ -1110,33 +1098,19 @@
       if (state.currentStep === 2) {
         state.currentStep = 1;
       } else if (state.currentStep === 3) {
-        if (state.travelType === "car") {
-          state.currentStep = 2;
-        } else {
-          state.currentStep = 1;
-        }
+        state.currentStep = state.travelType === "car" ? 2 : 1;
       } else if (state.currentStep === 4) {
         state.currentStep = 3;
       } else if (state.currentStep === 5) {
-        if (state.worksAway === "yes_cost") {
-          state.currentStep = 4;
-        } else {
-          state.currentStep = 3;
-        }
+        state.currentStep = state.worksAway === "yes_cost" ? 4 : 3;
       } else if (state.currentStep === 6) {
-        if (state.worksAway === "no" || !state.worksAway) {
-          state.currentStep = 3;
-        } else {
-          state.currentStep = 5;
-        }
+        state.currentStep = state.worksAway === "no" || !state.worksAway ? 3 : 5;
       } else if (state.currentStep === 7) {
         state.currentStep = 6;
       } else if (state.currentStep === 8) {
-        if (state.homeTravelPaid === "yes") {
-          state.currentStep = 7;
-        } else {
-          state.currentStep = 6;
-        }
+        state.currentStep = state.homeTravelPaid === "yes" ? 7 : 6;
+      } else if (state.currentStep === 9) {
+        state.currentStep = 8;
       } else {
         state.currentStep = Math.max(state.currentStep - 1, 1);
       }
@@ -1193,7 +1167,6 @@
       let total = 0;
       const items = [];
 
-      // Reseavdrag bil
       if (state.travelType === "car" && state.travelKm && state.travelKm > 0) {
         const brutto = state.travelKm * 25;
         const net = Math.max(0, brutto - 11000);
@@ -1206,7 +1179,6 @@
         }
       }
 
-      // Reseavdrag kollektiv
       if (state.travelType === "public") {
         const approx = 4000;
         total += approx;
@@ -1216,7 +1188,6 @@
         });
       }
 
-      // Dubbel bosättning
       if (
         state.worksAway === "yes_cost" &&
         state.doubleHousingCost &&
@@ -1230,7 +1201,6 @@
         });
       }
 
-      // Ökade levnadskostnader
       if (state.livingCostDays && state.livingCostDays > 0) {
         const days = Math.min(state.livingCostDays, 365);
         const approx = days * 200;
@@ -1241,7 +1211,6 @@
         });
       }
 
-      // Hemresor
       if (
         state.homeTravelPaid === "yes" &&
         state.homeTravelCost &&
@@ -1255,7 +1224,6 @@
         });
       }
 
-      // Arbetsrum
       if (state.homeOffice === "yes") {
         const approx = 2000;
         total += approx;
@@ -1265,7 +1233,6 @@
         });
       }
 
-      // Fackavgift
       const unionMonthly = Number(state.unionFeeMonthly) || 0;
       let unionYearly = 0;
       if (unionMonthly > 0) {
@@ -1278,7 +1245,6 @@
       }
       state.unionFeeDeduction = unionYearly;
 
-      // A-kassa
       const unemploymentMonthly = Number(state.unemploymentFeeMonthly) || 0;
       let unemploymentYearly = 0;
       if (unemploymentMonthly > 0) {
@@ -1291,7 +1257,6 @@
       }
       state.unemploymentFeeDeduction = unemploymentYearly;
 
-      // Ränta
       const interest = Number(state.annualInterestPaid) || 0;
       let interestDeduction = 0;
       if (interest > 0) {
@@ -1306,7 +1271,6 @@
       }
       state.interestDeduction = interestDeduction;
 
-      // Verktyg
       const toolsCost = Number(state.workToolsCost) || 0;
       let toolsDeduction = 0;
       if (toolsCost > 0) {
@@ -1319,7 +1283,6 @@
       }
       state.workToolsDeduction = toolsDeduction;
 
-      // Hemutrustning
       const homeEquipCost = Number(state.homeEquipmentCost) || 0;
       let homeEquipDeduction = 0;
       if (homeEquipCost > 0) {
@@ -1332,7 +1295,6 @@
       }
       state.homeEquipmentDeduction = homeEquipDeduction;
 
-      // Tjänsteresor utan traktamente
       const businessDays = Number(state.businessTravelDays) || 0;
       let perDiem = 0;
       if (businessDays > 0) {
@@ -1428,7 +1390,6 @@
           break;
 
         case "Traktamente vid tjänsteresor (preliminellt)":
-        case "Traktamente vid tjänsteresor (preliminärt)":
           meta.description =
             "Du har haft tjänsteresor utan traktamente som kan ge rätt till avdrag.";
           meta.difficulty = "medium";
@@ -1455,7 +1416,6 @@
           return "Ruta 2.4 – Övriga utgifter (t.ex. arbetsrum)";
 
         case "Traktamente vid tjänsteresor (preliminellt)":
-        case "Traktamente vid tjänsteresor (preliminärt)":
           return "Ruta 2.2 – Tjänsteresor";
 
         default:
@@ -1580,12 +1540,8 @@
       const taxStr = taxSaving > 0 ? formatCurrency(taxSaving) : null;
 
       const hasResults = count > 0;
-      if (showHowButton) {
-        showHowButton.disabled = !hasResults;
-      }
-      if (scrollToHowButton) {
-        scrollToHowButton.disabled = !hasResults;
-      }
+      if (showHowButton) showHowButton.disabled = !hasResults;
+      if (scrollToHowButton) scrollToHowButton.disabled = !hasResults;
 
       if (resultTotalEl) {
         if (taxStr) {
@@ -1724,9 +1680,7 @@
 
       howToBody.innerHTML = generateHowToContent(top);
 
-      if (howToBackdrop) {
-        howToBackdrop.hidden = false;
-      }
+      if (howToBackdrop) howToBackdrop.hidden = false;
       howToModal.hidden = false;
       howToModal.classList.add("active");
       document.body.style.overflow = "hidden";
@@ -1738,9 +1692,7 @@
       howToModal.classList.remove("active");
       howToModal.hidden = true;
 
-      if (howToBackdrop) {
-        howToBackdrop.hidden = true;
-      }
+      if (howToBackdrop) howToBackdrop.hidden = true;
       document.body.style.overflow = "";
     }
 
@@ -1920,9 +1872,7 @@
     if (headerStartBtn) {
       headerStartBtn.addEventListener("click", function () {
         const shell = document.querySelector(".ak-shell");
-        if (shell) {
-          shell.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
+        if (shell) shell.scrollIntoView({ behavior: "smooth", block: "start" });
         setView("declare");
       });
     }
@@ -1963,23 +1913,16 @@
     // Välj hur du deklarerar
     if (methodUploadBtn && deklarationFileInput) {
       methodUploadBtn.addEventListener("click", function () {
-        if (uploadPanel) {
-          uploadPanel.hidden = false;
-        }
+        if (uploadPanel) uploadPanel.hidden = false;
         methodUploadBtn.classList.add("ak-option-selected");
-        if (methodQuestionsBtn) {
-          methodQuestionsBtn.classList.remove("ak-option-selected");
-        }
-
+        if (methodQuestionsBtn) methodQuestionsBtn.classList.remove("ak-option-selected");
         setTimeout(() => deklarationFileInput.click(), 10);
       });
     }
 
     if (methodQuestionsBtn) {
       methodQuestionsBtn.addEventListener("click", function () {
-        if (methodUploadBtn) {
-          methodUploadBtn.classList.remove("ak-option-selected");
-        }
+        if (methodUploadBtn) methodUploadBtn.classList.remove("ak-option-selected");
         methodQuestionsBtn.classList.add("ak-option-selected");
         setView("flow");
         updateButtons();
@@ -1994,7 +1937,7 @@
       });
     }
 
-    // Auto-next och state-hantering i frågeflödet
+    // Auto-next & state i flödet
     if (flowEl) {
       flowEl.addEventListener("click", function (event) {
         const optionBtn = event.target.closest(".ak-option");
@@ -2015,13 +1958,9 @@
           else if (optionValue === "travel_public") state.travelType = "public";
           else state.travelType = "none";
         } else if (stepIndex === 3) {
-          if (optionValue === "away_yes_cost") {
-            state.worksAway = "yes_cost";
-          } else if (optionValue === "away_yes_employer") {
-            state.worksAway = "yes_employer";
-          } else {
-            state.worksAway = "no";
-          }
+          if (optionValue === "away_yes_cost") state.worksAway = "yes_cost";
+          else if (optionValue === "away_yes_employer") state.worksAway = "yes_employer";
+          else state.worksAway = "no";
         } else if (stepIndex === 6) {
           if (optionValue === "home_travel_yes") {
             state.homeTravelPaid = "yes";
@@ -2036,14 +1975,8 @@
 
         updateButtons();
 
-        // Auto-next på rena val-steg
         let shouldAutoAdvance = false;
-
-        if (stepIndex === 1) {
-          shouldAutoAdvance = true;
-        } else if (stepIndex === 3) {
-          shouldAutoAdvance = true;
-        } else if (stepIndex === 6) {
+        if (stepIndex === 1 || stepIndex === 3 || stepIndex === 6) {
           shouldAutoAdvance = true;
         }
 
@@ -2145,7 +2078,6 @@
       });
     }
 
-    // (Toggle för fler avdrag används inte längre, men lämnas ofarligt)
     if (moreToggle && moreWrapper) {
       moreToggle.addEventListener("click", function () {
         const hidden = moreWrapper.hidden;
