@@ -1112,3 +1112,36 @@ input[type="email"]:focus {
 #deklaration-file {
   display: none;
 }
+
+/* CTA efter deklarationsanalys */
+.ak-next-cta {
+  display: block;
+  width: 100%;
+  max-width: 340px;
+  margin: 1.8rem auto 0;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 0.9rem 1.4rem;
+  border-radius: var(--radius-full);
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(0, 80, 120, 0.35);
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+}
+
+.ak-next-cta:hover:not(:disabled),
+.ak-next-cta:focus-visible:not(:disabled) {
+  background: var(--color-primary-hover);
+  box-shadow: 0 16px 34px rgba(0, 80, 120, 0.45);
+  transform: translateY(-2px);
+}
+
+.ak-next-cta:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
