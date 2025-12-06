@@ -725,6 +725,22 @@
     const methodQuestionsBtn = document.getElementById("ak-method-questions");
     const uploadPanel = document.getElementById("ak-upload-panel");
     const goToQuestionsAfterUploadBtn = document.getElementById("ak-go-to-questions-after-upload");
+    // När man klickar på "Ladda upp din deklaration" → öppna filväljaren direkt
+if (methodUploadBtn && deklarationFileInput && uploadPanel) {
+  methodUploadBtn.addEventListener("click", function () {
+    // Visa upload-panelen och markera valet
+    uploadPanel.hidden = false;
+    methodUploadBtn.classList.add("ak-option-selected");
+
+    if (methodQuestionsBtn) {
+      methodQuestionsBtn.classList.remove("ak-option-selected");
+    }
+
+    // Vänta en tick så DOM hinner uppdateras
+    setTimeout(() => deklarationFileInput.click(), 10);
+  });
+}
+
 
     // Modal-element
     const howToModal = document.getElementById("howToModal");
