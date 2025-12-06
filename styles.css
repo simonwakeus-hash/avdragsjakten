@@ -79,6 +79,21 @@ a:hover {
 .page-main {
   padding-bottom: 5.5rem; /* plats för sticky-bar på mobil */
 }
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Viktigt: minst 16px font-size på inputs i iOS för att slippa auto-zoom vid fokus */
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
+/* Om du har en specifik klass för dina inputs */
+.ak-input {
+  font-size: 16px;
+}
 
 /* Knappar */
 
