@@ -2140,70 +2140,21 @@ if (methodUploadBtn && uploadPanel) {
 
     // Deklarations-analys
     if (analyzeDeklarationBtn && deklarationFileInput && deklarationStatus) {
-      analyzeDeklarationBtn.addEventListener("click", async function () {
+      // Man kan fortfarande klicka på knappen om man vill köra om
+      analyzeDeklarationBtn.addEventListener("click", function () {
         const file = deklarationFileInput.files[0];
-        if (!file) {
-          deklarationStatus.textContent = "Välj en PDF från Skatteverket först.";
-          deklarationStatus.style.color = "#b91c1c";
-          return;
-        }
+        runDeklarationAnalysis(file);
+      });
 
-        deklarationStatus.textContent = "Läser in din deklaration...";
-        deklarationStatus.style.color = "#555";
-
-        try {
-          const rawText = await extractTextFromPdf(file);
-          const parsed = parseDeklarationText(rawText);
-
-          state.deklarationAnalyzed = true;
-          state.deklarationRawText = rawText;
-          state.deklarationParsed = parsed;
-
-          const summaryParts = [];
-
-          if (parsed.capitalSurplus != null) {
-            summaryParts.push(
-              "överskott av kapital ca " + formatCurrency(parsed.capitalSurplus)
-            );
-          }
-          if (parsed.iskSchablon != null) {
-            summaryParts.push(
-              "schablonintäkt ISK ca " + formatCurrency(parsed.iskSchablon)
-            );
-          }
-
-          const flags = [];
-          if (parsed.hasTravelDeduction) {
-            flags.push("resor till och från arbetet");
-          }
-          if (parsed.hasWorkRoomDeduction) {
-            flags.push("övriga utgifter (t.ex. arbetsrum)");
-          }
-          if (parsed.hasDoubleHousingDeduction) {
-            flags.push("tillfälligt arbete / dubbel bosättning");
-          }
-
-          let summaryText = "Deklarationen är analyserad.";
-          if (summaryParts.length > 0) {
-            summaryText += " Vi hittade " + summaryParts.join(", ") + ".";
-          }
-          if (flags.length > 0) {
-            summaryText +=
-              " Vi ser att du redan har avdrag för " +
-              flags.join(" och ") +
-              " i din deklaration.";
-          }
-
-          deklarationStatus.textContent = summaryText;
-          deklarationStatus.style.color = "#166534";
-        } catch (err) {
-          console.error(err);
-          deklarationStatus.textContent =
-            "Kunde inte läsa PDF:en just nu. Kontrollera att det är Inkomstdeklaration 1 från Skatteverket.";
-          deklarationStatus.style.color = "#b91c1c";
+      // Auto-start direkt när fil valts
+      deklarationFileInput.addEventListener("change", function () {
+        const file = deklarationFileInput.files[0];
+        if (file) {
+          runDeklarationAnalysis(file);
         }
       });
     }
+
 
     // Init
     setView("intro");
