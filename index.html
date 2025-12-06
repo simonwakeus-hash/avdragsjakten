@@ -126,40 +126,41 @@
             </button>
           </div>
 
-          <!-- Panel som visas när man väljer "Ladda upp" -->
-          <div class="ak-upload-panel" id="ak-upload-panel" hidden>
-            <div class="ak-input-group">
-              <label for="deklaration-file" class="ak-input-label">
-                Ladda upp din deklaration (PDF från Skatteverket)
-              </label>
-              <div class="ak-input-help">
-                Vi läser bara filen lokalt i din webbläsare och sparar inget.
-              </div>
-              <input
-                type="file"
-                id="deklaration-file"
-                accept=".pdf"
-              />
-            </div>
+<div class="ak-upload-panel" id="ak-upload-panel" hidden>
+  <div class="ak-input-group">
+    <label for="deklaration-file" class="ak-input-label">
+      Ladda upp din deklaration (PDF från Skatteverket)
+    </label>
+    <div class="ak-input-help">
+      Vi läser bara filen lokalt i din webbläsare och sparar inget.
+    </div>
+    <input
+      type="file"
+      id="deklaration-file"
+      accept=".pdf"
+    />
+  </div>
 
-            <button
-              type="button"
-              class="ak-btn ak-btn-primary"
-              id="analyze-deklaration-btn"
-            >
-              Analysera deklarationen
-            </button>
+  <button
+    type="button"
+    class="ak-btn ak-btn-primary"
+    id="analyze-deklaration-btn"
+  >
+    Analysera deklarationen
+  </button>
 
-            <p class="ak-input-help" id="deklaration-status"></p>
+  <!-- Här ritar vi hela status-kortet efter analys -->
+  <div class="ak-deklaration-status" id="deklaration-status"></div>
 
-            <button
-              type="button"
-              class="ak-btn ak-btn-ghost"
-              id="ak-go-to-questions-after-upload"
-            >
-              Fortsätt till frågorna
-            </button>
-          </div>
+  <button
+    type="button"
+    class="ak-btn ak-btn-ghost"
+    id="ak-go-to-questions-after-upload"
+  >
+    Fortsätt till frågorna
+  </button>
+</div>
+
 
           <p class="ak-step-indicator">1 av 3</p>
         </div>
