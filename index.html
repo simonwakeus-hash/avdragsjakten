@@ -1976,62 +1976,95 @@
       });
     }
 
-    if (flowEl) {
-      flowEl.addEventListener("click", function (event) {
-        const optionBtn = event.target.closest(".ak-option");
-        if (!optionBtn) return;
+if (flowEl) {
+  flowEl.addEventListener("click", function (event) {
+    const optionBtn = event.target.closest(".ak-option");
+    if (!optionBtn) return;
 
-        const section = optionBtn.closest("[data-step-index]");
-        if (!section) return;
+    const section = optionBtn.closest("[data-step-index]");
+    if (!section) return;
 
-        const stepIndex = Number(section.dataset.stepIndex);
-        const optionValue = optionBtn.dataset.option;
+    const stepIndex = Number(section.dataset.stepIndex);
+    const optionValue = optionBtn.dataset.option;
 
-        section.querySelectorAll(".ak-option").forEach((btn) => {
-          btn.classList.toggle("ak-option-selected", btn === optionBtn);
-        });
+    // Markera vald knapp
+    section.querySelectorAll(".ak-option").forEach((btn) => {
+      btn.classList.toggle("ak-option-selected", btn === optionBtn);
+    });
 
-        if (stepIndex === 1) {
-          if (optionValue === "travel_car") state.travelType = "car";
-          else if (optionValue === "travel_public") state.travelType = "public";
-          else state.travelType = "none";
-        } else if (stepIndex === 3) {
-          if (optionValue === "away_yes_cost") {
-            state.worksAway = "yes_cost";
-            if (doubleHousingGroup) doubleHousingGroup.hidden = false;
-            if (livingCostGroup) livingCostGroup.hidden = false;
-          } else if (optionValue === "away_yes_employer") {
-            state.worksAway = "yes_employer";
-            if (doubleHousingGroup) doubleHousingGroup.hidden = true;
-            state.doubleHousingCost = null;
-            if (doubleHousingInput) doubleHousingInput.value = "";
-            if (livingCostGroup) livingCostGroup.hidden = false;
-          } else {
-            state.worksAway = "no";
-            if (doubleHousingGroup) doubleHousingGroup.hidden = true;
-            state.doubleHousingCost = null;
-            if (doubleHousingInput) doubleHousingInput.value = "";
-            if (livingCostGroup) livingCostGroup.hidden = true;
-            state.livingCostDays = null;
-            if (livingCostInput) livingCostInput.value = "";
-          }
-        } else if (stepIndex === 4) {
-          if (optionValue === "home_travel_yes") {
-            state.homeTravelPaid = "yes";
-            if (homeTravelGroup) homeTravelGroup.hidden = false;
-          } else {
-            state.homeTravelPaid = "no";
-            if (homeTravelGroup) homeTravelGroup.hidden = true;
-            state.homeTravelCost = null;
-            if (homeTravelInput) homeTravelInput.value = "";
-          }
-        } else if (stepIndex === 5) {
-          state.homeOffice = optionValue === "homeoffice_yes" ? "yes" : "no";
-        }
-
-        updateButtons();
-      });
+    // Spara state beroende på steg
+    if (stepIndex === 1) {
+      if (optionValue === "travel_car") state.travelType = "car";
+      else if (optionValue === "travel_public") state.travelType = "public";
+      else state.travelType = "none";
+    } else if (stepIndex === 3) {
+      if (optionValue === "away_yes_cost") {
+        state.worksAway = "yes_cost";
+        if (doubleHousingGroup) doubleHousingGroup.hidden = false;
+        if (livingCostGroup) livingCostGroup.hidden = false;
+      } else if (optionValue === "away_yes_employer") {
+        state.worksAway = "yes_employer";
+        if (doubleHousingGroup) doubleHousingGroup.hidden = true;
+        state.doubleHousingCost = null;
+        if (doubleHousingInput) doubleHousingInput.value = "";
+        if (livingCostGroup) livingCostGroup.hidden = false;
+      } else {
+        state.worksAway = "no";
+        if (doubleHousingGroup) doubleHousingGroup.hidden = true;
+        state.doubleHousingCost = null;
+        if (doubleHousingInput) doubleHousingInput.value = "";
+        if (livingCostGroup) livingCostGroup.hidden = true;
+        state.livingCostDays = null;
+        if (livingCostInput) livingCostInput.value = "";
+      }
+    } else if (stepIndex === 4) {
+      if (optionValue === "home_travel_yes") {
+        state.homeTravelPaid = "yes";
+        if (homeTravelGroup) homeTravelGroup.hidden = false;
+      } else {
+        state.homeTravelPaid = "no";
+        if (homeTravelGroup) homeTravelGroup.hidden = true;
+        state.homeTravelCost = null;
+        if (homeTravelInput) homeTravelInput.value = "";
+      }
+    } else if (stepIndex === 5) {
+      state.homeOffice = optionValue === "homeoffice_yes" ? "yes" : "no";
     }
+
+    // Uppdatera knappar + sticky-text
+    updateButtons();
+
+    // --- AUTO-NEXT LOGIK ---
+    // Vi auto-servar vidare på rena val-frågor
+    // (dvs där vi inte först måste fylla i ett belopp/dagar)
+    let shouldAutoAdvance = false;
+
+    if (stepIndex === 1) {
+      // Alltid auto-next när man valt rese-typ
+      shouldAutoAdvance = true;
+    } else if (stepIndex === 3) {
+      // Om man INTE behöver fylla i extra boendekostnad
+      if (state.worksAway === "no" || state.worksAway === "yes_employer") {
+        shouldAutoAdvance = true;
+      }
+    } else if (stepIndex === 4) {
+      // Om man svarar "Nej" på hemresor (ingen extra input)
+      if (state.homeTravelPaid === "no") {
+        shouldAutoAdvance = true;
+      }
+    }
+    // Steg 5 auto-nextar vi INTE, eftersom man ofta vill fylla i
+    // fackavgift, a-kassa m.m. på samma skärm.
+
+    if (shouldAutoAdvance) {
+      setTimeout(() => {
+        goToNextStep();
+        updateButtons();
+      }, 160); // liten delay så man hinner se klick-feedback
+    }
+  });
+}
+
 
     if (kmInput) {
       kmInput.addEventListener("input", function () {
