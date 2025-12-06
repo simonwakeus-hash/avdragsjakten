@@ -1837,17 +1837,21 @@
 
         // --- DÖLJ ALLT OVANFÖR & LÄMNA BARA KORT + CTA ---
 
-        // Dölj rubrik, introtext, metodval och steg-indikator i "Hur deklarerar du?"
+        // Dölj rubrik, introtext och steg-indikator i "Hur deklarerar du?"
         if (declareEl) {
           const stepTitle = declareEl.querySelector(".ak-step-title");
           const stepSub = declareEl.querySelector(".ak-step-sub");
-          const optionsEl = declareEl.querySelector(".ak-options");
           const stepIndicator = declareEl.querySelector(".ak-step-indicator");
+          const methodRow = declareEl.querySelector(".ak-options"); // Ladda upp / Svara på frågor
 
           if (stepTitle) stepTitle.hidden = true;
           if (stepSub) stepSub.hidden = true;
-          if (optionsEl) optionsEl.hidden = true;
           if (stepIndicator) stepIndicator.hidden = true;
+
+          // Ta helt bort metodval-raden så toppdelen försvinner
+          if (methodRow) {
+            methodRow.remove();
+          }
         }
 
         // Dölj själva uppladdningsdelen (label + input), plocka bort panel-looken
@@ -1862,6 +1866,7 @@
         // Dölj "Analysera deklarationen"-knappen
         if (analyzeDeklarationBtn) {
           analyzeDeklarationBtn.hidden = true;
+          analyzeDeklarationBtn.style.display = "none";
         }
 
         // Visa CTA "Fortsätt till frågorna"
