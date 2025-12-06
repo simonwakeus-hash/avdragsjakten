@@ -1734,15 +1734,15 @@
     }
 
     // Välj hur du deklarerar
-    if (methodUploadBtn && uploadPanel) {
-      methodUploadBtn.addEventListener("click", function () {
-        uploadPanel.hidden = false;
-        methodUploadBtn.classList.add("ak-option-selected");
-        if (methodQuestionsBtn) {
-          methodQuestionsBtn.classList.remove("ak-option-selected");
-        }
-      });
+if (methodUploadBtn && uploadPanel) {
+  methodUploadBtn.addEventListener("click", function () {
+    uploadPanel.hidden = false;
+    methodUploadBtn.classList.add("ak-option-selected");
+    if (methodQuestionsBtn) {
+      methodQuestionsBtn.classList.remove("ak-option-selected");
     }
+  });
+}
 
     if (methodQuestionsBtn) {
       methodQuestionsBtn.addEventListener("click", function () {
