@@ -126,42 +126,41 @@
             </button>
           </div>
 
-<div class="ak-upload-panel" id="ak-upload-panel" hidden>
-  <div class="ak-input-group">
-    <label for="deklaration-file" class="ak-input-label">
-      Ladda upp din deklaration (PDF från Skatteverket)
-    </label>
-    <div class="ak-input-help">
-      Vi läser bara filen lokalt i din webbläsare och sparar inget.
-    </div>
-    <input
-      type="file"
-      id="deklaration-file"
-      accept=".pdf"
-    />
-  </div>
+          <div class="ak-upload-panel" id="ak-upload-panel" hidden>
+            <div class="ak-input-group">
+              <label for="deklaration-file" class="ak-input-label">
+                Ladda upp din deklaration (PDF från Skatteverket)
+              </label>
+              <div class="ak-input-help">
+                Vi läser bara filen lokalt i din webbläsare och sparar inget.
+              </div>
+              <input
+                type="file"
+                id="deklaration-file"
+                accept=".pdf"
+              />
+            </div>
 
-  <button
-    type="button"
-    class="ak-btn ak-btn-primary"
-    id="analyze-deklaration-btn"
-  >
-    Analysera deklarationen
-  </button>
+            <button
+              type="button"
+              class="ak-btn ak-btn-primary"
+              id="analyze-deklaration-btn"
+            >
+              Analysera deklarationen
+            </button>
 
-  <!-- Här ritar vi hela status-kortet efter analys -->
-  <div class="ak-deklaration-status" id="deklaration-status"></div>
-<button
-  type="button"
-  class="ak-next-cta"
-  id="ak-go-to-questions-after-upload"
-  hidden
->
-  Fortsätt till frågorna
-</button>
+            <!-- Här ritar vi hela status-kortet efter analys -->
+            <div class="ak-deklaration-status" id="deklaration-status"></div>
 
-</div>
-
+            <button
+              type="button"
+              class="ak-next-cta"
+              id="ak-go-to-questions-after-upload"
+              hidden
+            >
+              Fortsätt till frågorna
+            </button>
+          </div>
 
           <p class="ak-step-indicator">1 av 3</p>
         </div>
@@ -630,8 +629,7 @@
   </div>
 
   <!-- JS -->
-  <!-- JS -->
- <script>
+  <script>
   // År i footern
   const yearEl = document.getElementById("year");
   if (yearEl) {
@@ -786,7 +784,7 @@
       taxSaving: 0,
       marginalRate: 0,
 
-      // Senaste result-objekt (för modalen)
+      // Senaste result-objekt (för modallen)
       lastResults: []
     };
 
@@ -1797,6 +1795,7 @@
                Vi ser inga tydliga redan registrerade avdrag i din deklaration.
              </p>`;
 
+        // Ta bort loader-stil och sätt kortet
         deklarationStatus.classList.remove("ak-status-loading");
         deklarationStatus.style.color = "#111827";
 
@@ -1835,90 +1834,47 @@
             </section>
           </div>
         `;
-        // Premium animation – fade bort steg 1 UI
-if (declareIntro) {
-    declareIntro.classList.add("ak-fade-out");
-    setTimeout(() => declareIntro.hidden = true, 350);
-}
 
-if (methodUploadBtn) {
-    methodUploadBtn.classList.add("ak-fade-out");
-    setTimeout(() => methodUploadBtn.hidden = true, 350);
-}
+        // --- DÖLJ ALLT OVANFÖR & LÄMNA BARA KORT + CTA ---
 
-if (methodQuestionsBtn) {
-    methodQuestionsBtn.classList.add("ak-fade-out");
-    setTimeout(() => methodQuestionsBtn.hidden = true, 350);
-}
-
-if (uploadPanel) {
-    uploadPanel.classList.add("ak-fade-out");
-    setTimeout(() => uploadPanel.hidden = true, 350);
-}
-
-// Fade-in analyskortet
-deklarationStatus.classList.add("ak-fade-in");
-
-// CTA – visa och animera upp
-if (goToQuestionsAfterUploadBtn) {
-    goToQuestionsAfterUploadBtn.hidden = false;
-    goToQuestionsAfterUploadBtn.classList.add("ak-cta-slide-in");
-}
-
-// Scrolla ned snyggt
-setTimeout(() => {
-    deklarationStatus.scrollIntoView({ behavior: "smooth", block: "start" });
-}, 200);
-
-// --- Efter att kortet renderats: dölj allt ovanför enligt skissen ---
-
-// Dölj sektionen "Hur deklarerar du?"
-const declareIntro = document.querySelector('[data-step="declare"]');
-if (declareIntro) {
-    declareIntro.hidden = true;
-}
-
-// Dölj metod-knapparna (ladda upp / svara på frågor)
-if (methodUploadBtn) methodUploadBtn.hidden = true;
-if (methodQuestionsBtn) methodQuestionsBtn.hidden = true;
-
-// Dölj hela uppladdningspanelen
-if (uploadPanel) uploadPanel.hidden = true;
-
-// Dölj "Analysera deklarationen"-knappen
-if (analyzeDeklarationBtn) analyzeDeklarationBtn.hidden = true;
-
-// Visa CTA för att gå vidare
-if (goToQuestionsAfterUploadBtn) {
-    goToQuestionsAfterUploadBtn.hidden = false;
-    goToQuestionsAfterUploadBtn.style.opacity = "0";
-    goToQuestionsAfterUploadBtn.style.transition = "opacity .35s ease";
-    setTimeout(() => {
-        goToQuestionsAfterUploadBtn.style.opacity = "1";
-    }, 10);
-}
-
-// Scrolla ned till resultatet
-deklarationStatus.scrollIntoView({ behavior: "smooth", block: "start" });
-
-        // Dölj hela "hur deklarerar du"-blocket (upload + val) enligt skissen
+        // Dölj rubrik, introtext, metodval och steg-indikator i "Hur deklarerar du?"
         if (declareEl) {
-          declareEl.classList.add("ak-declare-analyzed");
+          const stepTitle = declareEl.querySelector(".ak-step-title");
+          const stepSub = declareEl.querySelector(".ak-step-sub");
+          const optionsEl = declareEl.querySelector(".ak-options");
+          const stepIndicator = declareEl.querySelector(".ak-step-indicator");
+
+          if (stepTitle) stepTitle.hidden = true;
+          if (stepSub) stepSub.hidden = true;
+          if (optionsEl) optionsEl.hidden = true;
+          if (stepIndicator) stepIndicator.hidden = true;
         }
-       
-        // Visa knappen för att gå vidare
+
+        // Dölj själva uppladdningsdelen (label + input), plocka bort panel-looken
+        if (uploadPanel) {
+          const uploadInputGroup = uploadPanel.querySelector(".ak-input-group");
+          if (uploadInputGroup) uploadInputGroup.hidden = true;
+
+          uploadPanel.style.border = "none";
+          uploadPanel.style.background = "transparent";
+        }
+
+        // Dölj "Analysera deklarationen"-knappen
+        if (analyzeDeklarationBtn) {
+          analyzeDeklarationBtn.hidden = true;
+        }
+
+        // Visa CTA "Fortsätt till frågorna"
         if (goToQuestionsAfterUploadBtn) {
           goToQuestionsAfterUploadBtn.hidden = false;
-          goToQuestionsAfterUploadBtn.style.opacity = "0";
-          goToQuestionsAfterUploadBtn.style.transition = "opacity .35s ease";
-          setTimeout(() => {
-            goToQuestionsAfterUploadBtn.style.opacity = "1";
-          }, 10);
+          goToQuestionsAfterUploadBtn.classList.add("ak-cta-slide-in");
         }
 
-        // Scrolla användaren till resultatkortet
-        deklarationStatus.scrollIntoView({ behavior: "smooth", block: "start" });
+        // Snygg fade-in på kortet
+        deklarationStatus.classList.add("ak-fade-in");
 
+        // Scrolla ned till kortet
+        deklarationStatus.scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (err) {
         console.error(err);
         deklarationStatus.classList.remove("ak-status-loading");
@@ -2309,8 +2265,7 @@ deklarationStatus.scrollIntoView({ behavior: "smooth", block: "start" });
     // Init
     setView("intro");
   });
-</script>
-
+  </script>
 
 </body>
 </html>
