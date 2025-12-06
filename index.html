@@ -631,7 +631,7 @@
 
   <!-- JS -->
   <!-- JS -->
-  <script>
+ <script>
   // År i footern
   const yearEl = document.getElementById("year");
   if (yearEl) {
@@ -715,7 +715,7 @@
 
     const stickyBar = document.querySelector(".ak-sticky-bar");
 
-    const steps = Array.from(flowEl.querySelectorAll("[data-step-index]"));
+    const steps = flowEl ? Array.from(flowEl.querySelectorAll("[data-step-index]")) : [];
     const totalSteps = steps.length;
 
     // Deklarations-upload
@@ -791,15 +791,17 @@
     };
 
     function setView(view) {
-      introEl.hidden = view !== "intro";
-      declareEl.hidden = view !== "declare";
-      flowEl.hidden = view !== "flow";
-      resultEl.hidden = view !== "result";
+      if (introEl) introEl.hidden = view !== "intro";
+      if (declareEl) declareEl.hidden = view !== "declare";
+      if (flowEl) flowEl.hidden = view !== "flow";
+      if (resultEl) resultEl.hidden = view !== "result";
 
       if (stickyBar) {
         // Sticky-baren bara i frågeflöde/resultat
         stickyBar.hidden = view === "intro" || view === "declare";
       }
+
+      if (!stickyText || !nextBtn || !backBtn) return;
 
       if (view === "intro") {
         nextBtn.disabled = true;
@@ -823,6 +825,7 @@
     }
 
     function updateStepVisibility() {
+      if (!steps.length) return;
       steps.forEach((stepEl) => {
         const index = Number(stepEl.dataset.stepIndex);
         stepEl.hidden = index !== state.currentStep;
@@ -830,6 +833,7 @@
     }
 
     function updateProgress() {
+      if (!progressBarFill || !progressLabel || !steps.length) return;
       const clampedStep = Math.min(state.currentStep, totalSteps);
       const pct = (clampedStep / totalSteps) * 100;
       progressBarFill.style.width = pct + "%";
@@ -967,15 +971,17 @@
     }
 
     function updateButtons() {
-      if (!resultEl.hidden) {
+      if (!nextBtn || !backBtn || !stickyText) return;
+
+      if (resultEl && !resultEl.hidden) {
         backBtn.disabled = false;
-      } else if (!introEl.hidden && state.currentStep === 1) {
+      } else if (introEl && !introEl.hidden && state.currentStep === 1) {
         backBtn.disabled = true;
       } else {
         backBtn.disabled = false;
       }
 
-      if (!resultEl.hidden) {
+      if (resultEl && !resultEl.hidden) {
         nextBtn.disabled = true;
         stickyText.textContent = decorateStickyText();
         return;
@@ -986,7 +992,7 @@
       if (step === 1) {
         nextBtn.disabled = !state.travelType;
       } else if (step === 2) {
-        const km = parseFloat((kmInput.value || "").replace(",", "."));
+        const km = parseFloat(((kmInput && kmInput.value) || "").replace(",", "."));
         nextBtn.disabled = !(km > 0);
       } else if (step === 3) {
         if (!state.worksAway) {
@@ -1014,6 +1020,8 @@
     }
 
     function goToNextStep() {
+      if (!steps.length) return;
+
       if (state.currentStep >= totalSteps) {
         calculateAndShowResult();
         setView("result");
@@ -1044,7 +1052,13 @@
     }
 
     function goToPreviousStep() {
-      if (!resultEl.hidden) {
+      if (!steps.length) {
+        // fallback – bara tillbaka till declare
+        setView("declare");
+        return;
+      }
+
+      if (resultEl && !resultEl.hidden) {
         state.currentStep = totalSteps;
         setView("flow");
         return;
@@ -1080,11 +1094,13 @@
     }
 
     function clearKmError() {
+      if (!kmError || !kmInput) return;
       kmError.hidden = true;
       kmInput.classList.remove("ak-input-error");
     }
 
     function validateKmInput() {
+      if (!kmInput || !kmError) return true;
       const value = (kmInput.value || "").trim();
       if (!value) {
         kmError.hidden = false;
@@ -1106,6 +1122,7 @@
     }
 
     function parseNumberField(inputEl) {
+      if (!inputEl) return null;
       const raw = (inputEl.value || "").trim();
       if (!raw) return null;
       const num = Number(raw.replace(",", "."));
@@ -1690,6 +1707,170 @@
       document.body.style.overflow = "";
     }
 
+    // --- Deklarations-analys med loader + kort ---
+    async function runDeklarationAnalysis(file) {
+      if (!deklarationStatus) return;
+
+      if (!file) {
+        deklarationStatus.textContent = "Välj en PDF från Skatteverket först.";
+        deklarationStatus.style.color = "#b91c1c";
+        deklarationStatus.classList.remove("ak-status-loading");
+        return;
+      }
+
+      // Loader på status-ytan
+      deklarationStatus.textContent = "Analyserar din deklaration...";
+      deklarationStatus.style.color = "#555";
+      deklarationStatus.classList.add("ak-status-loading");
+
+      if (analyzeDeklarationBtn) {
+        analyzeDeklarationBtn.disabled = true;
+        analyzeDeklarationBtn.textContent = "Analyserar...";
+      }
+
+      try {
+        const rawText = await extractTextFromPdf(file);
+        const parsed = parseDeklarationText(rawText);
+
+        state.deklarationAnalyzed = true;
+        state.deklarationRawText = rawText;
+        state.deklarationParsed = parsed;
+
+        // --- Bygg data för kortet ---
+        const summaryRows = [];
+
+        if (
+          typeof parsed.salary === "number" &&
+          parsed.salary > 0
+        ) {
+          summaryRows.push({
+            label: "Deklarerad lön/inkomst",
+            value: formatCurrency(parsed.salary)
+          });
+        }
+
+        if (parsed.capitalSurplus != null) {
+          summaryRows.push({
+            label: "Överskott av kapital",
+            value: formatCurrency(parsed.capitalSurplus)
+          });
+        }
+
+        if (parsed.iskSchablon != null) {
+          summaryRows.push({
+            label: "Schablonintäkt ISK",
+            value: formatCurrency(parsed.iskSchablon)
+          });
+        }
+
+        const flags = [];
+        if (parsed.hasTravelDeduction) {
+          flags.push("Resor till och från arbetet");
+        }
+        if (parsed.hasWorkRoomDeduction) {
+          flags.push("Övriga utgifter (t.ex. arbetsrum)");
+        }
+        if (parsed.hasDoubleHousingDeduction) {
+          flags.push("Tillfälligt arbete / dubbel bosättning");
+        }
+
+        const rowsHtml = summaryRows.length
+          ? summaryRows
+              .map(
+                (row) => `
+              <div class="ak-deklaration-row">
+                <span class="ak-deklaration-row-label">${row.label}:</span>
+                <span class="ak-deklaration-row-value">${row.value}</span>
+              </div>
+            `
+              )
+              .join("")
+          : `<p class="ak-deklaration-muted">
+               Vi kunde inte läsa ut några belopp automatiskt. Du kan ändå gå vidare till frågorna.
+             </p>`;
+
+        const avdragHtml = flags.length
+          ? `<ul class="ak-deklaration-list">
+               ${flags.map((f) => `<li>${f}</li>`).join("")}
+             </ul>`
+          : `<p class="ak-deklaration-muted">
+               Vi ser inga tydliga redan registrerade avdrag i din deklaration.
+             </p>`;
+
+        deklarationStatus.classList.remove("ak-status-loading");
+        deklarationStatus.style.color = "#111827";
+
+        deklarationStatus.innerHTML = `
+          <div class="ak-deklaration-card">
+            <div class="ak-deklaration-header">
+              <p class="ak-deklaration-step">Steg 1 av 3</p>
+              <p class="ak-deklaration-step-sub">Analys av deklaration</p>
+
+              <div class="ak-deklaration-title-row">
+                <span class="ak-deklaration-icon">✓</span>
+                <h3 class="ak-deklaration-main-title">Deklaration analyserad</h3>
+              </div>
+            </div>
+
+            <hr class="ak-deklaration-divider">
+
+            <section>
+              <h4 class="ak-deklaration-section-title">Sammanfattning av din deklaration</h4>
+              <div class="ak-deklaration-rows">
+                ${rowsHtml}
+              </div>
+            </section>
+
+            <hr class="ak-deklaration-divider">
+
+            <section>
+              <div class="ak-deklaration-avdrag-title-row">
+                <span class="ak-deklaration-icon">✓</span>
+                <h4 class="ak-deklaration-section-title">Redan registrerade avdrag</h4>
+              </div>
+              ${avdragHtml}
+              <p class="ak-deklaration-muted">
+                Dessa uppgifter finns redan med i din deklaration. Vi tar hänsyn till detta i din analys.
+              </p>
+            </section>
+          </div>
+        `;
+
+        // Dölj hela "hur deklarerar du"-blocket (upload + val) enligt skissen
+        if (declareEl) {
+          declareEl.classList.add("ak-declare-analyzed");
+        }
+        if (uploadPanel) {
+          uploadPanel.hidden = true;
+        }
+
+        // Visa knappen för att gå vidare
+        if (goToQuestionsAfterUploadBtn) {
+          goToQuestionsAfterUploadBtn.hidden = false;
+          goToQuestionsAfterUploadBtn.style.opacity = "0";
+          goToQuestionsAfterUploadBtn.style.transition = "opacity .35s ease";
+          setTimeout(() => {
+            goToQuestionsAfterUploadBtn.style.opacity = "1";
+          }, 10);
+        }
+
+        // Scrolla användaren till resultatkortet
+        deklarationStatus.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      } catch (err) {
+        console.error(err);
+        deklarationStatus.classList.remove("ak-status-loading");
+        deklarationStatus.textContent =
+          "Kunde inte läsa PDF:en just nu. Kontrollera att det är Inkomstdeklaration 1 från Skatteverket.";
+        deklarationStatus.style.color = "#b91c1c";
+      } finally {
+        if (analyzeDeklarationBtn) {
+          analyzeDeklarationBtn.disabled = false;
+          analyzeDeklarationBtn.textContent = "Analysera deklarationen";
+        }
+      }
+    }
+
     // --- Event listeners ---
 
     const headerStartBtn = document.getElementById("startBtn");
@@ -1737,13 +1918,16 @@
     }
 
     // Välj hur du deklarerar
-    if (methodUploadBtn && uploadPanel && deklarationFileInput) {
+    if (methodUploadBtn && deklarationFileInput) {
       methodUploadBtn.addEventListener("click", function () {
-        uploadPanel.hidden = false;
+        if (uploadPanel) {
+          uploadPanel.hidden = false;
+        }
         methodUploadBtn.classList.add("ak-option-selected");
         if (methodQuestionsBtn) {
           methodQuestionsBtn.classList.remove("ak-option-selected");
         }
+
         // öppna filhanteraren direkt
         setTimeout(() => deklarationFileInput.click(), 10);
       });
@@ -1762,99 +1946,110 @@
     }
 
     if (goToQuestionsAfterUploadBtn) {
+      goToQuestionsAfterUploadBtn.hidden = true; // start: dold
       goToQuestionsAfterUploadBtn.addEventListener("click", function () {
         setView("flow");
         updateButtons();
       });
     }
 
-    flowEl.addEventListener("click", function (event) {
-      const optionBtn = event.target.closest(".ak-option");
-      if (!optionBtn) return;
+    if (flowEl) {
+      flowEl.addEventListener("click", function (event) {
+        const optionBtn = event.target.closest(".ak-option");
+        if (!optionBtn) return;
 
-      const section = optionBtn.closest("[data-step-index]");
-      if (!section) return;
+        const section = optionBtn.closest("[data-step-index]");
+        if (!section) return;
 
-      const stepIndex = Number(section.dataset.stepIndex);
-      const optionValue = optionBtn.dataset.option;
+        const stepIndex = Number(section.dataset.stepIndex);
+        const optionValue = optionBtn.dataset.option;
 
-      section.querySelectorAll(".ak-option").forEach((btn) => {
-        btn.classList.toggle("ak-option-selected", btn === optionBtn);
+        section.querySelectorAll(".ak-option").forEach((btn) => {
+          btn.classList.toggle("ak-option-selected", btn === optionBtn);
+        });
+
+        if (stepIndex === 1) {
+          if (optionValue === "travel_car") state.travelType = "car";
+          else if (optionValue === "travel_public") state.travelType = "public";
+          else state.travelType = "none";
+        } else if (stepIndex === 3) {
+          if (optionValue === "away_yes_cost") {
+            state.worksAway = "yes_cost";
+            if (doubleHousingGroup) doubleHousingGroup.hidden = false;
+            if (livingCostGroup) livingCostGroup.hidden = false;
+          } else if (optionValue === "away_yes_employer") {
+            state.worksAway = "yes_employer";
+            if (doubleHousingGroup) doubleHousingGroup.hidden = true;
+            state.doubleHousingCost = null;
+            if (doubleHousingInput) doubleHousingInput.value = "";
+            if (livingCostGroup) livingCostGroup.hidden = false;
+          } else {
+            state.worksAway = "no";
+            if (doubleHousingGroup) doubleHousingGroup.hidden = true;
+            state.doubleHousingCost = null;
+            if (doubleHousingInput) doubleHousingInput.value = "";
+            if (livingCostGroup) livingCostGroup.hidden = true;
+            state.livingCostDays = null;
+            if (livingCostInput) livingCostInput.value = "";
+          }
+        } else if (stepIndex === 4) {
+          if (optionValue === "home_travel_yes") {
+            state.homeTravelPaid = "yes";
+            if (homeTravelGroup) homeTravelGroup.hidden = false;
+          } else {
+            state.homeTravelPaid = "no";
+            if (homeTravelGroup) homeTravelGroup.hidden = true;
+            state.homeTravelCost = null;
+            if (homeTravelInput) homeTravelInput.value = "";
+          }
+        } else if (stepIndex === 5) {
+          state.homeOffice = optionValue === "homeoffice_yes" ? "yes" : "no";
+        }
+
+        updateButtons();
       });
+    }
 
-      if (stepIndex === 1) {
-        if (optionValue === "travel_car") state.travelType = "car";
-        else if (optionValue === "travel_public") state.travelType = "public";
-        else state.travelType = "none";
-      } else if (stepIndex === 3) {
-        if (optionValue === "away_yes_cost") {
-          state.worksAway = "yes_cost";
-          doubleHousingGroup.hidden = false;
-          livingCostGroup.hidden = false;
-        } else if (optionValue === "away_yes_employer") {
-          state.worksAway = "yes_employer";
-          doubleHousingGroup.hidden = true;
-          state.doubleHousingCost = null;
-          doubleHousingInput.value = "";
-          livingCostGroup.hidden = false;
+    if (kmInput) {
+      kmInput.addEventListener("input", function () {
+        clearKmError();
+        const value = kmInput.value.trim();
+        if (!value) {
+          state.travelKm = null;
         } else {
-          state.worksAway = "no";
-          doubleHousingGroup.hidden = true;
-          state.doubleHousingCost = null;
-          doubleHousingInput.value = "";
-          livingCostGroup.hidden = true;
-          state.livingCostDays = null;
-          livingCostInput.value = "";
+          const num = Number(value.replace(",", "."));
+          state.travelKm = num > 0 ? num : null;
         }
-      } else if (stepIndex === 4) {
-        if (optionValue === "home_travel_yes") {
-          state.homeTravelPaid = "yes";
-          homeTravelGroup.hidden = false;
+        updateButtons();
+      });
+    }
+
+    if (doubleHousingInput) {
+      doubleHousingInput.addEventListener("input", function () {
+        state.doubleHousingCost = parseNumberField(doubleHousingInput);
+        updateButtons();
+      });
+    }
+
+    if (livingCostInput) {
+      livingCostInput.addEventListener("input", function () {
+        const val = parseNumberField(livingCostInput);
+        if (val && val > 365) {
+          state.livingCostDays = 365;
+          livingCostInput.value = "365";
         } else {
-          state.homeTravelPaid = "no";
-          homeTravelGroup.hidden = true;
-          state.homeTravelCost = null;
-          homeTravelInput.value = "";
+          state.livingCostDays = val;
         }
-      } else if (stepIndex === 5) {
-        state.homeOffice = optionValue === "homeoffice_yes" ? "yes" : "no";
-      }
+        updateButtons();
+      });
+    }
 
-      updateButtons();
-    });
-
-    kmInput.addEventListener("input", function () {
-      clearKmError();
-      const value = kmInput.value.trim();
-      if (!value) {
-        state.travelKm = null;
-      } else {
-        const num = Number(value.replace(",", "."));
-        state.travelKm = num > 0 ? num : null;
-      }
-      updateButtons();
-    });
-
-    doubleHousingInput.addEventListener("input", function () {
-      state.doubleHousingCost = parseNumberField(doubleHousingInput);
-      updateButtons();
-    });
-
-    livingCostInput.addEventListener("input", function () {
-      const val = parseNumberField(livingCostInput);
-      if (val && val > 365) {
-        state.livingCostDays = 365;
-        livingCostInput.value = "365";
-      } else {
-        state.livingCostDays = val;
-      }
-      updateButtons();
-    });
-
-    homeTravelInput.addEventListener("input", function () {
-      state.homeTravelCost = parseNumberField(homeTravelInput);
-      updateButtons();
-    });
+    if (homeTravelInput) {
+      homeTravelInput.addEventListener("input", function () {
+        state.homeTravelCost = parseNumberField(homeTravelInput);
+        updateButtons();
+      });
+    }
 
     if (unionFeeMonthlyInput) {
       unionFeeMonthlyInput.addEventListener("input", function () {
@@ -2034,311 +2229,6 @@
       }
     });
 
-    // --- Deklarations-analys med loader + kort ---
-// --- Deklarations-analys med loader + kort ---
-async function runDeklarationAnalysis(file) {
-  if (!file) {
-    deklarationStatus.textContent = "Välj en PDF från Skatteverket först.";
-    deklarationStatus.style.color = "#b91c1c";
-    deklarationStatus.classList.remove("ak-status-loading");
-    return;
-  }
-
-  // Loader på status-ytan
-  deklarationStatus.textContent = "Analyserar din deklaration...";
-  deklarationStatus.style.color = "#555";
-  deklarationStatus.classList.add("ak-status-loading");
-
-  if (analyzeDeklarationBtn) {
-    analyzeDeklarationBtn.disabled = true;
-    analyzeDeklarationBtn.textContent = "Analyserar...";
-  }
-
-  try {
-    const rawText = await extractTextFromPdf(file);
-    const parsed = parseDeklarationText(rawText);
-
-    state.deklarationAnalyzed = true;
-    state.deklarationRawText = rawText;
-    state.deklarationParsed = parsed;
-
-    // --- Bygg data för kortet ---
-    const summaryRows = [];
-
-    if (typeof parsed.salary === "number" && parsed.salary > 0) {
-      summaryRows.push({
-        label: "Deklarerad lön/inkomst",
-        value: formatCurrency(parsed.salary)
-      });
-    }
-
-    if (parsed.capitalSurplus != null) {
-      summaryRows.push({
-        label: "Överskott av kapital",
-        value: formatCurrency(parsed.capitalSurplus)
-      });
-    }
-
-    if (parsed.iskSchablon != null) {
-      summaryRows.push({
-        label: "Schablonintäkt ISK",
-        value: formatCurrency(parsed.iskSchablon)
-      });
-    }
-
-    const flags = [];
-    if (parsed.hasTravelDeduction) {
-      flags.push("Resor till och från arbetet");
-    }
-    if (parsed.hasWorkRoomDeduction) {
-      flags.push("Övriga utgifter (t.ex. arbetsrum)");
-    }
-    if (parsed.hasDoubleHousingDeduction) {
-      flags.push("Tillfälligt arbete / dubbel bosättning");
-    }
-
-    // --- HTML för kortet, inspirerat av skissen ---
-    const rowsHtml = summaryRows.length
-      ? summaryRows
-          .map(
-            (row) => `
-          <div class="ak-deklaration-row">
-            <span class="ak-deklaration-row-label">${row.label}:</span>
-            <span class="ak-deklaration-row-value">${row.value}</span>
-          </div>
-        `
-          )
-          .join("")
-      : `<p class="ak-deklaration-muted">
-           Vi kunde inte läsa ut några belopp automatiskt. Du kan ändå gå vidare till frågorna.
-         </p>`;
-
-    const avdragHtml = flags.length
-      ? `<ul class="ak-deklaration-list">
-           ${flags.map((f) => `<li>${f}</li>`).join("")}
-         </ul>`
-      : `<p class="ak-deklaration-muted">
-           Vi ser inga tydliga redan registrerade avdrag i din deklaration.
-         </p>`;
-
-    deklarationStatus.classList.remove("ak-status-loading");
-    deklarationStatus.style.color = "#111827";
-
-    deklarationStatus.innerHTML = `
-      <div class="ak-deklaration-card">
-        <div class="ak-deklaration-header">
-          <p class="ak-deklaration-step">Steg 1 av 3</p>
-          <p class="ak-deklaration-step-sub">Analys av deklaration</p>
-
-          <div class="ak-deklaration-title-row">
-            <span class="ak-deklaration-icon">✓</span>
-            <h3 class="ak-deklaration-main-title">Deklaration analyserad</h3>
-          </div>
-        </div>
-
-        <hr class="ak-deklaration-divider">
-
-        <section>
-          <h4 class="ak-deklaration-section-title">Sammanfattning av din deklaration</h4>
-          <div class="ak-deklaration-rows">
-            ${rowsHtml}
-          </div>
-        </section>
-
-        <hr class="ak-deklaration-divider">
-
-        <section>
-          <div class="ak-deklaration-avdrag-title-row">
-            <span class="ak-deklaration-icon">✓</span>
-            <h4 class="ak-deklaration-section-title">Redan registrerade avdrag</h4>
-          </div>
-          ${avdragHtml}
-          <p class="ak-deklaration-muted">
-            Dessa uppgifter finns redan med i din deklaration. Vi tar hänsyn till detta i din analys.
-          </p>
-        </section>
-      </div>
-    `;
-
-    // Göm valen + analysera-knappen (men behåll kortet)
-    if (methodUploadBtn) methodUploadBtn.style.display = "none";
-    if (methodQuestionsBtn) methodQuestionsBtn.style.display = "none";
-    if (analyzeDeklarationBtn) analyzeDeklarationBtn.style.display = "none";
-
-    // Visa knappen för att gå vidare
-    if (goToQuestionsAfterUploadBtn) {
-      goToQuestionsAfterUploadBtn.hidden = false;
-      goToQuestionsAfterUploadBtn.style.opacity = "0";
-      goToQuestionsAfterUploadBtn.style.transition = "opacity .35s ease";
-      setTimeout(() => {
-        goToQuestionsAfterUploadBtn.style.opacity = "1";
-      }, 10);
-    }
-
-    // Scrolla användaren till resultatkortet
-    deklarationStatus.scrollIntoView({ behavior: "smooth", block: "start" });
-  } catch (err) {
-    console.error(err);
-    deklarationStatus.classList.remove("ak-status-loading");
-    deklarationStatus.textContent =
-      "Kunde inte läsa PDF:en just nu. Kontrollera att det är Inkomstdeklaration 1 från Skatteverket.";
-    deklarationStatus.style.color = "#b91c1c";
-  } finally {
-    if (analyzeDeklarationBtn) {
-      analyzeDeklarationBtn.disabled = false;
-      analyzeDeklarationBtn.textContent = "Analysera deklarationen";
-    }
-  }
-}
-
-
-      try {
-        const rawText = await extractTextFromPdf(file);
-        const parsed = parseDeklarationText(rawText);
-
-        state.deklarationAnalyzed = true;
-        state.deklarationRawText = rawText;
-        state.deklarationParsed = parsed;
-
-        // --- Bygg data för kortet ---
-        const summaryRows = [];
-
-        if (
-          typeof parsed.salary === "number" &&
-          parsed.salary > 0
-        ) {
-          summaryRows.push({
-            label: "Deklarerad lön/inkomst",
-            value: formatCurrency(parsed.salary)
-          });
-        }
-
-        if (parsed.capitalSurplus != null) {
-          summaryRows.push({
-            label: "Överskott av kapital",
-            value: formatCurrency(parsed.capitalSurplus)
-          });
-        }
-
-        if (parsed.iskSchablon != null) {
-          summaryRows.push({
-            label: "Schablonintäkt ISK",
-            value: formatCurrency(parsed.iskSchablon)
-          });
-        }
-
-        const flags = [];
-        if (parsed.hasTravelDeduction) {
-          flags.push("Resor till och från arbetet");
-        }
-        if (parsed.hasWorkRoomDeduction) {
-          flags.push("Övriga utgifter (t.ex. arbetsrum)");
-        }
-        if (parsed.hasDoubleHousingDeduction) {
-          flags.push("Tillfälligt arbete / dubbel bosättning");
-        }
-
-        // --- HTML för kortet, inspirerat av skissen ---
-        const rowsHtml = summaryRows.length
-          ? summaryRows
-              .map(
-                (row) => `
-              <div class="ak-deklaration-row">
-                <span class="ak-deklaration-row-label">${row.label}:</span>
-                <span class="ak-deklaration-row-value">${row.value}</span>
-              </div>
-            `
-              )
-              .join("")
-          : `<p class="ak-deklaration-muted">
-               Vi kunde inte läsa ut några belopp automatiskt. Du kan ändå gå vidare till frågorna.
-             </p>`;
-
-        const avdragHtml = flags.length
-          ? `<ul class="ak-deklaration-list">
-               ${flags.map((f) => `<li>${f}</li>`).join("")}
-             </ul>`
-          : `<p class="ak-deklaration-muted">
-               Vi ser inga tydliga redan registrerade avdrag i din deklaration.
-             </p>`;
-
-        deklarationStatus.classList.remove("ak-status-loading");
-        deklarationStatus.style.color = "#111827";
-
-        deklarationStatus.innerHTML = `
-          <div class="ak-deklaration-card">
-            <div class="ak-deklaration-header">
-              <p class="ak-deklaration-step">Steg 1 av 3</p>
-              <p class="ak-deklaration-step-sub">Analys av deklaration</p>
-
-              <div class="ak-deklaration-title-row">
-                <span class="ak-deklaration-icon">✓</span>
-                <h3 class="ak-deklaration-main-title">Deklaration analyserad</h3>
-              </div>
-            </div>
-
-            <hr class="ak-deklaration-divider">
-
-            <section>
-              <h4 class="ak-deklaration-section-title">Sammanfattning av din deklaration</h4>
-              <div class="ak-deklaration-rows">
-                ${rowsHtml}
-              </div>
-            </section>
-
-            <hr class="ak-deklaration-divider">
-
-            <section>
-              <div class="ak-deklaration-avdrag-title-row">
-                <span class="ak-deklaration-icon">✓</span>
-                <h4 class="ak-deklaration-section-title">Redan registrerade avdrag</h4>
-              </div>
-              ${avdragHtml}
-              <p class="ak-deklaration-muted">
-                Dessa uppgifter finns redan med i din deklaration. Vi tar hänsyn till detta i din analys.
-              </p>
-            </section>
-          </div>
-        `;
-
-        // Dölj hela uppladdningsblocket efter analys
-if (uploadPanel) {
-  uploadPanel.hidden = true;
-}
-
-// Visa knappen för att gå vidare
-if (goToQuestionsAfterUploadBtn) {
-  goToQuestionsAfterUploadBtn.hidden = false;
-}
-// Visa knappen
-if (goToQuestionsAfterUploadBtn) {
-  goToQuestionsAfterUploadBtn.hidden = false;
-
-  // Fade-in animation
-  goToQuestionsAfterUploadBtn.style.opacity = "0";
-  goToQuestionsAfterUploadBtn.style.transition = "opacity .35s ease";
-  setTimeout(() => {
-      goToQuestionsAfterUploadBtn.style.opacity = "1";
-  }, 10); // liten delay så CSS hinner apply
-}
-
-// Scrolla användaren till resultatkortet
-deklarationStatus.scrollIntoView({ behavior: "smooth", block: "start" });
-
-      } catch (err) {
-        console.error(err);
-        deklarationStatus.classList.remove("ak-status-loading");
-        deklarationStatus.textContent =
-          "Kunde inte läsa PDF:en just nu. Kontrollera att det är Inkomstdeklaration 1 från Skatteverket.";
-        deklarationStatus.style.color = "#b91c1c";
-      } finally {
-        if (analyzeDeklarationBtn) {
-          analyzeDeklarationBtn.disabled = false;
-          analyzeDeklarationBtn.textContent = "Analysera deklarationen";
-        }
-      }
-    }
-
     // Deklarations-analys – klick + auto-start vid filval
     if (analyzeDeklarationBtn && deklarationFileInput && deklarationStatus) {
       analyzeDeklarationBtn.addEventListener("click", function () {
@@ -2357,7 +2247,8 @@ deklarationStatus.scrollIntoView({ behavior: "smooth", block: "start" });
     // Init
     setView("intro");
   });
-  </script>
+</script>
+
 
 </body>
 </html>
