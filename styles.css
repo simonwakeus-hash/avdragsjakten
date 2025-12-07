@@ -79,6 +79,7 @@ a:hover {
 .page-main {
   padding-bottom: 5.5rem; /* plats för sticky-bar på mobil */
 }
+
 html {
   -webkit-text-size-adjust: 100%;
 }
@@ -552,123 +553,161 @@ select {
   }
 }
 
-/* Result-vy */
+/* === Resultatsida === */
 
-/* Resultat – minimalistisk layout */
-
-function renderResultsView(total, results) {
-  const count = results.length;
-
-  const taxSaving = computeTaxSaving(total);
-  const totalStr = total > 0 ? formatCurrency(total) : "0 kr";
-  const taxStr = taxSaving > 0 ? formatCurrency(taxSaving) : null;
-
-  const hasResults = count > 0;
-
-  // Aktivera / avaktivera knappar
-  if (showHowButton) {
-    showHowButton.disabled = !hasResults;
-  }
-  if (scrollToHowButton) {
-    scrollToHowButton.disabled = !hasResults;
-  }
-
-  // Stora talet överst – vi visar skattelättnaden om vi har den,
-  // annars total avdragssumma.
-  if (resultTotalEl) {
-    if (taxStr) {
-      resultTotalEl.textContent = taxStr;
-    } else {
-      resultTotalEl.textContent = totalStr;
-    }
-  }
-
-  if (summaryTotalAmountEl) {
-    summaryTotalAmountEl.textContent = taxStr || totalStr;
-  }
-
-  if (summaryMetaEl) {
-    let metaText =
-      count > 0
-        ? count + " möjliga avdrag identifierade"
-        : "Inga tydliga avdrag identifierade";
-    if (taxStr && count > 0) {
-      metaText += " · ca " + taxStr + " lägre skatt";
-    }
-    summaryMetaEl.textContent = metaText;
-  }
-
-  // Förklarande text under CTA
-  if (resultsSubtitleEl) {
-    if (total > 0) {
-      resultsSubtitleEl.textContent =
-        "Beräknat utifrån dina uppgifter och en förenklad svensk marginalskatt.";
-    } else if (count === 0) {
-      resultsSubtitleEl.textContent =
-        "Utifrån de här svaren hittar vi inga tydliga avdrag. Det kan ändå finnas andra situationer där avdrag är aktuella.";
-    } else {
-      resultsSubtitleEl.textContent =
-        "De möjliga avdragen ser ut att vara små eller under schablonbeloppen. Se våra guider om du vill fördjupa dig.";
-    }
-  }
-
-  // Rensa listor
-  if (topDeductionsListEl) topDeductionsListEl.innerHTML = "";
-  if (otherDeductionsListEl) otherDeductionsListEl.innerHTML = "";
-
-  const nextStepsEl = document.getElementById("resultsNextSteps");
-  if (nextStepsEl) nextStepsEl.innerHTML = "";
-
-  if (results.length === 0) {
-    if (topDeductionsListEl) {
-      const p = document.createElement("p");
-      p.className = "deduction-empty";
-      p.textContent =
-        "Vi hittar inga tydliga avdrag baserat på de här svaren.";
-      topDeductionsListEl.appendChild(p);
-    }
-    return;
-  }
-
-  const sorted = [...results].sort(
-    (a, b) => (b.amount || 0) - (a.amount || 0)
-  );
-
-  // "Nästa steg på Skatteverket" – kort lista under korten
-  if (nextStepsEl) {
-    const withRoute = sorted
-      .map((d) => ({
-        name: d.name,
-        route: getSkvRouteForName(d.name)
-      }))
-      .filter((d) => d.route)
-      .slice(0, 3);
-
-    if (withRoute.length > 0) {
-      const itemsHtml = withRoute
-        .map((d) => `<li>${d.route}</li>`)
-        .join("");
-      nextStepsEl.innerHTML =
-        '<strong>Nästa steg på Skatteverket:</strong><ul>' +
-        itemsHtml +
-        "</ul>";
-    }
-  }
-
-  // Rendera korten
-  const top = sorted.slice(0, 3);
-  const others = sorted.slice(3);
-
-  top.forEach((d) => {
-    if (topDeductionsListEl)
-      topDeductionsListEl.appendChild(createDeductionCard(d));
-  });
-  others.forEach((d) => {
-    if (otherDeductionsListEl)
-      otherDeductionsListEl.appendChild(createDeductionCard(d));
-  });
+.results-view {
+  margin-top: 2rem;
+  padding: 1.75rem 1.5rem;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
 }
 
+.results-header {
+  margin-bottom: 1.5rem;
+}
+
+.results-kicker {
+  margin: 0 0 0.2rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.results-title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* Stor siffra i fokus */
+
+.results-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin: 0.4rem 0 0.4rem;
+}
+
+.results-equals {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #065f46;
+  line-height: 1;
+}
+
+.results-total-amount {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #065f46;
+}
+
+.results-tagline {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #059669;
+}
+
+.results-subtitle {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  color: #4b5563;
+  max-width: 40rem;
+}
+
+/* Texten "Nästa steg" under resultatet */
+
+.results-nextsteps {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.results-nextsteps ul {
+  margin: 0.25rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.results-disclaimer {
+  margin: 0.75rem 0 0;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Sektionstitlar ovanför avdragskorten */
+
+.results-section {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.results-section-title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Layout om du använder två kolumner (valfritt, skadar inte om ej används) */
+
+.results-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.results-main {
+  min-width: 0;
+}
+
+.results-sidebar {
+  min-width: 0;
+}
+
+/* Sammanfattningskort i sidokolumn (valfritt) */
+
+.results-summary-card {
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  padding: 1.25rem 1.5rem;
+  background: #f9fafb;
+}
+
+.results-summary-title {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.results-summary-amount {
+  margin: 0 0 0.25rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #065f46;
+}
+
+.results-summary-meta {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.results-summary-text {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* Lite luft runt CTA på resultatsidan */
+
+.results-header .btn-primary {
+  margin-top: 0.75rem;
+}
+
+/* Avdragskort */
 
 .deduction-list {
   display: flex;
@@ -752,7 +791,7 @@ function renderResultsView(total, results) {
   color: #4b5563;
 }
 
-/* Knapp-styles för resultatvyn */
+/* Knapp-styles för resultatvyn (återanvänder .btn) */
 
 .btn {
   display: inline-flex;
@@ -777,11 +816,15 @@ function renderResultsView(total, results) {
   border: 1px solid #d1d5db;
 }
 
-/* Responsivt */
+/* Responsivt för resultatsidan */
 
 @media (max-width: 768px) {
   .results-view {
     padding: 1.5rem 1.25rem;
+  }
+
+  .results-total-amount {
+    font-size: 2rem;
   }
 
   .results-layout {
@@ -792,34 +835,9 @@ function renderResultsView(total, results) {
     order: -1;
   }
 }
-/* Loader för deklarations-analys */
-.ak-status-loading {
-  position: relative;
-  padding-left: 1.6rem;
-}
 
-.ak-status-loading::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.25rem;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 999px;
-  border: 2px solid rgba(15, 23, 42, 0.15);
-  border-top-color: var(--color-primary);
-  animation: ak-spin 0.7s linear infinite;
-}
-
-@keyframes ak-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 /* Loader för deklarations-analys */
+
 .ak-status-loading {
   position: relative;
   padding-left: 1.6rem;
@@ -848,6 +866,7 @@ function renderResultsView(total, results) {
 }
 
 /* Deklarations-sammanfattning i steg 1 */
+
 .ak-deklaration-status {
   margin-top: 1rem;
 }
@@ -956,7 +975,6 @@ function renderResultsView(total, results) {
   font-size: 0.85rem;
   color: #6b7280;
 }
-
 
 /* Modal */
 
@@ -1123,6 +1141,7 @@ input[type="email"]:focus {
 }
 
 /* CTA efter deklarationsanalys */
+
 .ak-next-cta {
   display: block;
   width: 100%;
@@ -1154,26 +1173,8 @@ input[type="email"]:focus {
   box-shadow: none;
 }
 
-/* Sticky mobil-CTA layout */
-.ak-next-cta {
-  display: block;
-  width: 100%;
-  max-width: 340px;
-  margin: 1.8rem auto 0;
-  background: var(--color-primary);
-  color: #fff;
-  border: none;
-  padding: 0.9rem 1.4rem;
-  border-radius: var(--radius-full);
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: center;
-  box-shadow: 0 12px 28px rgba(0, 80, 120, 0.35);
-  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
-}
-
-
 /* --- Sticky på mobil/tablet --- */
+
 @media (max-width: 960px) {
   .ak-next-cta {
     position: fixed;
@@ -1184,20 +1185,14 @@ input[type="email"]:focus {
     width: calc(100% - 2rem);
     max-width: 500px;
     z-index: 9000;
-
-    /* IOS “safe area” fix */
     padding-bottom: max(0.9rem, env(safe-area-inset-bottom));
   }
-}
 
-@media (max-width: 960px) {
   .ak-next-cta {
     backdrop-filter: blur(4px);
     background: rgba(0, 80, 120, 0.97);
   }
-}
 
-@media (max-width: 960px) {
   .page-main {
     padding-bottom: 6.5rem !important;
   }
@@ -1206,67 +1201,42 @@ input[type="email"]:focus {
 /* === Deklarationsanimationer === */
 
 .ak-fade-out {
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity .35s ease, transform .35s ease;
-    pointer-events: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
 }
 
 .ak-fade-in {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: akFadeIn .45s ease forwards;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: akFadeIn 0.45s ease forwards;
 }
 
 @keyframes akFadeIn {
-    0% { opacity: 0; transform: translateY(10px); }
-    100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .ak-cta-slide-in {
-    position: sticky;
-    bottom: 0;
-    animation: akSlideUp .4s ease forwards;
+  position: sticky;
+  bottom: 0;
+  animation: akSlideUp 0.4s ease forwards;
 }
 
 @keyframes akSlideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-
-/* === Resultatsida: stor siffra i fokus === */
-
-.results-hero {
-  display: flex;
-  align-items: baseline;
-  gap: 0.4rem;
-  margin: 0.2rem 0 0.25rem;
-}
-
-.results-equals {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #065f46; /* samma gröna ton som beloppet */
-  line-height: 1;
-}
-
-.results-total-amount {
-  margin: 0;
-  font-size: 2.4rem;        /* större än tidigare */
-  font-weight: 700;
-  color: #065f46;
-}
-
-.results-tagline {
-  margin: 0 0 0.6rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #059669;
-}
-
-/* Lite luft runt CTA på resultatsidan */
-.results-header .btn-primary {
-  margin-top: 0.75rem;
-}
-
-
