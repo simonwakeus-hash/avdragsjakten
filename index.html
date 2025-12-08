@@ -31,6 +31,54 @@
 </head>
 <body>
 
+  <body>
+  <header class="ak-header">
+    <div class="container ak-header-inner">
+      <a href="/" class="ak-logo">
+        <span class="ak-logo-mark" aria-hidden="true"></span>
+        <span class="ak-logo-text">Avdragsjakten</span>
+      </a>
+
+      <button
+        class="ak-menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="akMainMenu"
+      >
+        <span class="ak-menu-label">Meny</span>
+        <span class="ak-menu-icon" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+    </div>
+
+    <nav id="akMainMenu" class="ak-menu-panel" aria-hidden="true">
+      <div class="ak-menu-backdrop" data-ak-menu-close></div>
+      <div class="ak-menu-sheet">
+        <button
+          class="ak-menu-close"
+          type="button"
+          data-ak-menu-close
+          aria-label="Stäng meny"
+        >
+          Stäng
+        </button>
+        <ul class="ak-menu-list">
+          <li><a href="#how-it-works" data-ak-menu-close>Så funkar Avdragsjakten</a></li>
+          <li><a href="#faq" data-ak-menu-close>Vanliga frågor</a></li>
+          <li><a href="#privacy" data-ak-menu-close>Sekretess &amp; säkerhet</a></li>
+          <li><a href="#about" data-ak-menu-close>Om oss / Kontakt</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- här fortsätter din befintliga kod -->
+  <main class="page-main">
+    <!-- ... -->
+
   <main class="page-main">
     <!-- Avdragskollen – huvudkort -->
     <div class="ak-main">
@@ -2207,6 +2255,40 @@
 
     setView("intro");
   });
+
+    /* === Header & meny === */
+const akHeader = document.querySelector(".ak-header");
+const akMenuToggle = document.querySelector(".ak-menu-toggle");
+const akMenuPanel = document.getElementById("akMainMenu");
+
+if (akMenuToggle && akMenuPanel) {
+  akMenuToggle.addEventListener("click", () => {
+    const isOpen = akMenuPanel.classList.toggle("is-open");
+    akMenuToggle.classList.toggle("is-open", isOpen);
+    akMenuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    akMenuPanel.setAttribute("aria-hidden", isOpen ? "false" : "true");
+  });
+
+  akMenuPanel.addEventListener("click", (event) => {
+    const target = event.target;
+    if (
+      target.matches("[data-ak-menu-close]") ||
+      target.closest("[data-ak-menu-close]")
+    ) {
+      akMenuPanel.classList.remove("is-open");
+      akMenuToggle.classList.remove("is-open");
+      akMenuToggle.setAttribute("aria-expanded", "false");
+      akMenuPanel.setAttribute("aria-hidden", "true");
+    }
+  });
+}
+
+// Subtil skugga när man scrollar
+window.addEventListener("scroll", () => {
+  if (!akHeader) return;
+  akHeader.classList.toggle("ak-header-scrolled", window.scrollY > 4);
+});
+
   </script>
 
 </body>
