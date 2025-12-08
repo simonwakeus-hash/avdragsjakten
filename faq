@@ -1,0 +1,393 @@
+<main class="ak-main">
+  <section class="ak-section ak-section--faq">
+    <div class="ak-container">
+      <h1 class="ak-page-title">Vanliga frågor om Avdragsjakten</h1>
+      <p class="ak-lead">
+        Här hittar du tydliga svar på de vanligaste frågorna om Avdragsjakten – hur tjänsten fungerar,
+        hur dina uppgifter hanteras och vad du kan förvänta dig av resultatet.
+      </p>
+
+      <div class="ak-faq-list">
+
+        <details class="ak-faq-item" open>
+          <summary class="ak-faq-question">
+            Vad är Avdragsjakten?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Avdragsjakten är en digital tjänst som hjälper dig att hitta avdrag du kan ha rätt till i din
+              deklaration – snabbt och utan att du behöver kunna alla regler själv. Tjänsten analyserar dina
+              uppgifter utifrån Skatteverkets regelverk och visar hur du kan minska din skatt.
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Är Avdragsjakten gratis?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Ja. Avdragsjakten är för närvarande helt gratis att använda. Du kan testa tjänsten, se dina
+              beräkningar och använda resultatet när du deklarerar – utan kostnad.
+            </p>
+            <p>
+              I framtiden kan vi komma att erbjuda tillvalstjänster, men grundfunktionen är kostnadsfri.
+            </p>
+            <p>
+              <a href="/" class="ak-link-cta">Testa Avdragsjakten gratis här</a>
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Hur fungerar tjänsten rent praktiskt?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Du svarar på några enkla frågor eller laddar upp din deklarationsfil. Därefter analyserar
+              Avdragsjakten dina uppgifter och räknar fram vilka avdrag som kan vara aktuella för dig,
+              baserat på Skatteverkets regelverk.
+            </p>
+            <p>
+              Resultatet visas direkt på skärmen, tillsammans med en översikt över hur avdragen kan påverka
+              din slutliga skatt.
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Är beräkningarna korrekta?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Beräkningarna i Avdragsjakten bygger på Skatteverkets regler för avdrag och har
+              <strong>granskats av skattejurist</strong>. Tjänsten är utformad för att ge en tydlig och
+              vägledande bild av vilka avdrag som kan vara aktuella för dig.
+            </p>
+            <p>
+              Samtidigt är varje situation unik. Därför ska Avdragsjakten ses som ett stöd när du deklarerar,
+              inte som ett personligt beslut från Skatteverket.
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Är mina uppgifter säkra och konfidentiella?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Ja. Dina uppgifter skickas via krypterad anslutning och hanteras konfidentiellt. Vi använder
+              inte dina uppgifter för andra syften än att beräkna dina avdrag.
+            </p>
+            <p>
+              Du kan själv styra om, och hur länge, uppgifter ska sparas i tjänsten.
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Behöver jag BankID för att använda Avdragsjakten?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Nej. Du behöver inte logga in med BankID för att använda Avdragsjakten. Du kan använda tjänsten
+              direkt via webbläsaren.
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Hur snabbt får jag svar?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Du får resultatet direkt efter att du har svarat på frågorna eller laddat upp din fil. De flesta
+              användare är klara på bara några minuter.
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Vilka typer av avdrag kan Avdragsjakten hjälpa mig att hitta?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Avdragsjakten kan bland annat identifiera avdrag kopplade till:
+            </p>
+            <ul>
+              <li>reseavdrag</li>
+              <li>dubbelt boende och tillfälligt arbete</li>
+              <li>arbetsrum och arbetsrelaterade kostnader</li>
+              <li>verktyg, utrustning och arbetskläder</li>
+              <li>studier och vidareutbildning</li>
+              <li>ROT- och RUT-relaterade uppgifter</li>
+              <li>familje- och boendekostnader</li>
+              <li>vissa kapitalrelaterade avdrag</li>
+            </ul>
+            <p>
+              Det är vanligt att privatpersoner missar flera av dessa avdrag. Tjänsten hjälper dig att få en
+              samlad bild.
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Vad gör jag efter att jag fått resultatet?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Du använder resultatet när du fyller i din deklaration hos Skatteverket. Avdragsjakten visar
+              vilka avdrag som kan vara aktuella och var de normalt sett ska föras in.
+            </p>
+            <p>
+              <a href="/" class="ak-link-cta">
+                Det tar bara några minuter att testa Avdragsjakten.
+              </a>
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Kan jag använda Avdragsjakten även om jag redan har deklarerat?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Ja. Om du redan har lämnat in din deklaration kan du i många fall komplettera eller begära
+              omprövning hos Skatteverket. Avdragsjakten kan hjälpa dig att se om du har missat något avdrag
+              som kan vara värt att ta upp.
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Ger Avdragsjakten juridisk rådgivning?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Avdragsjakten ger automatiserad vägledning baserad på Skatteverkets regelverk. Tjänsten är
+              inte personlig juridisk rådgivning, utan ett stöd för att du själv ska kunna deklarera rätt.
+            </p>
+            <p>
+              Vid mer komplexa situationer kan det vara lämpligt att komplettera med individuell
+              skatterådgivning.
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Fungerar Avdragsjakten för företagare?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              I dagsläget är Avdragsjakten utvecklad för privatpersoner. Vi utvärderar på sikt stöd även för
+              företagare och enskilda firmor.
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Vilka vanliga fel gör privatpersoner när det gäller avdrag?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Vanliga misstag är att:
+            </p>
+            <ul>
+              <li>inte göra reseavdrag trots rätt till det</li>
+              <li>inte känna till reglerna för dubbelt boende</li>
+              <li>underskatta kostnader för arbetsrum och utrustning</li>
+              <li>inte justera för ersättningar från arbetsgivare</li>
+            </ul>
+            <p>
+              Avdragsjakten hjälper dig att systematiskt gå igenom dessa områden.
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Varför missar så många avdrag?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Regelverket är omfattande och Skatteverkets e-tjänst visar inte automatiskt vilka avdrag som
+              kan gälla just dig. Därför är det lätt att avdrag blir bortglömda eller känns för krångliga.
+            </p>
+            <p>
+              Avdragsjakten är utvecklad för att göra det enklare att se vad du faktiskt kan ha rätt till.
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Kan jag radera mina uppgifter?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Ja. Du kan ta bort dina uppgifter när du vill. Vi sparar inte mer information än nödvändigt
+              och aldrig längre än vad som behövs för tjänstens funktion.
+            </p>
+          </div>
+        </details>
+
+        <details class="ak-faq-item">
+          <summary class="ak-faq-question">
+            Kan jag använda Avdragsjakten nästa år också?
+          </summary>
+          <div class="ak-faq-answer">
+            <p>
+              Ja. Avdragsjakten uppdateras inför varje deklarationssäsong så att regelverket är aktuellt.
+              Tjänsten är tänkt att vara ett återkommande stöd år efter år.
+            </p>
+          </div>
+        </details>
+
+      </div>
+
+      <div class="ak-faq-disclaimer">
+        <p>
+          <strong>Juridisk information:</strong><br>
+          Avdragsjakten är en vägledande tjänst baserad på Skatteverkets regelverk.
+          Beräkningarna är granskade av skattejurist. Tjänsten ersätter inte individuell
+          skatterådgivning.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ CTA-sektion (valfri, men bra för konvertering) -->
+  <section class="ak-section ak-section--faq-cta">
+    <div class="ak-container ak-faq-cta">
+      <div class="ak-faq-cta-content">
+        <h2>Redo att se om du missat avdrag?</h2>
+        <p>
+          Det tar bara några minuter att gå igenom dina uppgifter och se hur mycket du kan sänka din skatt.
+        </p>
+      </div>
+      <div class="ak-faq-cta-actions">
+        <a href="/" class="ak-button ak-button-primary">
+          Testa Avdragsjakten gratis
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEO: FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Vad är Avdragsjakten?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Avdragsjakten är en digital tjänst som hjälper dig att hitta avdrag du kan ha rätt till i din deklaration. Tjänsten analyserar dina uppgifter utifrån Skatteverkets regelverk och visar hur du kan minska din skatt."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Är Avdragsjakten gratis?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ja. Avdragsjakten är för närvarande helt gratis att använda. Du kan testa tjänsten, se dina beräkningar och använda resultatet när du deklarerar utan kostnad."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hur fungerar Avdragsjakten?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Du svarar på några frågor eller laddar upp din deklarationsfil. Därefter analyserar Avdragsjakten dina uppgifter och räknar fram vilka avdrag som kan vara aktuella för dig baserat på Skatteverkets regelverk. Resultatet visas direkt på skärmen."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Är beräkningarna korrekta?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Beräkningarna i Avdragsjakten bygger på Skatteverkets regler och har granskats av skattejurist. Tjänsten är utformad för att ge en tydlig och vägledande bild av vilka avdrag som kan vara aktuella, men ersätter inte Skatteverkets egna beslut."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Är mina uppgifter säkra?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ja. Dina uppgifter skickas via krypterad anslutning och hanteras konfidentiellt. Vi använder inte dina uppgifter för andra syften än att beräkna dina avdrag och du kan radera dem när du vill."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Behöver jag BankID för att använda Avdragsjakten?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nej. Du behöver inte logga in med BankID för att använda Avdragsjakten. Du kan använda tjänsten direkt via webbläsaren."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hur snabbt får jag svar?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Du får resultatet direkt efter att du har svarat på frågorna eller laddat upp din fil. De flesta användare är klara på bara några minuter."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Vilka typer av avdrag kan Avdragsjakten hitta?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Avdragsjakten kan bland annat identifiera avdrag kopplade till reseavdrag, dubbelt boende, arbetsrum, arbetsrelaterade kostnader, verktyg och utrustning, studier och vidareutbildning, ROT- och RUT-relaterade uppgifter samt vissa kapitalrelaterade avdrag."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Vad gör jag efter att jag fått resultatet?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Du använder resultatet från Avdragsjakten när du fyller i din deklaration hos Skatteverket. Tjänsten visar vilka avdrag som kan vara aktuella och var de normalt sett ska föras in."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Kan jag använda Avdragsjakten även om jag redan har deklarerat?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ja. Om du redan har lämnat in din deklaration kan du i många fall komplettera eller begära omprövning hos Skatteverket. Avdragsjakten kan hjälpa dig att se om du har missat något avdrag som kan vara värt att ta upp."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Ger Avdragsjakten juridisk rådgivning?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Avdragsjakten ger automatiserad vägledning baserad på Skatteverkets regelverk. Tjänsten är inte personlig juridisk rådgivning, utan ett stöd för att du själv ska kunna deklarera rätt."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Kan jag radera mina uppgifter?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ja. Du kan ta bort dina uppgifter när du vill. Vi sparar inte mer information än nödvändigt och aldrig längre än vad som behövs för tjänstens funktion."
+        }
+      }
+    ]
+  }
+  </script>
+</main>
