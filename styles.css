@@ -1240,3 +1240,203 @@ input[type="email"]:focus {
     transform: translateY(0);
   }
 }
+
+/* === Header: minimalistisk logga + hamburgermeny === */
+
+.ak-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  padding: 0.6rem 0;
+  background: transparent;
+  transition: background 0.2s ease, box-shadow 0.2s ease, backdrop-filter 0.2s ease;
+}
+
+.ak-header-scrolled {
+  background: rgba(245, 245, 247, 0.92);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+}
+
+.ak-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logga / ordmärke */
+
+.ak-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.ak-logo:hover {
+  text-decoration: none;
+}
+
+.ak-logo-mark {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 2px solid #059669;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.ak-logo-mark::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 3px;
+  width: 6px;
+  height: 10px;
+  border-right: 2px solid #059669;
+  border-bottom: 2px solid #059669;
+  transform: rotate(40deg);
+}
+
+.ak-logo-text {
+  letter-spacing: 0.01em;
+}
+
+/* Hamburgermeny-knapp */
+
+.ak-menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.ak-menu-toggle:focus-visible {
+  outline: 2px solid rgba(0, 80, 120, 0.4);
+  outline-offset: 3px;
+  border-radius: 999px;
+}
+
+.ak-menu-label {
+  display: none; /* vi kan dölja texten visuellt på desktop */
+}
+
+.ak-menu-icon {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ak-menu-icon span {
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: #111827;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* När menyn är öppen blir hamburgaren ett "X" */
+
+.ak-menu-toggle.is-open .ak-menu-icon span:nth-child(1) {
+  transform: translateY(5px) rotate(45deg);
+}
+
+.ak-menu-toggle.is-open .ak-menu-icon span:nth-child(2) {
+  opacity: 0;
+}
+
+.ak-menu-toggle.is-open .ak-menu-icon span:nth-child(3) {
+  transform: translateY(-5px) rotate(-45deg);
+}
+
+/* Mobil: visa "Meny"-texten också */
+
+@media (max-width: 768px) {
+  .ak-menu-label {
+    display: inline;
+  }
+}
+
+/* Menypanel / overlay */
+
+.ak-menu-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  display: none;
+}
+
+.ak-menu-panel.is-open {
+  display: block;
+}
+
+.ak-menu-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.ak-menu-sheet {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 260px;
+  max-width: 80%;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: -16px 0 40px rgba(15, 23, 42, 0.22);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.ak-menu-close {
+  align-self: flex-end;
+  border: none;
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0;
+}
+
+.ak-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ak-menu-list a {
+  font-size: 0.95rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.ak-menu-list a:hover {
+  text-decoration: underline;
+}
+
+/* Lite mindre på väldigt små skärmar */
+
+@media (max-width: 480px) {
+  .ak-logo-text {
+    font-size: 0.95rem;
+  }
+}
+
