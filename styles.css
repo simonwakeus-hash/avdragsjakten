@@ -1500,16 +1500,70 @@ input[type="email"]:focus {
 }
 
 
-/* FAQ-layout: enkel kolumn, centrerad */
-.ak-section--faq .ak-container {
-  display: block;          /* skriver över ev. flex/grid */
+/* FAQ-layout: tvinga enkel kolumn */
+.ak-section--faq .ak-container,
+.ak-section--faq-cta .ak-container {
+  display: block !important;      /* skriv över ev. grid/flex på container */
   max-width: 800px;
   margin: 0 auto;
 }
 
-/* CTA under FAQ, också enkel kolumn */
-.ak-section--faq-cta .ak-container {
-  display: block;
-  max-width: 800px;
-  margin: 0 auto;
+/* CTA-blocket under FAQ */
+.ak-faq-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+/* FAQ-kort */
+.ak-faq-item {
+  border-radius: 999px;
+  border: 1px solid var(--color-border, #e2e2e7);
+  background: #ffffff;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Klickytan */
+.ak-faq-question {
+  list-style: none;
+  cursor: pointer;
+  padding: 1rem 1.25rem;
+  font-weight: 500;
+  position: relative;
+}
+
+/* Ta bort defaulttriangel */
+.ak-faq-question::-webkit-details-marker {
+  display: none;
+}
+details.ak-faq-item > summary {
+  list-style: none;
+}
+
+/* Egen pil */
+.ak-faq-question::after {
+  content: "▾";
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  font-size: 0.9rem;
+  opacity: 0.7;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+/* Rotera pil när öppen */
+.ak-faq-item[open] .ak-faq-question::after {
+  transform: translateY(-50%) rotate(180deg);
+  opacity: 1;
+}
+
+/* Svaret */
+.ak-faq-answer {
+  padding: 0 1.25rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
