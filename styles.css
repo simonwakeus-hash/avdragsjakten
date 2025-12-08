@@ -1498,3 +1498,18 @@ input[type="email"]:focus {
   text-decoration: underline;
   font-weight: 500;
 }
+
+
+/* FAQ-layout: enkel kolumn, centrerad */
+.ak-section--faq .ak-container {
+  display: block;          /* skriver över ev. flex/grid */
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* CTA under FAQ, också enkel kolumn */
+.ak-section--faq-cta .ak-container {
+  display: block;
+  max-width: 800px;
+  margin: 0 auto;
+}
