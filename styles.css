@@ -1574,3 +1574,21 @@ details.ak-faq-item > summary {
   max-width: 800px;
   margin: 0 auto;
 }
+
+.ak-section--privacy p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.ak-section--privacy ul {
+  margin: 0 0 1.5rem 1.25rem;
+}
+
+.ak-footer {
+  padding: 2rem 0;
+  margin-top: 3rem;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #666;
+}
