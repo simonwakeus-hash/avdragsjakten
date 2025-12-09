@@ -23,15 +23,105 @@
   <link rel="manifest" href="/site.webmanifest">
 
   <meta charset="UTF-8" />
-  <title>Om oss & kontakt – Avdragsjakten.se</title>
+  <title>Om oss &amp; kontakt – Avdragsjakten.se</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <meta name="description" content="Lär känna Avdragsjakten – vår bakgrund, vårt uppdrag och hur du kontaktar oss." />
+  <meta name="description" content="Läs mer om vilka som står bakom Avdragsjakten.se, hur vi arbetar och kontakta oss om frågor, önskemål eller pressförfrågningar." />
+
   <link rel="stylesheet" href="/styles.css" />
+
+  <!-- Sid-specifik styling för om-oss/kontakt -->
+  <style>
+    .ak-section--about {
+      padding-top: 3.5rem;
+      padding-bottom: 4rem;
+    }
+
+    .ak-section--about .ak-section-header {
+      margin-bottom: 2.5rem;
+      max-width: 48rem;
+    }
+
+    .ak-contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: 3rem;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .ak-contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+    }
+
+    .ak-contact-main .ak-block + .ak-block {
+      margin-top: 1.75rem;
+    }
+
+    .ak-contact-form-card {
+      background: var(--color-surface, #ffffff);
+      border-radius: 1.5rem;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      padding: 1.75rem 1.75rem 1.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .ak-contact-form-card {
+        padding: 1.4rem 1.25rem 1.25rem;
+        border-radius: 1.25rem;
+      }
+    }
+
+    .ak-contact-form-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .ak-contact-form-intro {
+      font-size: 0.95rem;
+      color: #4b5563;
+      margin-bottom: 1rem;
+    }
+
+    .ak-contact-form-embed iframe {
+      width: 100%;
+      max-width: 100%;
+      border: 0;
+      border-radius: 1rem;
+      display: block;
+      margin: 0 auto;
+      min-height: 420px;
+    }
+
+    .ak-contact-footnote {
+      margin-top: 0.85rem;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .ak-contact-company {
+      margin-top: 2.5rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid rgba(15, 23, 42, 0.06);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .ak-contact-company p {
+      margin: 0.15rem 0;
+    }
+
+    .ak-contact-company strong {
+      font-weight: 600;
+    }
+  </style>
 </head>
-  
+
 <body>
   <header class="ak-header">
-    <div class="container ak-header-inner">
+    <div class="ak-container ak-header-inner">
       <a href="/" class="ak-logo">
         <span class="ak-logo-mark" aria-hidden="true"></span>
         <span class="ak-logo-text">Avdragsjakten.se</span>
@@ -54,14 +144,19 @@
     <nav id="akMainMenu" class="ak-menu-panel" aria-hidden="true">
       <div class="ak-menu-backdrop" data-ak-menu-close></div>
       <div class="ak-menu-sheet">
-        <button class="ak-menu-close" type="button" data-ak-menu-close aria-label="Stäng meny">
+        <button
+          class="ak-menu-close"
+          type="button"
+          data-ak-menu-close
+          aria-label="Stäng meny"
+        >
           Stäng
         </button>
         <ul class="ak-menu-list">
-          <li><a href="/sa-funkar-det" data-ak-menu-close>Så funkar Avdragsjakten</a></li>
-          <li><a href="/faq" data-ak-menu-close>Vanliga frågor</a></li>
-          <li><a href="/sekretess" data-ak-menu-close>Sekretess & säkerhet</a></li>
-          <li><a href="/om-oss" data-ak-menu-close>Om oss / Kontakt</a></li>
+          <li><a href="/sa-funkar-det/" data-ak-menu-close>Så funkar Avdragsjakten</a></li>
+          <li><a href="/faq/" data-ak-menu-close>Vanliga frågor</a></li>
+          <li><a href="/sekretess/" data-ak-menu-close>Sekretess &amp; säkerhet</a></li>
+          <li><a href="/om-oss/" data-ak-menu-close>Om oss / Kontakt</a></li>
         </ul>
       </div>
     </nav>
@@ -70,60 +165,84 @@
   <main class="ak-main">
     <section id="about" class="ak-section ak-section--about">
       <div class="ak-container">
-
-        <h1 class="ak-heading-1">Om oss & kontakt</h1>
-
-        <div class="ak-block">
-          <h2 class="ak-heading-2">Vårt uppdrag</h2>
-          <p>
-            Avdragsjakten finns för att hjälpa fler svenskar att göra korrekta avdrag och undvika att betala mer skatt än nödvändigt.
-            Vi vill att det ska vara enkelt, tryggt och begripligt — även utan skattekunskap.
+        <header class="ak-section-header">
+          <h1 class="ak-heading-1">Om oss &amp; kontakt</h1>
+          <p class="ak-lead">
+            Avdragsjakten finns för att hjälpa fler svenskar att göra korrekta avdrag
+            och undvika att betala mer skatt än nödvändigt – på ett enkelt, tryggt
+            och begripligt sätt.
           </p>
-        </div>
+        </header>
 
-        <div class="ak-block">
-          <h2 class="ak-heading-2">Vem står bakom Avdragsjakten?</h2>
-          <p>
-            Avdragsjakten ägs och utvecklas av SWe-handel AB, ett svenskt bolag med fokus på digitala konsumenttjänster, analys och automatisering.
-          </p>
-          <p>
-            Vi är helt oberoende och har ingen koppling till Skatteverket eller bank- och revisionskoncerner.
-            Det gör att vi kan utveckla Avdragsjakten med användarens bästa som utgångspunkt.
-          </p>
-        </div>
+        <div class="ak-contact-grid">
+          <!-- Vänster kolumn: text om oss -->
+          <div class="ak-contact-main">
+            <div class="ak-block">
+              <h2 class="ak-heading-2">Vårt uppdrag</h2>
+              <p>
+                Avdragsjakten finns för att hjälpa fler svenskar att göra korrekta avdrag
+                och undvika att betala mer skatt än nödvändigt.
+                Vi vill att det ska vara enkelt, tryggt och begripligt — även utan skattekunskap.
+              </p>
+            </div>
 
-        <div class="ak-block">
-          <h2 class="ak-heading-2">Hur vi arbetar</h2>
-          <ul>
-            <li>Tjänsten utvecklas och underhålls i Sverige</li>
-            <li>Drift sker via Cloudflare Pages</li>
-            <li>Säkerhet, integritet och transparens är centrala i hela vår design</li>
-            <li>Vi bygger Avdragsjakten tillsammans med våra användare, med målet att bli Sveriges mest hjälpsamma och lättanvända avdragstjänst.</li>
-          </ul>
-        </div>
+            <div class="ak-block">
+              <h2 class="ak-heading-2">Vem står bakom Avdragsjakten?</h2>
+              <p>
+                Avdragsjakten ägs och utvecklas av <strong>SWe-handel AB</strong>, ett svenskt bolag
+                med fokus på digitala konsumenttjänster, analys och automatisering.
+              </p>
+              <p>
+                Vi är helt oberoende och har ingen koppling till Skatteverket eller bank- och
+                revisionskoncerner. Det gör att vi kan utveckla Avdragsjakten med användarens
+                bästa som utgångspunkt.
+              </p>
+            </div>
 
-        <div class="ak-block">
-          <h2 class="ak-heading-2">Kontakt</h2>
-          <p>Har du frågor, önskemål eller pressförfrågningar är du varmt välkommen att höra av dig.</p>
+            <div class="ak-block">
+              <h2 class="ak-heading-2">Hur vi arbetar</h2>
+              <ul>
+                <li>Tjänsten utvecklas och underhålls i Sverige</li>
+                <li>Drift sker via Cloudflare Pages</li>
+                <li>Säkerhet, integritet och transparens är centrala i hela vår design</li>
+              </ul>
+              <p>
+                Vi bygger Avdragsjakten tillsammans med våra användare, med målet att bli
+                Sveriges mest hjälpsamma och lättanvända avdragstjänst.
+              </p>
+            </div>
 
-          <div class="ak-card">
-            <!-- Brevo Form (iframe) -->
-            <iframe width="540" height="305"
-              src="https://33cff84e.sibforms.com/serve/MUIFAIlml-Xgdtl-O2NPR1VMSVxXlvhTHA_Z22YtaU9xmeDVpHd8CrZFA5PUHLcnEOyfcNmjl8wQYWtCRfojMK85uOExFMa5IwIyYzd3ECc78o0PdeDZ8V1iOatwmjBAG-0dCmfSC1LwIT_3QfxU0O8JggQQz8id0yXr-2ktqguXHc4imAtZAfGZC4ANg5dw5HZ15kot4ebdzP0tqQ=="
-              frameborder="0" scrolling="auto" allowfullscreen
-              style="display:block;margin-left:auto;margin-right:auto;max-width:100%;">
-            </iframe>
+            <div class="ak-contact-company">
+              <p><strong>SWe-handel AB</strong></p>
+              <p>Org.nr: 559372-3140</p>
+              <p>Norra Allégatan 7</p>
+              <p>413 30 Göteborg</p>
+              <p>Vi svarar vanligtvis inom 24–48 timmar.</p>
+            </div>
           </div>
 
-          <p class="ak-meta">
-            SWe-handel AB<br>
-            Org.nr: 559372-3140<br>
-            Norra Allégatan 7<br>
-            413 30 Göteborg<br><br>
-            Vi svarar vanligtvis inom 24–48 timmar.
-          </p>
-        </div>
+          <!-- Höger kolumn: kontaktformulär -->
+          <aside class="ak-contact-form-card">
+            <h2 class="ak-contact-form-title">Kontakt</h2>
+            <p class="ak-contact-form-intro">
+              Har du frågor, önskemål eller pressförfrågningar?
+              Fyll i formuläret så återkommer vi så snart vi kan.
+            </p>
 
+            <div class="ak-contact-form-embed">
+              <iframe
+                src="https://33cff84e.sibforms.com/serve/MUIFAIlml-Xgdtl-O2NPR1VMSVxXlvhTHA_Z22YtaU9xmeDVpHd8CrZFA5PUHLcnEOyfcNmjl8wQYWtCRfojMK85uOExFMa5IwIyYzd3ECc78o0PdeDZ8V1iOatwmjBAG-0dCmfSC1LwIT_3QfxU0O8JggQQz8id0yXr-2ktqguXHc4imAtZAfGZC4ANg5dw5HZ15kot4ebdzP0tqQ=="
+                frameborder="0"
+                scrolling="no"
+                allowfullscreen
+              ></iframe>
+            </div>
+
+            <p class="ak-contact-footnote">
+              Av säkerhetsskäl ber vi dig att inte lämna känsliga uppgifter i formuläret.
+            </p>
+          </aside>
+        </div>
       </div>
     </section>
   </main>
@@ -135,7 +254,13 @@
   </footer>
 
   <script>
-    /* Header-meny som på övriga sidor */
+    // Dynamiskt år (om vi skulle lägga in span#year senare)
+    const yearEl = document.getElementById("year");
+    if (yearEl) {
+      yearEl.textContent = new Date().getFullYear();
+    }
+
+    /* === Header & meny === */
     const akHeader = document.querySelector(".ak-header");
     const akMenuToggle = document.querySelector(".ak-menu-toggle");
     const akMenuPanel = document.getElementById("akMainMenu");
@@ -162,11 +287,11 @@
       });
     }
 
+    // Subtil skugga när man scrollar
     window.addEventListener("scroll", () => {
       if (!akHeader) return;
       akHeader.classList.toggle("ak-header-scrolled", window.scrollY > 4);
     });
   </script>
-
 </body>
 </html>
