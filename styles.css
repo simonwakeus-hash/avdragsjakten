@@ -1567,3 +1567,10 @@ details.ak-faq-item > summary {
   font-size: 0.95rem;
   line-height: 1.6;
 }
+
+.ak-section--privacy {
+  padding-top: 3rem;
+  padding-bottom: 4rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
