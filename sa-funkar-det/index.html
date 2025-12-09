@@ -23,12 +23,126 @@
   <link rel="manifest" href="/site.webmanifest">
 
   <meta charset="UTF-8" />
-  <title>Om oss & kontakt – Avdragsjakten.se</title>
+  <title>Så funkar Avdragsjakten – steg för steg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <meta name="description" content="Lär känna Avdragsjakten – vår bakgrund, vårt uppdrag och hur du kontaktar oss." />
+  <meta name="description" content="Se hur Avdragsjakten fungerar steg för steg – från att ladda upp din deklaration till att få tydliga avdrag och instruktioner för Skatteverket." />
+
   <link rel="stylesheet" href="/styles.css" />
+
+  <!-- Lokal layout för denna sida -->
+  <style>
+    .ak-section--how-page {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+
+    .ak-how-container {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .ak-section-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .ak-section-header .ak-heading-1 {
+      margin-bottom: 0.75rem;
+    }
+
+    .ak-section-header .ak-lead {
+      max-width: 52rem;
+    }
+
+    .ak-steps-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .ak-step-card {
+      background: #ffffff;
+      border-radius: 24px;
+      border: 1px solid var(--color-border, #e2e8f0);
+      padding: 1.5rem 1.75rem;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+    }
+
+    .ak-step-card + .ak-step-card {
+      margin-top: 0;
+    }
+
+    .ak-step-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 0.35rem;
+    }
+
+    .ak-step-number {
+      display: inline-block;
+      font-weight: 600;
+      margin-right: 0.2rem;
+      color: var(--color-primary, #005078);
+    }
+
+    .ak-step-card p {
+      margin: 0.25rem 0;
+    }
+
+    .ak-step-card ul {
+      margin: 0.5rem 0 0.25rem 1.25rem;
+    }
+
+    .ak-step-card li + li {
+      margin-top: 0.15rem;
+    }
+
+    .ak-how-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .ak-how-grid .ak-step-card {
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .ak-how-grid h2.ak-heading-2 {
+      margin-top: 0;
+      margin-bottom: 0.35rem;
+      font-size: 1.05rem;
+    }
+
+    .ak-how-grid strong {
+      font-weight: 600;
+    }
+
+    .ak-summary-card {
+      margin-bottom: 0;
+    }
+
+    .ak-summary-card ol {
+      margin: 0.5rem 0 1rem 1.25rem;
+    }
+
+    .ak-summary-card li + li {
+      margin-top: 0.15rem;
+    }
+
+    @media (min-width: 900px) {
+      .ak-how-grid {
+        flex-direction: row;
+      }
+      .ak-how-grid > .ak-step-card {
+        width: 50%;
+      }
+    }
+  </style>
 </head>
-  
+
 <body>
   <header class="ak-header">
     <div class="container ak-header-inner">
@@ -54,75 +168,120 @@
     <nav id="akMainMenu" class="ak-menu-panel" aria-hidden="true">
       <div class="ak-menu-backdrop" data-ak-menu-close></div>
       <div class="ak-menu-sheet">
-        <button class="ak-menu-close" type="button" data-ak-menu-close aria-label="Stäng meny">
+        <button
+          class="ak-menu-close"
+          type="button"
+          data-ak-menu-close
+          aria-label="Stäng meny"
+        >
           Stäng
         </button>
         <ul class="ak-menu-list">
           <li><a href="/sa-funkar-det" data-ak-menu-close>Så funkar Avdragsjakten</a></li>
           <li><a href="/faq" data-ak-menu-close>Vanliga frågor</a></li>
-          <li><a href="/sekretess" data-ak-menu-close>Sekretess & säkerhet</a></li>
-          <li><a href="/om-oss" data-ak-menu-close>Om oss / Kontakt</a></li>
+          <li><a href="/sekretess" data-ak-menu-close>Sekretess &amp; säkerhet</a></li>
+          <li><a href="#about" data-ak-menu-close>Om oss / Kontakt</a></li>
         </ul>
       </div>
     </nav>
   </header>
 
   <main class="ak-main">
-    <section id="about" class="ak-section ak-section--about">
-      <div class="ak-container">
+    <section class="ak-section ak-section--how-page">
+      <div class="ak-container ak-how-container">
 
-        <h1 class="ak-heading-1">Om oss & kontakt</h1>
-
-        <div class="ak-block">
-          <h2 class="ak-heading-2">Vårt uppdrag</h2>
-          <p>
-            Avdragsjakten finns för att hjälpa fler svenskar att göra korrekta avdrag och undvika att betala mer skatt än nödvändigt.
-            Vi vill att det ska vara enkelt, tryggt och begripligt — även utan skattekunskap.
+        <header class="ak-section-header">
+          <h1 class="ak-heading-1">Så funkar det</h1>
+          <p class="ak-lead">
+            Avdragsjakten hjälper dig att upptäcka avdrag du har rätt till — snabbt, enkelt och utan att
+            dela dina uppgifter med någon annan. Tjänsten analyserar din deklaration direkt i webbläsaren och
+            guidar dig steg för steg till hur du kan fylla i avdragen hos Skatteverket.
           </p>
+        </header>
+
+        <ol class="ak-steps-list">
+          <li class="ak-step-card">
+            <h2 class="ak-step-title">
+              <span class="ak-step-number">1.</span>Ladda upp din deklaration
+            </h2>
+            <p>Du börjar med att ladda upp din Inkomstdeklaration 1 (INK1). Vi utgår från att det är den senaste versionen du fått från Skatteverket.</p>
+            <p>All analys sker direkt i din webbläsare — filen lämnar aldrig din enhet.</p>
+          </li>
+
+          <li class="ak-step-card">
+            <h2 class="ak-step-title">
+              <span class="ak-step-number">2.</span>Svara på några frågor
+            </h2>
+            <p>För att ge dig en komplett bild ställer tjänsten några enkla frågor. Det kan handla om exempelvis resor, hushållskostnader eller avdrag som inte framgår i PDF:en.</p>
+            <p>Du behöver inte kunna skatt — svara bara så gott du kan.</p>
+          </li>
+
+          <li class="ak-step-card">
+            <h2 class="ak-step-title">
+              <span class="ak-step-number">3.</span>Vi analyserar åt dig
+            </h2>
+            <p>När du laddat upp filen och svarat på frågorna gör Avdragsjakten resten:</p>
+            <ul>
+              <li>vi identifierar avdrag du redan gjort</li>
+              <li>vi hittar avdrag du kan ha missat</li>
+              <li>vi räknar ut hur mycket lägre skatt du kan få</li>
+            </ul>
+            <p>Analysen gäller INK1. Bilagor som K2, K6 eller NE kommer inom kort — men ingår ännu inte automatiskt.</p>
+          </li>
+
+          <li class="ak-step-card">
+            <h2 class="ak-step-title">
+              <span class="ak-step-number">4.</span>Du får ett tydligt resultat
+            </h2>
+            <p>När analysen är klar får du en sammanställning som visar:</p>
+            <ul>
+              <li>dina möjliga avdrag</li>
+              <li>hur mycket varje avdrag påverkar din skatt</li>
+              <li>vilka avdrag som ger mest effekt för dig</li>
+            </ul>
+            <p>Vi gör det lätt att förstå — utan att du själv behöver räkna.</p>
+          </li>
+
+          <li class="ak-step-card">
+            <h2 class="ak-step-title">
+              <span class="ak-step-number">5.</span>Vi visar hur du gör avdragen i din deklaration
+            </h2>
+            <p>Efter resultatet kan du klicka vidare och få instruktioner:</p>
+            <ul>
+              <li>var du fyller i avdragen hos Skatteverket</li>
+              <li>hur du justerar belopp</li>
+              <li>vad du behöver tänka på när du skickar in deklarationen</li>
+            </ul>
+            <p>Målet är att du ska kunna agera direkt utan osäkerhet.</p>
+          </li>
+        </ol>
+
+        <div class="ak-how-grid">
+          <section class="ak-step-card">
+            <h2 class="ak-heading-2">Tryggt hela vägen</h2>
+            <p><strong>Din deklaration lämnar aldrig din enhet.</strong> All bearbetning sker lokalt i din webbläsare.</p>
+            <p><strong>Inget sparas hos oss.</strong> Ingen kan se eller öppna din fil.</p>
+            <p><strong>Anslutningen är krypterad.</strong> Din information skyddas under hela användningen.</p>
+          </section>
+
+          <section class="ak-step-card">
+            <h2 class="ak-heading-2">Viktigt att veta</h2>
+            <p>Avdragsjakten hjälper dig att upptäcka möjliga avdrag och visar hur du kan fylla i dem hos Skatteverket.</p>
+            <p>Du ansvarar själv för din deklaration och för att uppgifterna du lämnar är korrekta.</p>
+            <p>Vi ger vägledning och beräkningar baserat på informationen du delar med tjänsten. Det är alltid du som avgör vilka avdrag du gör — och du kan när som helst kontrollera dem mot Skatteverkets rekommendationer.</p>
+          </section>
         </div>
 
-        <div class="ak-block">
-          <h2 class="ak-heading-2">Vem står bakom Avdragsjakten?</h2>
-          <p>
-            Avdragsjakten ägs och utvecklas av SWe-handel AB, ett svenskt bolag med fokus på digitala konsumenttjänster, analys och automatisering.
-          </p>
-          <p>
-            Vi är helt oberoende och har ingen koppling till Skatteverket eller bank- och revisionskoncerner.
-            Det gör att vi kan utveckla Avdragsjakten med användarens bästa som utgångspunkt.
-          </p>
-        </div>
-
-        <div class="ak-block">
-          <h2 class="ak-heading-2">Hur vi arbetar</h2>
-          <ul>
-            <li>Tjänsten utvecklas och underhålls i Sverige</li>
-            <li>Drift sker via Cloudflare Pages</li>
-            <li>Säkerhet, integritet och transparens är centrala i hela vår design</li>
-            <li>Vi bygger Avdragsjakten tillsammans med våra användare, med målet att bli Sveriges mest hjälpsamma och lättanvända avdragstjänst.</li>
-          </ul>
-        </div>
-
-        <div class="ak-block">
-          <h2 class="ak-heading-2">Kontakt</h2>
-          <p>Har du frågor, önskemål eller pressförfrågningar är du varmt välkommen att höra av dig.</p>
-
-          <div class="ak-card">
-            <!-- Brevo Form (iframe) -->
-            <iframe width="540" height="305"
-              src="https://33cff84e.sibforms.com/serve/MUIFAIlml-Xgdtl-O2NPR1VMSVxXlvhTHA_Z22YtaU9xmeDVpHd8CrZFA5PUHLcnEOyfcNmjl8wQYWtCRfojMK85uOExFMa5IwIyYzd3ECc78o0PdeDZ8V1iOatwmjBAG-0dCmfSC1LwIT_3QfxU0O8JggQQz8id0yXr-2ktqguXHc4imAtZAfGZC4ANg5dw5HZ15kot4ebdzP0tqQ=="
-              frameborder="0" scrolling="auto" allowfullscreen
-              style="display:block;margin-left:auto;margin-right:auto;max-width:100%;">
-            </iframe>
-          </div>
-
-          <p class="ak-meta">
-            SWe-handel AB<br>
-            Org.nr: 559372-3140<br>
-            Norra Allégatan 7<br>
-            413 30 Göteborg<br><br>
-            Vi svarar vanligtvis inom 24–48 timmar.
-          </p>
-        </div>
+        <section class="ak-step-card ak-summary-card">
+          <h2 class="ak-heading-2">Kort sagt</h2>
+          <ol>
+            <li>Ladda upp din deklaration</li>
+            <li>Svara på några frågor</li>
+            <li>Få ditt resultat</li>
+            <li>Följ våra steg-för-steg-instruktioner</li>
+          </ol>
+          <p>Avdragsjakten hjälper dig hitta pengar du annars riskerar att missa — på ett tryggt och enkelt sätt.</p>
+        </section>
 
       </div>
     </section>
@@ -130,12 +289,18 @@
 
   <footer class="ak-footer">
     <div class="ak-container">
-      <p>© 2025 Avdragsjakten. Ingen data sparas i denna version – alla beräkningar görs i din webbläsare.</p>
+      <p>© <span id="year"></span> Avdragsjakten. Ingen data sparas i denna version – alla beräkningar görs i din webbläsare.</p>
     </div>
   </footer>
 
   <script>
-    /* Header-meny som på övriga sidor */
+    // År i footern
+    const yearEl = document.getElementById("year");
+    if (yearEl) {
+      yearEl.textContent = new Date().getFullYear();
+    }
+
+    // Header & meny
     const akHeader = document.querySelector(".ak-header");
     const akMenuToggle = document.querySelector(".ak-menu-toggle");
     const akMenuPanel = document.getElementById("akMainMenu");
@@ -162,11 +327,11 @@
       });
     }
 
+    // Subtil skugga när man scrollar
     window.addEventListener("scroll", () => {
       if (!akHeader) return;
       akHeader.classList.toggle("ak-header-scrolled", window.scrollY > 4);
     });
   </script>
-
 </body>
 </html>
