@@ -30,8 +30,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
 </head>
 <body>
-
-  <body>
   <header class="ak-header">
     <div class="container ak-header-inner">
       <a href="/" class="ak-logo">
@@ -570,7 +568,7 @@
           </section>
         </div>
 
-        <!-- RESULTATVY – minimalistisk -->
+        <!-- RESULTATVY -->
         <section
           id="results-view"
           class="results-view"
@@ -934,16 +932,31 @@
     }
 
     function decorateStickyText() {
-      const { total } = computeEstimate();
-      const taxSaving = computeTaxSaving(total);
+      // I resultatsvyn använder vi den aktuella selekterade summan,
+      // annars en löpande uppskattning baserat på svaren.
+      if (resultEl && !resultEl.hidden && state.lastResults && state.lastResults.length) {
+        const total = state.totalEstimate || 0;
+        const taxSaving = state.taxSaving || 0;
 
-      if (taxSaving > 0) {
-        return "Besparing: ca " + formatCurrency(taxSaving) + " lägre skatt";
+        if (taxSaving > 0) {
+          return "Besparing: ca " + formatCurrency(taxSaving) + " lägre skatt";
+        }
+        if (total > 0) {
+          return "Besparing: " + formatCurrency(total) + " i avdrag";
+        }
+        return "Besparing: 0 kr";
+      } else {
+        const { total } = computeEstimate();
+        const taxSaving = computeTaxSaving(total);
+
+        if (taxSaving > 0) {
+          return "Besparing: ca " + formatCurrency(taxSaving) + " lägre skatt";
+        }
+        if (total > 0) {
+          return "Besparing: " + formatCurrency(total) + " i avdrag";
+        }
+        return "Besparing: 0 kr";
       }
-      if (total > 0) {
-        return "Besparing: " + formatCurrency(total) + " i avdrag";
-      }
-      return "Besparing: 0 kr";
     }
 
     // === PDF-hjälp ===
@@ -1504,15 +1517,25 @@
     function createDeductionCard(deduction) {
       const article = document.createElement("article");
       article.className = "deduction-card";
+      article.dataset.id = deduction.id || deduction.name;
+      article.dataset.selected = deduction.selected === false ? "false" : "true";
 
       const tagsHtml = (deduction.tags || [])
         .map((t) => `<span class="deduction-tag">${t}</span>`)
         .join("");
 
+      const isSelected = deduction.selected !== false;
+      const route = deduction.route || getSkvRouteForName(deduction.name);
+
       article.innerHTML = `
         <header class="deduction-card-header">
-          <h4 class="deduction-title">${deduction.name}</h4>
-          <p class="deduction-amount">${formatCurrency(deduction.amount)}</p>
+          <button type="button" class="deduction-checkbox" aria-pressed="${isSelected ? "true" : "false"}">
+            <span>${isSelected ? "✓" : ""}</span>
+          </button>
+          <div class="deduction-header-main">
+            <h4 class="deduction-title">${deduction.name}</h4>
+            <p class="deduction-amount">${formatCurrency(deduction.amount)}</p>
+          </div>
         </header>
         <p class="deduction-description">${deduction.description || ""}</p>
         <div class="deduction-meta">
@@ -1532,19 +1555,74 @@
           ${tagsHtml}
         </div>
         ${
-          deduction.helpUrl
-            ? `<a href="${deduction.helpUrl}" class="deduction-link">Hur gör jag avdraget?</a>`
-            : ""
+          route
+            ? `<div class="deduction-route-row">
+                 <span class="deduction-route">${route}</span>
+                 <button type="button" class="deduction-link" data-deduction-id="${article.dataset.id}">
+                   Hur gör jag avdraget?
+                 </button>
+               </div>`
+            : `<div class="deduction-route-row">
+                 <button type="button" class="deduction-link" data-deduction-id="${article.dataset.id}">
+                   Hur gör jag avdraget?
+                 </button>
+               </div>`
         }
       `;
+
+      // Checkbox toggling
+      const checkbox = article.querySelector(".deduction-checkbox");
+      if (checkbox) {
+        checkbox.addEventListener("click", () => {
+          const id = article.dataset.id;
+          const list = state.lastResults || [];
+          const target = list.find((d) => (d.id || d.name) === id);
+          if (target) {
+            const newSelected = !(target.selected !== false);
+            target.selected = newSelected;
+            article.dataset.selected = newSelected ? "true" : "false";
+            checkbox.setAttribute("aria-pressed", newSelected ? "true" : "false");
+            const checkSpan = checkbox.querySelector("span");
+            if (checkSpan) {
+              checkSpan.textContent = newSelected ? "✓" : "";
+            }
+            renderResultsView();
+            if (stickyText) {
+              stickyText.textContent = decorateStickyText();
+            }
+          }
+        });
+      }
+
+      // Per-avdrag-guide
+      const linkBtn = article.querySelector(".deduction-link");
+      if (linkBtn) {
+        linkBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const id = article.dataset.id;
+          const list = state.lastResults || [];
+          const target = list.find((d) => (d.id || d.name) === id);
+          if (target) {
+            openHowToModal(target);
+          } else {
+            openHowToModal();
+          }
+        });
+      }
 
       return article;
     }
 
-    function renderResultsView(total, results) {
+    function renderResultsView() {
+      const results = state.lastResults || [];
+      const active = results.filter((d) => d.selected !== false);
       const count = results.length;
+      const activeCount = active.length;
 
+      const total = active.reduce((sum, d) => sum + (d.amount || 0), 0);
       const taxSaving = computeTaxSaving(total);
+      state.totalEstimate = total;
+
       const totalStr = total > 0 ? formatCurrency(total) : "0 kr";
       const taxStr = taxSaving > 0 ? formatCurrency(taxSaving) : null;
 
@@ -1572,10 +1650,10 @@
 
       if (summaryMetaEl) {
         let metaText =
-          count > 0
-            ? count + " möjliga avdrag identifierade"
-            : "Inga tydliga avdrag identifierade";
-        if (taxStr && count > 0) {
+          activeCount > 0
+            ? activeCount + " möjliga avdrag valda"
+            : "Inga aktiva avdrag valda";
+        if (taxStr && activeCount > 0) {
           metaText += " · ca " + taxStr + " lägre skatt";
         }
         summaryMetaEl.textContent = metaText;
@@ -1598,7 +1676,7 @@
       if (otherDeductionsListEl) otherDeductionsListEl.innerHTML = "";
 
       let nextStepsEl = document.getElementById("resultsNextSteps");
-      if (results.length === 0) {
+      if (count === 0) {
         if (topDeductionsListEl) {
           const p = document.createElement("p");
           p.className = "deduction-empty";
@@ -1618,9 +1696,10 @@
 
       if (nextStepsEl) {
         const withRoute = sorted
+          .filter((d) => d.selected !== false)
           .map((d) => ({
             name: d.name,
-            route: getSkvRouteForName(d.name)
+            route: d.route || getSkvRouteForName(d.name)
           }))
           .filter((d) => d.route)
           .slice(0, 3);
@@ -1655,36 +1734,51 @@
     function calculateAndShowResult() {
       const { total, items } = computeEstimate();
 
-      const results = items.map((item) => {
+      const results = items.map((item, index) => {
         const meta = getDeductionMeta(item.label);
         return {
+          id: "deduction_" + index,
           name: item.label,
           amount: item.value,
           description: meta.description,
           difficulty: meta.difficulty,
           tags: meta.tags,
-          helpUrl: meta.helpUrl
+          helpUrl: meta.helpUrl,
+          selected: true,
+          route: getSkvRouteForName(item.label)
         };
       });
 
       state.deductionsCount = results.length;
       state.lastResults = results;
 
-      renderResultsView(total, results);
+      renderResultsView();
+      if (stickyText) {
+        stickyText.textContent = decorateStickyText();
+      }
     }
 
-    function openHowToModal() {
-      if (!howToModal || !howToBody || !state.lastResults.length) {
+    function openHowToModal(deduction) {
+      if (!howToModal || !howToBody) {
         window.location.href = "/skatteavdrag/";
         return;
       }
 
-      const sorted = [...state.lastResults].sort(
-        (a, b) => (b.amount || 0) - (a.amount || 0)
-      );
-      const top = sorted[0];
+      let target = deduction || null;
 
-      howToBody.innerHTML = generateHowToContent(top);
+      if (!target) {
+        const list = state.lastResults || [];
+        if (!list.length) {
+          window.location.href = "/skatteavdrag/";
+          return;
+        }
+        const sorted = [...list].sort(
+          (a, b) => (b.amount || 0) - (a.amount || 0)
+        );
+        target = sorted[0];
+      }
+
+      howToBody.innerHTML = generateHowToContent(target);
 
       if (howToBackdrop) {
         howToBackdrop.hidden = false;
