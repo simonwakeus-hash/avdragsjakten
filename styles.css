@@ -1659,3 +1659,120 @@ details.ak-faq-item > summary {
   color: #6b7280;
 }
 
+/* Liten rund "check"-knapp högst upp i varje avdragskort */
+.deduction-checkbox {
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  background: #ffffff;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  padding: 0;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.deduction-checkbox span {
+  color: #16a34a;
+}
+
+/* Markerad (vald) avdragsrad */
+.deduction-checkbox[aria-pressed="true"] {
+  background: #ecfdf3;
+  border-color: #16a34a;
+  box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.25);
+}
+
+.deduction-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+/* Rad längst ned i kortet med ruta-info och länk */
+.deduction-route-row {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #4b5563;
+}
+
+.deduction-route {
+  font-size: 0.8rem;
+  color: #4b5563;
+}
+
+/* Knapp-länk: "Hur gör jag avdraget?" */
+.deduction-link {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.deduction-link:hover {
+  text-decoration-thickness: 1.5px;
+}
+
+/* Kompakt sammanfattningsrad längst ned på resultatsidan */
+.results-summary-inline {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 1rem;
+}
+
+.results-summary-label {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.results-summary-amount {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #065f46;
+}
+
+.results-summary-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+@media (max-width: 640px) {
+  .results-summary-inline {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.results-view {
+  margin-top: 2rem;
+  padding: 1.75rem 1.5rem;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 22px 45px rgba(15, 23, 42, 0.08);
+}
+
+
