@@ -695,7 +695,7 @@
     </div>
   </div>
 
-  <!-- JS -->
+   <!-- JS -->
   <script>
   // År i footern
   const yearEl = document.getElementById("year");
@@ -1308,7 +1308,7 @@
       }
       state.homeEquipmentDeduction = homeEquipDeduction;
 
-      // Tjänsteresor utan traktamente
+      // Tjänsteresor utan trattamente
       const businessDays = Number(state.businessTravelDays) || 0;
       let perDiem = 0;
       if (businessDays > 0) {
@@ -1658,10 +1658,10 @@
       if (resultsSubtitleEl) {
         if (total > 0) {
           resultsSubtitleEl.textContent =
-            "Beräkningen är en förenklad uppskattning baserad på dina svar och en ungefärlig svensk marginalskatt.";
+            "Detta är en förenklad uppskattning baserad på dina svar och en ungefärlig svensk marginalskatt.";
         } else if (count === 0) {
           resultsSubtitleEl.textContent =
-            "Utifrån de här svaren hittar vi inga tydliga avdrag. Det kan ändå finnas andra situationer där avdrag är aktuella.";
+            "Vi hittar inga tydliga avdrag baserat på de här svaren. Det kan ändå finnas andra situationer där avdrag är aktuella.";
         } else {
           resultsSubtitleEl.textContent =
             "Baserat på dina svar ser det ut som att de möjliga avdragen är relativt små eller inte över schablonnivån.";
@@ -1671,7 +1671,9 @@
       if (topDeductionsListEl) topDeductionsListEl.innerHTML = "";
       if (otherDeductionsListEl) otherDeductionsListEl.innerHTML = "";
 
-      let nextStepsEl = document.getElementById("resultsNextSteps");
+      const nextStepsEl = document.getElementById("resultsNextSteps");
+      const secondarySection = document.querySelector(".results-section-secondary");
+
       if (count === 0) {
         if (topDeductionsListEl) {
           const p = document.createElement("p");
@@ -1682,6 +1684,9 @@
         }
         if (nextStepsEl) {
           nextStepsEl.textContent = "";
+        }
+        if (secondarySection) {
+          secondarySection.style.display = "none";
         }
         return;
       }
@@ -1702,13 +1707,13 @@
 
         if (withRoute.length === 0) {
           nextStepsEl.textContent =
-            "Nästa steg: Logga in på Skatteverket och följ vår guide för att fylla i rätt rutor.";
+            "Nästa steg: Logga in på Skatteverket och fyll i dina avdrag i rätt rutor.";
         } else {
           const itemsHtml = withRoute
             .map((d) => `<li>${d.route}</li>`)
             .join("");
           nextStepsEl.innerHTML =
-            '<strong>Nästa steg på Skatteverket:</strong><ul>' +
+            '<strong>Nästa steg hos Skatteverket:</strong><ul>' +
             itemsHtml +
             "</ul>";
         }
@@ -1721,6 +1726,15 @@
         if (topDeductionsListEl)
           topDeductionsListEl.appendChild(createDeductionCard(d));
       });
+
+      if (secondarySection) {
+        if (others.length === 0) {
+          secondarySection.style.display = "none";
+        } else {
+          secondarySection.style.display = "";
+        }
+      }
+
       others.forEach((d) => {
         if (otherDeductionsListEl)
           otherDeductionsListEl.appendChild(createDeductionCard(d));
@@ -2379,6 +2393,7 @@ window.addEventListener("scroll", () => {
 });
 
   </script>
+
 
 </body>
 </html>
