@@ -1845,4 +1845,18 @@ details.ak-faq-item > summary {
   text-decoration-thickness: 2px;
 }
 
+/* Gör varje kort mer Apple/Klarna-likt */
+.deduction-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 1rem 1.15rem;
+  box-shadow: 0 4px 10px rgba(15,23,42,0.03);
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.deduction-card:hover {
+  box-shadow: 0 10px 22px rgba(15,23,42,0.08);
+  transform: translateY(-2px);
+}
 
