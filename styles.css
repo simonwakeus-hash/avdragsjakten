@@ -1595,6 +1595,7 @@ details.ak-faq-item > summary {
 
 /* === Finjustering resultatlayout (matchar index.html) === */
 
+/* Rad med "≈ 11 792 kr" på resultatsidan */
 .results-number-row {
   display: flex;
   align-items: baseline;
@@ -1603,7 +1604,7 @@ details.ak-faq-item > summary {
 }
 
 .results-main-cta {
-  margin-top: 0.75rem;
+  margin: 0.75rem 0 1rem;
 }
 
 .results-summary-inline {
